@@ -1,0 +1,70 @@
+.rating-panel {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--a-card);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 24px;
+  gap: 30px;
+  width: 100%;
+  height: 100%;
+
+  &__container {
+    display: flex;
+    align-items: center;
+  }
+
+  &__rating-block {
+    padding-right: 16px;
+  }
+
+  &__rating-value {
+    font-size: 45px;
+    line-height: 40px;
+    font-weight: 700;
+    color: #fff;
+
+    &.bad {
+      color: var(--a-red);
+    }
+
+    &.good {
+      color: var(--a-orange);
+    }
+
+    &.excellent {
+      color: var(--a-green);
+    }
+  }
+
+  &__text-block {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  &__title {
+    font-size: 16px;
+    color: #fff;
+    font-weight: 600;
+  }
+
+  &__extra {
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 12px;
+  }
+
+  .a-media-rating-panel__container {
+    width: 100%;
+  }
+
+  .a-star-rating {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .a-rating-item {
+    width: 48px;
+    height: 48px;
+  }
+}

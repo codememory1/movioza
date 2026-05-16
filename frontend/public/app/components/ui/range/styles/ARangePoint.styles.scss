@@ -1,0 +1,19 @@
+.a-range-point {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  cursor: pointer;
+  transform: translate(-50%, -50%);
+  background: #fff;
+  border: 2px solid var(--a-primary);
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  transition: scale 0.2s linear;
+  z-index: 3;
+
+  &:hover,
+  &.dragging {
+    scale: 1.2;
+  }
+}

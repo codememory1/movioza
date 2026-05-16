@@ -1,0 +1,9 @@
+.video-player-progress-bar {
+  &__marker {
+    position: absolute;
+    right: 0;
+    width: 0.3rem;
+    background-color: rgb(130, 130, 130);
+    border-radius: 0 !important;
+  }
+}

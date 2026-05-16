@@ -1,0 +1,14 @@
+.video-player {
+  position: relative;
+  overflow: hidden;
+  border-radius: 12px;
+  outline: none;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+
+  &__portal-root {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1000;
+  }
+}

@@ -1,0 +1,21 @@
+.a-select-drop-down {
+  border-radius: 8px;
+  background-color: rgb(var(--a-secondary-rgb));
+  width: 100%;
+  z-index: 10000;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  pointer-events: auto;
+
+  &__list {
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  &__list-container {
+    max-height: 200px;
+    overflow: auto;
+  }
+}

@@ -1,0 +1,52 @@
+.media-filters-group {
+  width: 100%;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 5px 0;
+    font-size: 14px;
+    color: #fff;
+    border: none;
+    background-color: transparent;
+    outline: none;
+    transition: color 0.2s linear;
+    cursor: pointer;
+    margin-bottom: 8px;
+
+    &:hover {
+      color: var(--a-primary);
+
+      svg {
+        color: var(--a-primary);
+      }
+    }
+
+    svg {
+      width: 10px;
+      height: 10px;
+      margin-left: auto;
+      color: #fff;
+      transition:
+        color 0.2s linear,
+        transform 0.2s linear;
+    }
+  }
+
+  &__panel {
+    &-inner {
+      padding-top: 8px;
+    }
+  }
+
+  &__search {
+    margin-bottom: 10px;
+  }
+
+  &__options {
+    max-height: 200px;
+    overflow: auto;
+    transition: max-height 0.2s linear;
+  }
+}

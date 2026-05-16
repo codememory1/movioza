@@ -1,0 +1,33 @@
+.video-player-center-actions {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &__play-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100px;
+    height: 100px;
+    background-color: var(--a-primary);
+    border-radius: 50%;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    user-select: none;
+    transition: background-color 0.2s linear;
+
+    &:hover {
+      background-color: var(--a-primary-dark);
+    }
+
+    svg {
+      width: 46px;
+      height: 46px;
+      color: #fff;
+    }
+  }
+}

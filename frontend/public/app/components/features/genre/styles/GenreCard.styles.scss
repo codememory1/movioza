@@ -1,0 +1,99 @@
+.genre-card {
+  transition: all 0.2s linear;
+
+  &__wrapper {
+    display: flex;
+    text-decoration: none;
+  }
+
+  &--tile &__wrapper {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    padding: 24px 24px;
+    background: linear-gradient(135deg, var(--genre-card-from), var(--genre-card-to));
+    min-height: 115px;
+  }
+
+  &--horizontal &__wrapper {
+    border-radius: 12px;
+    padding: 20px;
+    background-color: var(--a-card);
+    min-height: 104px;
+  }
+
+  &--horizontal:hover {
+    outline: 1px solid var(--a-primary);
+  }
+
+  &--horizontal:hover &__arrow-icon {
+    transform: translateX(5px);
+  }
+
+  &--horizontal:hover &__title {
+    color: var(--a-primary);
+  }
+
+  &--tile:hover {
+    transform: scale(1.05);
+    opacity: 0.8;
+  }
+
+  &--tile &__icon {
+    font-size: 36px;
+    margin-bottom: 8px;
+  }
+
+  &--horizontal &__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 64px;
+    height: 64px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, var(--a-genre-from), var(--a-genre-to));
+    font-size: 30px;
+  }
+
+  &--horizontal &__content {
+    display: flex;
+    flex-direction: column;
+    margin-top: auto;
+    margin-bottom: auto;
+    gap: 6px;
+    margin-left: 16px;
+  }
+
+  &--tile &__content {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    text-align: center;
+  }
+
+  &__title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #fff;
+    transition: color 0.2s linear;
+  }
+
+  &__subtitle {
+    font-size: 13px;
+    font-weight: 500;
+    color: rgb(220, 220, 220);
+  }
+
+  &__arrow-icon {
+    margin-left: auto;
+    margin-top: auto;
+    margin-bottom: auto;
+    width: 18px;
+    transition: transform 0.2s linear;
+
+    path {
+      fill: rgba(255, 255, 255, 0.6);
+    }
+  }
+}

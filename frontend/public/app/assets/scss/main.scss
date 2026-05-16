@@ -1,0 +1,82 @@
+@use './include/variables';
+@use './include/animations';
+@use './include/keyframes';
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  list-style-type: none;
+
+  &:after,
+  &:before {
+    box-sizing: border-box;
+  }
+}
+
+ol,
+ul {
+  list-style: none;
+}
+
+body {
+  background-color: var(--a-background);
+  font-family: Inter, sans-serif;
+}
+
+input,
+textarea {
+  font-family: Inter, sans-serif;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.a-link {
+  text-decoration: none;
+  color: #fff;
+  transition: color 0.2s linear;
+
+  &:hover {
+    color: var(--a-primary);
+  }
+}
+
+.a-section-mt {
+  &--sm {
+    margin-top: var(--a-mt-sm);
+  }
+
+  &--md {
+    margin-top: var(--a-mt-md);
+  }
+
+  &--lg {
+    margin-top: var(--a-mt-lg);
+  }
+}
+
+*::-webkit-scrollbar {
+  width: 5px;
+  height: 3px;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: var(--a-primary);
+  border-radius: 5px;
+
+  &:hover {
+    background-color: var(--a-primary-dark);
+  }
+}

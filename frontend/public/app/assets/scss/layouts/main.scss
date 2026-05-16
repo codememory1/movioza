@@ -1,0 +1,44 @@
+.app-layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+
+  .a-site-main {
+    flex: 1 0 auto;
+  }
+
+  .app-footer {
+    flex-shrink: 0;
+  }
+}
+
+.a-site-main {
+  padding-top: 64px;
+  padding-bottom: 120px;
+
+  &__title {
+    padding-top: 48px;
+    font-size: 32px;
+    font-weight: 700;
+    color: #fff;
+  }
+
+  &__description {
+    margin-top: 12px;
+    font-size: 16px;
+    color: rgba(255, 255, 255, 0.6);
+    font-weight: 600;
+  }
+
+  &__stat {
+    margin-top: 12px;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.6);
+    font-weight: 400;
+
+    strong {
+      color: #fff;
+      font-weight: 600;
+    }
+  }
+}

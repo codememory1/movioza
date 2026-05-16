@@ -1,0 +1,17 @@
+.video-player-ambient {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  filter: blur(40px) brightness(0.7);
+  visibility: hidden;
+  opacity: 0;
+  transition:
+    visibility 1s linear,
+    opacity 1s linear;
+  z-index: 0;
+
+  &--visible {
+    opacity: 0.3;
+    visibility: visible;
+  }
+}

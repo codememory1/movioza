@@ -1,0 +1,8 @@
+.media-year-tag {
+  text-decoration: underline;
+  transition: opacity 0.2s linear;
+
+  &:hover {
+    opacity: 0.8;
+  }
+}

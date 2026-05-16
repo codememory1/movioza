@@ -1,0 +1,10 @@
+.video-player-controls {
+  display: flex;
+  justify-content: space-between;
+
+  &__left,
+  &__right {
+    display: flex;
+    gap: 8px;
+  }
+}

@@ -1,0 +1,19 @@
+.video-player-settings-menu {
+  position: absolute;
+  right: 30px;
+  bottom: 120px;
+
+  &__quality-item {
+    .a-popup-menu__item-label {
+      position: relative;
+    }
+  }
+
+  &__quality-tag {
+    position: absolute;
+    top: -2px;
+    right: 0;
+    white-space: nowrap;
+    font-size: 10px;
+  }
+}

@@ -1,0 +1,17 @@
+.a-select-option {
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s linear;
+  color: #fff;
+  font-size: 14px;
+  user-select: none;
+
+  &:hover {
+    background-color: var(--a-primary);
+  }
+
+  &[aria-selected='true'] {
+    background-color: var(--a-primary);
+  }
+}

@@ -1,0 +1,10 @@
+.collection-page {
+  display: flex;
+  flex-direction: column;
+
+  &__pagination {
+    margin-top: 32px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}

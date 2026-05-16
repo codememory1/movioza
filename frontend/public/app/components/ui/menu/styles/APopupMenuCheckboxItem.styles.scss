@@ -1,0 +1,12 @@
+.a-popup-menu__checkbox-item {
+  .a-popup-menu__item-label {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  &-hint {
+    font-size: 10px;
+    color: rgb(190, 190, 190);
+  }
+}

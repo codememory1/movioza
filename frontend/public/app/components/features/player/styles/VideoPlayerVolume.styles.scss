@@ -1,0 +1,32 @@
+.video-player__volume {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+
+  &-off-btn {
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    transition: opacity 0.2s linear;
+
+    &:hover {
+      opacity: 0.7;
+    }
+
+    svg {
+      width: 22px;
+      height: 22px;
+      color: #fff;
+    }
+  }
+
+  &-range {
+    width: 60px;
+  }
+}

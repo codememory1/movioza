@@ -1,0 +1,28 @@
+:root {
+  --a-primary: #6366f1;
+  --a-primary-rgb: 99, 102, 241;
+  --a-primary-dark: #4e51dc;
+  --a-primary-300: #8083f5;
+  --a-secondary: #1e2538;
+  --a-secondary-dark: #171c29;
+  --a-secondary-rgb: 30, 37, 56;
+  --a-placeholder: #94a2b8;
+  --a-background: #0a0e1a;
+  --a-background-rgb: 10, 14, 26;
+  --a-card: #13182b;
+  --a-card-30: color-mix(in oklab, var(--a-card) 30%, transparent);
+  --a-yellow: #fdc700;
+  --a-yellow-rgb: 253, 199, 0;
+  --a-green-rgb: 0, 200, 81;
+  --a-blue-rgb: 43, 127, 255;
+  --a-purple-rgb: 172, 71, 255;
+  --a-muted-foreground: #94a3b8;
+  --a-red: #ff3300;
+  --a-green: #00b400;
+  --a-orange: #ff9900;
+  --a-border: rgba(255, 255, 255, 0.1);
+
+  --a-mt-sm: 32px;
+  --a-mt-md: 64px;
+  --a-mt-lg: 120px;
+}

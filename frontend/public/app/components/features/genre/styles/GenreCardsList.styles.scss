@@ -1,0 +1,13 @@
+.genre-cards-list {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 16px;
+
+  .genre-card {
+    min-width: 0;
+  }
+
+  .genre-card__wrapper {
+    height: 100%;
+  }
+}

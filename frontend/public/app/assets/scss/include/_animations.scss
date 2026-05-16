@@ -1,0 +1,41 @@
+.menu-forward-animation-enter-active,
+.menu-forward-animation-leave-active,
+.menu-back-animation-enter-active,
+.menu-back-animation-leave-active {
+  position: absolute;
+  width: 100%;
+  transition: transform 0.2s linear;
+  will-change: transform;
+}
+
+.menu-forward-animation-enter-from {
+  transform: translateX(100%);
+}
+
+.menu-forward-animation-enter-to {
+  transform: translateX(0%);
+}
+
+.menu-forward-animation-leave-from {
+  transform: translateX(0%);
+}
+
+.menu-forward-animation-leave-to {
+  transform: translateX(-100%);
+}
+
+.menu-back-animation-enter-from {
+  transform: translateX(-100%);
+}
+
+.menu-back-animation-enter-to {
+  transform: translateX(0%);
+}
+
+.menu-back-animation-leave-from {
+  transform: translateX(0%);
+}
+
+.menu-back-animation-leave-to {
+  transform: translateX(100%);
+}

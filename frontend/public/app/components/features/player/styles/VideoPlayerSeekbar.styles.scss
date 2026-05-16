@@ -1,0 +1,11 @@
+.video-player-seekbar {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+
+  &__time {
+    color: #fff;
+    font-size: 14px;
+    font-variant-numeric: tabular-nums;
+  }
+}

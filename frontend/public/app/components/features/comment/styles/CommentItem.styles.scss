@@ -1,0 +1,147 @@
+.comment-item {
+  position: relative;
+  display: flex;
+  gap: 15px;
+
+  &__avatar {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background-color: var(--a-primary);
+    user-select: none;
+
+    &-char {
+      font-size: 14px;
+      color: #fff;
+      font-weight: 700;
+    }
+  }
+
+  &__body {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+  }
+
+  &__footer {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-top: 15px;
+  }
+
+  &__name {
+    font-size: 14px;
+    color: #fff;
+    font-weight: 700;
+  }
+
+  &__date {
+    color: rgb(148, 163, 184);
+    font-size: 12px;
+    font-weight: 400;
+  }
+
+  &__text {
+    font-size: 14px;
+    font-weight: 400;
+    word-break: break-word;
+    color: var(--a-muted-foreground);
+  }
+
+  &__action-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 32px;
+    padding: 0;
+    border: none;
+    background: transparent;
+    outline: none;
+    cursor: pointer;
+    color: #fff;
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 1;
+    transition:
+      opacity 0.2s linear,
+      color 0.2s linear;
+
+    &:hover {
+      opacity: 0.8;
+    }
+
+    &.selected {
+      color: var(--a-primary);
+
+      svg {
+        color: var(--a-primary);
+      }
+    }
+
+    &.dislike {
+      margin-left: 10px;
+    }
+
+    &.reply {
+      margin-left: 20px;
+    }
+
+    svg {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+      color: var(--a-muted-foreground);
+    }
+  }
+
+  &__replies {
+    position: relative;
+    margin-top: 25px;
+  }
+
+  &__replies-toggle {
+    margin-top: 15px;
+
+    &-btn {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--a-primary);
+      background-color: transparent;
+      border: none;
+      outline: none;
+      cursor: pointer;
+      font-size: 14px;
+      transition:
+        opacity 0.2s linear,
+        color 0.2s linear;
+      user-select: none;
+
+      &:hover {
+        opacity: 0.8;
+      }
+
+      &.loading {
+        pointer-events: none;
+        opacity: 0.5;
+      }
+
+      svg {
+        width: 14px;
+        height: 14px;
+      }
+    }
+  }
+}

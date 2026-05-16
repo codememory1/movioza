@@ -1,0 +1,32 @@
+.media-seasons-section {
+  .a-content-section__header-append {
+    display: flex;
+    gap: 5px;
+    margin-left: 12px;
+  }
+
+  &__season-btn {
+    padding: 8px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    text-decoration: none;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 700;
+    transition:
+      background-color 0.2s linear,
+      transform 0.2s linear;
+
+    &.selected {
+      background-color: var(--a-secondary);
+
+      &:hover {
+        transform: scale(1.1);
+      }
+    }
+
+    &:not(.selected):hover {
+      background-color: var(--a-secondary);
+    }
+  }
+}

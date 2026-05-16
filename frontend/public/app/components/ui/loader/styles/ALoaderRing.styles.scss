@@ -1,0 +1,25 @@
+.a-loader-ring {
+  position: relative;
+  width: 64px;
+  height: 64px;
+
+  &__item {
+    position: absolute;
+    border-radius: 50%;
+    border: 4px solid transparent;
+
+    &--outer {
+      inset: 0;
+      border-top-color: var(--a-primary);
+      border-right-color: var(--a-primary);
+      animation: spin 1s linear infinite;
+    }
+
+    &--inner {
+      inset: 8px;
+      border-bottom-color: var(--a-primary);
+      border-left-color: var(--a-primary);
+      animation: spin-reverse 1s linear infinite;
+    }
+  }
+}

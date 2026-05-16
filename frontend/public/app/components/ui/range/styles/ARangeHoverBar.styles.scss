@@ -1,0 +1,13 @@
+.a-range-hover-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: #6f6e6e;
+  opacity: 0;
+  visibility: hidden;
+
+  &.hovering {
+    visibility: visible;
+    opacity: 1;
+  }
+}

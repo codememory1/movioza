@@ -1,0 +1,53 @@
+.a-slider {
+  position: relative;
+  visibility: hidden;
+
+  &--ready {
+    visibility: visible;
+  }
+
+  &__container {
+    overscroll-behavior-x: contain;
+  }
+
+  &__nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1;
+    background-color: var(--a-primary);
+    border: none;
+    color: #fff;
+    border-radius: 50%;
+    width: 42px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 6px 8px 2px rgba(0, 0, 0, 0.5);
+    transition: opacity 0.2s linear;
+
+    &:hover {
+      opacity: 0.8;
+    }
+
+    &:disabled {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    &--prev {
+      left: -21px;
+    }
+
+    &--next {
+      right: -21px;
+    }
+  }
+}

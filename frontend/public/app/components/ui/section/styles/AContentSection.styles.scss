@@ -1,0 +1,28 @@
+.a-content-section {
+  &__header {
+    display: flex;
+    margin-bottom: 24px;
+
+    &-append {
+      margin-left: auto;
+    }
+  }
+
+  &__title {
+    color: #fff;
+    font-size: 24px;
+    font-weight: 600;
+  }
+
+  &__append-link {
+    color: var(--a-primary);
+    text-decoration: none;
+    transition: opacity 0.2s linear;
+    font-size: 14px;
+    font-weight: 400;
+
+    &:hover {
+      opacity: 0.7;
+    }
+  }
+}

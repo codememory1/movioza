@@ -1,0 +1,53 @@
+.app-footer {
+  background-color: var(--a-card);
+
+  &__top {
+    padding-block: 48px;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-gap: 32px;
+  }
+
+  &__logo {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    outline: none;
+    transition: all 0.2s linear;
+
+    &:hover {
+      opacity: 0.7;
+    }
+
+    img {
+      width: 32px;
+      height: 32px;
+    }
+
+    span {
+      padding-left: 10px;
+      font-size: 16px;
+      font-weight: bold;
+      color: #fff;
+    }
+  }
+
+  &__brand {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    p {
+      color: rgb(148, 163, 184);
+      font-size: 14px;
+      line-height: 20px;
+    }
+  }
+
+  &__bottom {
+    border-top: 1px solid var(--a-border);
+    padding: 24px 0;
+    color: rgb(148, 163, 184);
+    font-size: 14px;
+  }
+}

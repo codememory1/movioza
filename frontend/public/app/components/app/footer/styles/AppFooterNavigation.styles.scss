@@ -1,0 +1,30 @@
+.app-footer-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  &__header {
+    font-size: 18px;
+    font-weight: 600;
+    color: rgb(232, 233, 240);
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  &__item {
+    a {
+      color: rgb(148, 163, 184);
+      font-size: 14px;
+      text-decoration: none;
+      transition: color 0.2s linear;
+
+      &:hover {
+        color: var(--a-primary);
+      }
+    }
+  }
+}

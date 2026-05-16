@@ -1,0 +1,66 @@
+.app-support-crypto-section {
+  background-color: var(--a-card);
+  border: 1px solid var(--a-border);
+  border-radius: 16px;
+  padding: 24px;
+
+  &__header {
+    font-size: 24px;
+    color: #fff;
+    font-weight: 700;
+    margin-bottom: 20px;
+  }
+
+  &__descriptions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    p {
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 14px;
+    }
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 30px;
+  }
+
+  &__item {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 16px;
+    background-color: var(--a-secondary);
+    border-radius: 8px;
+    border: 1px solid var(--a-border);
+
+    dt {
+      font-size: 14px;
+      font-weight: bold;
+      color: #fff;
+    }
+
+    dd {
+      font-size: 14px;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 0.5);
+    }
+  }
+
+  &__footer {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid var(--a-border);
+
+    span {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.8);
+    }
+  }
+}
