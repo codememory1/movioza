@@ -2,13 +2,13 @@ import { buildWebPageSchema } from '#shared/seo/builders/webpage.schema'
 import type { MaybeRefOrGetter } from 'vue'
 import type { MediaShortModel } from '#shared/types/media'
 import { buildItemListSchema } from '#shared/seo/builders/item-list.schema'
-import type { CollectionModel } from '#shared/types/collection/collection.model'
+import type { CollectionShortModel } from '#shared/types/collection/collection.model'
 import { AppRoutes } from '#shared/router/routes'
 import { buildItemMovieSchema } from '#shared/seo/builders/movie.schema'
 import { buildItemTvSeriesSchema } from '#shared/seo/builders/tv-series.schema'
 
 export interface HomeSeoCollection {
-  entity: CollectionModel
+  entity: CollectionShortModel
   media: MediaShortModel[]
 }
 
