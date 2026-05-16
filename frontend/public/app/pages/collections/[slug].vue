@@ -26,12 +26,14 @@ definePageMeta({
   middleware: ['collection-middleware']
 })
 
+const MEDIA_LIMIT = 20
+
 const route = useRoute()
 
 const page = ref<number>(Number(route.params.page || 1))
 const { id, slug } = useSlugParser(String(route.params.slug), 'Collection')
 const { data: collection } = await useCollectionDetail(id)
-const { data: mediaList } = await useCollectionMediaList(id, page, 20, true)
+const { data: mediaList } = await useCollectionMediaList(id, page, MEDIA_LIMIT, true)
 
 if (!mediaList.value) {
   throw createError({ status: 404, message: 'Collection not found' })
@@ -40,7 +42,9 @@ if (!mediaList.value) {
 useCollectionDetailSeo({
   collection,
   page,
-  totalPages: computed(() => mediaList.value?.meta.pagination.totalPages || 1)
+  totalPages: computed(() => mediaList.value?.meta.pagination.totalPages || 1),
+  limit: MEDIA_LIMIT,
+  media: mediaList.value.data
 })
 </script>
 
