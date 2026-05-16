@@ -6,7 +6,7 @@ export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
   pinia: {
-    storesDirs: ['./app/costores/*']
+    storesDirs: ['./app/stores/*']
   },
   css: ['~/assets/scss/main.scss', 'keen-slider/keen-slider.min.css'],
   fonts: {
