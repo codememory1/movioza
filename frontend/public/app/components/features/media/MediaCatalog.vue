@@ -12,11 +12,14 @@
       <div class="media-catalog__meta">
         <span>{{ resultsText }}</span>
       </div>
+
       <div class="media-catalog__grid">
-        <MediaCard v-for="item in items" :key="item.id" :media="item" />
+        <MediaCard v-if="!loading" v-for="item in items" :key="item.id" :media="item" />
+        <MediaCard v-else v-for="i in 10" :key="i" />
       </div>
 
       <APagination
+        v-if="!loading"
         :model-value="currentPage"
         :total="totalPages"
         :link="pageLink"
@@ -41,6 +44,7 @@ export interface MediaCatalogProps {
   pageLink: (page: number) => RouteLocationRaw
   resetFiltersLoading?: boolean
   acceptFiltersLoading?: boolean
+  loading?: boolean
 }
 
 export interface MediaCatalogEmits {

@@ -22,8 +22,8 @@
       :value="model"
       class="a-input__input"
       @input="onInput"
-      @focus="focus = true"
-      @blur="focus = false"
+      @focus="onFocus"
+      @blur="onBlur"
     />
     <div v-if="$slots.append && appendIcon" class="a-input__append">
       <slot name="append">
@@ -51,6 +51,8 @@ export interface AInputProps {
 
 export interface AInputEmits {
   input: [value: string | null]
+  focus: []
+  blur: []
 }
 
 const props = withDefaults(defineProps<AInputProps>(), {
@@ -68,6 +70,18 @@ const onInput = (e: Event): void => {
   model.value = isEmpty(value) ? null : value
 
   emit('input', model.value)
+}
+
+const onFocus = (): void => {
+  focus.value = true
+
+  emit('focus')
+}
+
+const onBlur = (): void => {
+  focus.value = false
+
+  emit('blur')
 }
 </script>
 

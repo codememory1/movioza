@@ -80,3 +80,22 @@ textarea {
     background-color: var(--a-primary-dark);
   }
 }
+
+.a-skeleton {
+  position: relative;
+  overflow: hidden;
+
+  &:before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%);
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.08) 50%,
+      transparent 100%
+    );
+    animation: skeleton-loading 1.2s infinite;
+  }
+}
