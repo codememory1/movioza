@@ -59,5 +59,9 @@ export const AppRoutes = {
   collectionModel: (model: Pick<CollectionShortModel, 'id' | 'slug'>) =>
     AppRoutes.collection(model.id, model.slug),
   collectionPageModel: (model: Pick<CollectionShortModel, 'id' | 'slug'>, page: number) =>
-    AppRoutes.collectionPage(model.id, model.slug, page)
+    AppRoutes.collectionPage(model.id, model.slug, page),
+
+  // Search
+  search: () => '/search',
+  searchPage: (page: number) => `/search/page/${page}`
 }
