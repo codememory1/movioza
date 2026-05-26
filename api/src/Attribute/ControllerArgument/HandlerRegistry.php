@@ -7,7 +7,7 @@ namespace Movioza\Attribute\ControllerArgument;
 class HandlerRegistry implements HandlerRegistryInterface
 {
     /**
-     * @var AttributeHandlerInterface[]
+     * @var AttributeHandlerInterface<AttributeInterface>[]
      */
     private array $handlers = [];
 

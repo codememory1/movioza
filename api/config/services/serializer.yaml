@@ -1,0 +1,21 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    # Name Converters
+    Symfony\Component\Serializer\NameConverter\CamelCaseToSnakeCaseNameConverter: ~
+
+    # Request payload
+    movioza.serializer.normalizer.request_object:
+        class: Symfony\Component\Serializer\Normalizer\ObjectNormalizer
+        arguments:
+            $nameConverter: '@serializer.name_converter.camel_case_to_snake_case'
+
+    movioza.serializer.request_payload:
+        class: Symfony\Component\Serializer\Serializer
+        arguments:
+            $normalizers:
+                - '@movioza.serializer.normalizer.request_object'
+            $encoders:
+                - '@serializer.encoder.json'
