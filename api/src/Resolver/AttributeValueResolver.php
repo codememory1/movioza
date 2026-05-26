@@ -45,6 +45,9 @@ readonly class AttributeValueResolver implements ValueResolverInterface
         return $argument->getAttributes(AttributeInterface::class, ReflectionAttribute::IS_INSTANCEOF);
     }
 
+    /**
+     * @return AttributeHandlerInterface<AttributeInterface>
+     */
     private function getAttributeHandler(AttributeInterface $attribute): AttributeHandlerInterface
     {
         $handler = $this->attributeHandlerRegistry->getHandler($attribute->handler());

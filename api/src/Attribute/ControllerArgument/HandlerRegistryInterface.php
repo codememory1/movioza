@@ -6,7 +6,13 @@ namespace Movioza\Attribute\ControllerArgument;
 
 interface HandlerRegistryInterface
 {
+    /**
+     * @param AttributeHandlerInterface<AttributeInterface> $handler
+     */
     public function register(AttributeHandlerInterface $handler): void;
 
+    /**
+     * @return AttributeHandlerInterface<AttributeInterface>|null
+     */
     public function getHandler(string $className): ?AttributeHandlerInterface;
 }
