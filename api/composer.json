@@ -34,7 +34,7 @@
     },
     "autoload": {
         "psr-4": {
-            "App\\": "src/"
+            "Movioza\\": "src/"
         }
     },
     "autoload-dev": {

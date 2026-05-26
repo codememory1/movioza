@@ -5,5 +5,21 @@ services:
         autowire: true
         autoconfigure: true
 
-    App\:
-        resource: '../src/'
+    Movioza\Controller\:
+        resource: '../src/Controller/**/*Controller.php'
+        tags:
+            - { name: controller.service_arguments }
+
+    Movioza\Attribute\ControllerArgument\:
+        resource: '../src/Attribute/ControllerArgument/*Handler.php'
+        tags:
+            - { name: movioza.controller.argument_attribute_handler }
+
+    Movioza\Resolver\AttributeValueResolver:
+        tags:
+            - { name: controller.argument_value_resolver }
+
+    movioza.attribute.controller_argument.handler_registry:
+        class: Movioza\Attribute\ControllerArgument\HandlerRegistry
+
+    Movioza\Attribute\ControllerArgument\HandlerRegistryInterface: '@movioza.attribute.controller_argument.handler_registry'
