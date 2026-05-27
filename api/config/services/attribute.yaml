@@ -17,3 +17,14 @@ services:
         class: Movioza\Attribute\ControllerArgument\HandlerRegistry
 
     Movioza\Attribute\ControllerArgument\HandlerRegistryInterface: '@movioza.attribute.controller_argument.handler_registry'
+
+    # Controller
+    Movioza\Attribute\Controller\:
+        resource: '%kernel.project_dir%/src/Attribute/Controller/*Handler.php'
+        tags:
+            - { name: movioza.controller.attribute_handler }
+
+    movioza.attribute.controller.handler_registry:
+        class: Movioza\Attribute\Controller\HandlerRegistry
+
+    Movioza\Attribute\Controller\HandlerRegistryInterface: '@movioza.attribute.controller.handler_registry'
