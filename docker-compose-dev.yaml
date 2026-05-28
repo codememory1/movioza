@@ -81,9 +81,9 @@ services:
     networks:
       - www_app
 
-  embeddings:
+  huggingface-embeddings:
     image: ghcr.io/huggingface/text-embeddings-inference:${HUGGINGFACE_EMBEDDINGS_VERSION}
-    container_name: ${DOCKER_CONTAINER_PREFIX}-embeddings
+    container_name: ${DOCKER_CONTAINER_PREFIX}-huggingface-embeddings
     restart: unless-stopped
     platform: linux/amd64
     ports:
