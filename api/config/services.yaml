@@ -16,3 +16,9 @@ services:
 
     Movioza\EventListener\:
         resource: '%kernel.project_dir%/src/EventListener/*'
+
+    # Slug generator
+    movioza.slug_generator.cocur:
+        class: Movioza\Service\Slug\CocurSlugGenerator
+
+    Movioza\Service\Slug\SlugGeneratorInterface: '@movioza.slug_generator.cocur'
