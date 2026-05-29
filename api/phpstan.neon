@@ -14,4 +14,4 @@ parameters:
     tmpDir: var/cache/phpstan
 
     symfony:
-        containerXmlPath: var/cache/dev/App_KernelDevDebugContainer.xml
+        containerXmlPath: var/cache/dev/Movioza_KernelDevDebugContainer.xml
