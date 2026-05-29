@@ -1,6 +1,8 @@
 imports:
     - { resource: './services/attribute.yaml' }
     - { resource: './services/serializer.yaml' }
+    - { resource: './services/factory.yaml' }
+    - { resource: './services/repository.yaml' }
 
 parameters: []
 
