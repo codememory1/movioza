@@ -1,6 +1,8 @@
 imports:
     - { resource: './services/attribute.yaml' }
     - { resource: './services/serializer.yaml' }
+    - { resource: './services/factory.yaml' }
+    - { resource: './services/repository.yaml' }
 
 parameters: []
 
@@ -16,3 +18,9 @@ services:
 
     Movioza\EventListener\:
         resource: '%kernel.project_dir%/src/EventListener/*'
+
+    # Slug generator
+    movioza.slug_generator.cocur:
+        class: Movioza\Service\Slug\CocurSlugGenerator
+
+    Movioza\Service\Slug\SlugGeneratorInterface: '@movioza.slug_generator.cocur'
