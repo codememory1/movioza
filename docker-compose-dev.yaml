@@ -81,6 +81,23 @@ services:
     networks:
       - www_app
 
+  huggingface-embeddings:
+    image: ghcr.io/huggingface/text-embeddings-inference:${HUGGINGFACE_EMBEDDINGS_VERSION}
+    container_name: ${DOCKER_CONTAINER_PREFIX}-huggingface-embeddings
+    restart: unless-stopped
+    platform: linux/amd64
+    ports:
+      - "${HUGGINGFACE_EMBEDDINGS_PORT}:80"
+    environment:
+      MODEL_ID: ${HUGGINGFACE_EMBEDDINGS_MODEL_ID}
+    command:
+      - "--model-id"
+      - "${HUGGINGFACE_EMBEDDINGS_MODEL_ID}"
+    volumes:
+      - ${HUGGINGFACE_EMBEDDINGS_VOLUMES}:/data
+    networks:
+      - www_app
+
 networks:
   www_app:
     external: true
