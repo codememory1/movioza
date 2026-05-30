@@ -1,0 +1,10 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    # Responder
+    movioza.api.json_response:
+        class: Movioza\Api\Response\JsonApiResponse
+
+    Movioza\Api\Response\ApiResponseInterface: '@movioza.api.json_response'
