@@ -3,6 +3,7 @@ imports:
     - { resource: './services/serializer.yaml' }
     - { resource: './services/factory.yaml' }
     - { resource: './services/repository.yaml' }
+    - { resource: './services/api.yaml' }
 
 parameters: []
 
