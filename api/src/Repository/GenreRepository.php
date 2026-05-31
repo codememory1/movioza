@@ -18,4 +18,15 @@ class GenreRepository extends ServiceEntityRepository implements GenreRepository
     {
         parent::__construct($registry, Genre::class);
     }
+
+    public function findAllSortedById(): array
+    {
+        $qb = $this->createQueryBuilder('g');
+
+        $qb->orderBy(
+            $qb->expr()->desc('g.id')
+        );
+
+        return $qb->getQuery()->getResult();
+    }
 }
