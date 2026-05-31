@@ -17,6 +17,9 @@ services:
         tags:
             - { name: controller.service_arguments }
 
+    Movioza\DataFixtures\:
+        resource: '%kernel.project_dir%/src/DataFixtures/*Fixtures.php'
+
     Movioza\EventListener\:
         resource: '%kernel.project_dir%/src/EventListener/*'
 

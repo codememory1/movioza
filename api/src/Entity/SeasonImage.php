@@ -8,6 +8,9 @@ use Doctrine\ORM\Mapping as ORM;
 use Movioza\Entity\Interfaces\ImageInterface;
 use Movioza\Entity\Interfaces\SeasonImageInterface;
 use Movioza\Entity\Interfaces\SeasonInterface;
+use Movioza\Entity\Traits\BigintIdentifier;
+use Movioza\Entity\Traits\CreatedAtTrait;
+use Movioza\Entity\Traits\UpdatedAtTrait;
 use Movioza\Enum\SeasonImageType;
 use Movioza\Repository\SeasonImageRepository;
 
@@ -16,6 +19,10 @@ use Movioza\Repository\SeasonImageRepository;
 #[ORM\HasLifecycleCallbacks]
 class SeasonImage implements SeasonImageInterface
 {
+    use BigintIdentifier;
+    use CreatedAtTrait;
+    use UpdatedAtTrait;
+
     #[ORM\ManyToOne(targetEntity: Season::class, inversedBy: 'images')]
     #[ORM\JoinColumn(nullable: false)]
     public private(set) SeasonInterface $season {

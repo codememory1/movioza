@@ -12,6 +12,8 @@ use Movioza\Entity\Traits\BigintIdentifier;
 use Movioza\Entity\Traits\CreatedAtTrait;
 use Movioza\Entity\Traits\UpdatedAtTrait;
 use Movioza\Repository\CountryRepository;
+use Movioza\Serializer\Group\CountryGroups;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: CountryRepository::class)]
 #[ORM\Table(name: 'countries')]
@@ -23,11 +25,13 @@ class Country implements CountryInterface
     use UpdatedAtTrait;
 
     #[ORM\Column(length: 120, unique: true)]
+    #[Groups([CountryGroups::LIST])]
     public private(set) string $name {
         get => $this->name;
     }
 
     #[ORM\Column(length: 3, unique: true)]
+    #[Groups([CountryGroups::LIST])]
     public private(set) string $code {
         get => $this->code;
     }

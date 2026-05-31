@@ -2,3 +2,8 @@ services:
     _defaults:
         autowire: true
         autoconfigure: true
+
+    movioza.repository.country:
+        class: Movioza\Repository\CountryRepository
+
+    Movioza\Repository\Interfaces\CountryRepositoryInterface: '@movioza.repository.country'
