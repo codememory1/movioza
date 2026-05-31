@@ -3,7 +3,14 @@ services:
         autowire: true
         autoconfigure: true
 
+    # Country
     movioza.repository.country:
         class: Movioza\Repository\CountryRepository
 
     Movioza\Repository\Interfaces\CountryRepositoryInterface: '@movioza.repository.country'
+
+    # Genre
+    movioza.repository.genre:
+        class: Movioza\Repository\GenreRepository
+
+    Movioza\Repository\Interfaces\GenreRepositoryInterface: '@movioza.repository.genre'
