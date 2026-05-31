@@ -8,7 +8,7 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Movioza\Entity\Country;
 
-class LoadCountryFixtures extends Fixture
+class LoadCountriesFixtures extends Fixture
 {
     private const array COUNTRIES = [
         [
