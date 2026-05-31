@@ -12,7 +12,7 @@ interface ApiResponseInterface
 
     public function error(string $message, int $httpCode, array $headers = []): static;
 
-    public function resource(object|array $resource, array $context = []): static;
+    public function resource(object|array $resource, array $groups = [], array $context = []): static;
 
     public function withPagination(int $totalPages, int $currentPage): static;
 

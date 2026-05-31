@@ -18,4 +18,15 @@ class CountryRepository extends ServiceEntityRepository implements CountryReposi
     {
         parent::__construct($registry, Country::class);
     }
+
+    public function findAllSortedByName(): array
+    {
+        $qb = $this->createQueryBuilder('c');
+
+        $qb->orderBy(
+            $qb->expr()->asc('c.name')
+        );
+
+        return $qb->getQuery()->getResult();
+    }
 }

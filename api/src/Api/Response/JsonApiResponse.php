@@ -40,9 +40,12 @@ class JsonApiResponse implements ApiResponseInterface
     /**
      * @throws ExceptionInterface
      */
-    public function resource(object|array $resource, array $context = []): static
+    public function resource(object|array $resource, array $groups = [], array $context = []): static
     {
-        $this->response['data'] = $this->normalizer->normalize($resource, 'array', $context);
+        $this->response['data'] = $this->normalizer->normalize($resource, 'array', [
+            'groups' => $groups,
+            ...$context,
+        ]);
 
         return $this;
     }
