@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Movioza\Controller;
 
 use Movioza\Api\Response\ApiResponseInterface;
+use Movioza\Attribute\Controller\Cacheable;
 use Movioza\Attribute\ControllerArgument\MapEntity;
 use Movioza\Entity\Interfaces\MediaInterface;
 use Movioza\Entity\Media;
@@ -20,6 +21,7 @@ readonly class MediaController
     }
 
     #[Route(path: '/{id<\d+>}', name: 'detail')]
+    #[Cacheable(key: 'api:media:{id}:detail', ttl: 86400)]
     public function detail(
         #[MapEntity(Media::class)]
         MediaInterface $media

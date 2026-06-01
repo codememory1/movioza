@@ -8,9 +8,9 @@ use Symfony\Component\HttpFoundation\Response;
 
 interface ApiResponseInterface
 {
-    public function success(int $httpCode, array $headers = []): static;
+    public function success(int $status, array $headers = []): static;
 
-    public function error(string $message, int $httpCode, array $headers = []): static;
+    public function error(string $message, int $status, array $headers = []): static;
 
     public function resource(object|array $resource, array $groups = [], array $context = []): static;
 

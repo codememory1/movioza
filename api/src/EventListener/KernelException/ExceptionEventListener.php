@@ -68,7 +68,11 @@ readonly class ExceptionEventListener
         }
 
         if ($exception instanceof HttpException) {
-            return $this->apiResponse->error($exception->getMessage(), $exception->getStatusCode());
+            return $this->apiResponse->error(
+                $exception->getMessage(),
+                $exception->getStatusCode(),
+                $exception->getHeaders()
+            );
         }
 
         if ($this->parameterBag->get('kernel.debug')) {

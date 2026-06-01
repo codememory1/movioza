@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Movioza\Controller;
 
 use Movioza\Api\Response\ApiResponseInterface;
+use Movioza\Attribute\Controller\Cacheable;
 use Movioza\Repository\Interfaces\CountryRepositoryInterface;
 use Movioza\Serializer\Group\CountryGroups;
 use Symfony\Component\Routing\Attribute\Route;
@@ -18,6 +19,7 @@ readonly class CountryController
     }
 
     #[Route(name: 'all')]
+    #[Cacheable(key: 'api:country:all', ttl: 86400)]
     public function all(CountryRepositoryInterface $countryRepository): ApiResponseInterface
     {
         return $this->apiResponse
