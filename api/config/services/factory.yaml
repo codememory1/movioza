@@ -2,3 +2,21 @@ services:
     _defaults:
         autowire: true
         autoconfigure: true
+
+    # Genre
+    movioza.factory.genre:
+        class: Movioza\Factory\GenreFactory
+
+    Movioza\Factory\Interfaces\GenreFactoryInterface: '@movioza.factory.genre'
+
+    # Person
+    movioza.factory.person:
+        class: Movioza\Factory\PersonFactory
+
+    Movioza\Factory\Interfaces\PersonFactoryInterface: '@movioza.factory.person'
+
+    # Media
+    movioza.factory.media:
+        class: Movioza\Factory\MediaFactory
+
+    Movioza\Factory\Interfaces\MediaFactoryInterface: '@movioza.factory.media'

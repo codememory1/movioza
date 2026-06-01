@@ -77,20 +77,37 @@ interface MediaInterface extends BigintIdentifierInterface
         get;
     }
 
+    /**
+     * @var Collection<int, MediaGenreInterface>
+     */
+    public Collection $genres {
+        get;
+    }
+
     public function setUploadedNow(): static;
 
     /**
-     * @return Collection<int, PersonInterface>
+     * @return PersonInterface[]
      */
-    public function getPersonsByRole(PersonRole $role): Collection;
+    public function getPersonsByRole(PersonRole $role): array;
 
     /**
-     * @return Collection<int, PersonInterface>
+     * @return PersonInterface[]
      */
-    public function getActors(): Collection;
+    public function getActors(): array;
 
     /**
-     * @return Collection<int, PersonInterface>
+     * @return PersonInterface[]
      */
-    public function getDirectors(): Collection;
+    public function getDirectors(): array;
+
+    /**
+     * @return Collection<int, GenreInterface>
+     */
+    public function getGenres(): Collection;
+
+    /**
+     * @return Collection<int, CountryInterface>
+     */
+    public function getCountries(): Collection;
 }

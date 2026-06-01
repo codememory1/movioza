@@ -116,7 +116,11 @@ class LoadCountriesFixtures extends Fixture
     public function load(ObjectManager $manager): void
     {
         foreach (self::COUNTRIES as $country) {
-            $manager->persist(new Country($country['name'], $country['code']));
+            $entity = new Country($country['name'], $country['code']);
+
+            $manager->persist($entity);
+
+            $this->addReference("country-{$country['code']}", $entity);
         }
 
         $manager->flush();

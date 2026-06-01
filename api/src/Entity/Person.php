@@ -15,6 +15,8 @@ use Movioza\Entity\Traits\CreatedAtTrait;
 use Movioza\Entity\Traits\UpdatedAtTrait;
 use Movioza\Enum\PersonGender;
 use Movioza\Repository\PersonRepository;
+use Movioza\Serializer\Group\MediaGroups;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: PersonRepository::class)]
 #[ORM\Table(name: 'persons')]
@@ -26,11 +28,13 @@ class Person implements PersonInterface
     use UpdatedAtTrait;
 
     #[ORM\Column(length: 120)]
+    #[Groups([MediaGroups::DETAIL])]
     public private(set) string $name {
         get => $this->name;
     }
 
     #[ORM\Column(length: 140)]
+    #[Groups([MediaGroups::DETAIL])]
     public private(set) string $slug {
         get => $this->slug;
     }
@@ -70,5 +74,11 @@ class Person implements PersonInterface
 
         $this->images = new ArrayCollection();
         $this->mediaPersons = new ArrayCollection();
+    }
+
+    #[Groups([MediaGroups::DETAIL])]
+    public function getId(): int
+    {
+        return $this->id;
     }
 }

@@ -9,7 +9,7 @@ use Movioza\Repository\Interfaces\GenreRepositoryInterface;
 use Movioza\Serializer\Group\GenreGroups;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route(path: '/genres', name: 'genres')]
+#[Route(path: '/genres', name: 'genres_')]
 readonly class GenreController
 {
     public function __construct(
