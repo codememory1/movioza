@@ -13,6 +13,7 @@ use Movioza\Entity\Traits\CreatedAtTrait;
 use Movioza\Entity\Traits\UpdatedAtTrait;
 use Movioza\Repository\CountryRepository;
 use Movioza\Serializer\Group\CountryGroups;
+use Movioza\Serializer\Group\MediaGroups;
 use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: CountryRepository::class)]
@@ -25,13 +26,19 @@ class Country implements CountryInterface
     use UpdatedAtTrait;
 
     #[ORM\Column(length: 120, unique: true)]
-    #[Groups([CountryGroups::LIST])]
+    #[Groups([
+        CountryGroups::LIST,
+        MediaGroups::DETAIL,
+    ])]
     public private(set) string $name {
         get => $this->name;
     }
 
     #[ORM\Column(length: 3, unique: true)]
-    #[Groups([CountryGroups::LIST])]
+    #[Groups([
+        CountryGroups::LIST,
+        MediaGroups::DETAIL,
+    ])]
     public private(set) string $code {
         get => $this->code;
     }

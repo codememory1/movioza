@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Movioza\Entity\Interfaces;
 
+use Doctrine\Common\Collections\Collection;
+
 interface GenreInterface extends BigintIdentifierInterface
 {
     public string $name {
@@ -19,6 +21,13 @@ interface GenreInterface extends BigintIdentifierInterface
     }
 
     public string $shortDescription {
+        get;
+    }
+
+    /**
+     * @var Collection<int, MediaGenreInterface>
+     */
+    public Collection $mediaGenres {
         get;
     }
 }

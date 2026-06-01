@@ -9,7 +9,7 @@ use Movioza\Repository\Interfaces\CountryRepositoryInterface;
 use Movioza\Serializer\Group\CountryGroups;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route(path: '/countries', name: 'countries')]
+#[Route(path: '/countries', name: 'countries_')]
 readonly class CountryController
 {
     public function __construct(

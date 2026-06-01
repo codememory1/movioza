@@ -142,12 +142,16 @@ class LoadGenresFixtures extends Fixture
     public function load(ObjectManager $manager): void
     {
         foreach (self::GENRES as $genre) {
-            $manager->persist(new Genre(
+            $entity = new Genre(
                 $genre['name'],
                 $this->slugGenerator->generate($genre['name']),
                 $genre['emoji'],
                 $genre['shortDescription']
-            ));
+            );
+
+            $manager->persist($entity);
+
+            $this->addReference("genre-{$genre['name']}", $entity);
         }
 
         $manager->flush();

@@ -3,6 +3,9 @@ services:
         autowire: true
         autoconfigure: true
 
+    Movioza\Repository\:
+        resource: '%kernel.project_dir%/src/Repository/*Repository.php'
+
     # Country
     movioza.repository.country:
         class: Movioza\Repository\CountryRepository
@@ -14,3 +17,9 @@ services:
         class: Movioza\Repository\GenreRepository
 
     Movioza\Repository\Interfaces\GenreRepositoryInterface: '@movioza.repository.genre'
+
+    # Media
+    movoiza.repository.media:
+        class: Movioza\Repository\MediaRepository
+
+    Movioza\Repository\Interfaces\MediaRepositoryInterface: '@movoiza.repository.media'
