@@ -23,6 +23,20 @@ services:
     Movioza\EventListener\:
         resource: '%kernel.project_dir%/src/EventListener/*'
 
+    app.redis.client:
+        class: Predis\Client
+        arguments:
+            - {
+                scheme: '%env(REDIS_SCHEME)%',
+                host: '%env(REDIS_HOST)%',
+                port: '%env(REDIS_PORT)%',
+                password: '%env(REDIS_PASSWORD)%',
+                database: '%env(REDIS_DATABASE)%',
+                read_write_timeout: -1
+            }
+
+    Predis\ClientInterface: '@app.redis.client'
+
     # Slug generator
     movioza.slug_generator.cocur:
         class: Movioza\Service\Slug\CocurSlugGenerator

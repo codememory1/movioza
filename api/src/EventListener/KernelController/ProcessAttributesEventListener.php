@@ -22,12 +22,7 @@ readonly class ProcessAttributesEventListener
     public function onKernelController(ControllerEvent $event): void
     {
         foreach ($this->getAttributes($event) as $attribute) {
-            $this->getAttributeHandler($attribute)->handle(
-                $attribute,
-                $event->getRequest(),
-                $event->getRequestType(),
-                $event->isMainRequest()
-            );
+            $this->getAttributeHandler($attribute)->handle($attribute, $event);
         }
     }
 

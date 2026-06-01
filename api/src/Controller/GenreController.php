@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Movioza\Controller;
 
 use Movioza\Api\Response\ApiResponseInterface;
+use Movioza\Attribute\Controller\Cacheable;
 use Movioza\Repository\Interfaces\GenreRepositoryInterface;
 use Movioza\Serializer\Group\GenreGroups;
 use Symfony\Component\Routing\Attribute\Route;
@@ -18,6 +19,7 @@ readonly class GenreController
     }
 
     #[Route(name: 'all')]
+    #[Cacheable(key: 'api:genre:all', ttl: 86400)]
     public function all(GenreRepositoryInterface $genreRepository): ApiResponseInterface
     {
         return $this->apiResponse

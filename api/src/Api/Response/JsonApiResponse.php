@@ -11,7 +11,8 @@ use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 class JsonApiResponse implements ApiResponseInterface
 {
-    private array $response = [];
+    public $response;
+    private array $data = [];
     private int $httpCode = 200;
     private array $headers = [];
 
@@ -20,19 +21,25 @@ class JsonApiResponse implements ApiResponseInterface
     ) {
     }
 
-    public function success(int $httpCode, array $headers = []): static
+    public function success(int $status, array $headers = []): static
     {
-        $this->response['success'] = true;
+        $this->data['success'] = true;
+
+        $this->httpCode = $status;
+        $this->headers = $headers;
 
         return $this;
     }
 
-    public function error(string $message, int $httpCode, array $headers = []): static
+    public function error(string $message, int $status, array $headers = []): static
     {
-        $this->response['success'] = false;
-        $this->response['error'] = [
+        $this->data['success'] = false;
+        $this->data['error'] = [
             'message' => $message,
         ];
+
+        $this->httpCode = $status;
+        $this->headers = $headers;
 
         return $this;
     }
@@ -42,7 +49,7 @@ class JsonApiResponse implements ApiResponseInterface
      */
     public function resource(object|array $resource, array $groups = [], array $context = []): static
     {
-        $this->response['data'] = $this->normalizer->normalize($resource, 'array', [
+        $this->data['data'] = $this->normalizer->normalize($resource, 'array', [
             'groups' => $groups,
             ...$context,
         ]);
@@ -61,16 +68,16 @@ class JsonApiResponse implements ApiResponseInterface
     public function addMeta(string $key, mixed $value): static
     {
         if (!isset($this->response['meta'])) {
-            $this->response['meta'] = [];
+            $this->data['meta'] = [];
         }
 
-        $this->response['meta'][$key] = $value;
+        $this->data['meta'][$key] = $value;
 
         return $this;
     }
 
     public function response(): Response
     {
-        return new JsonResponse($this->response, $this->httpCode, $this->headers);
+        return new JsonResponse($this->data, $this->httpCode, $this->headers);
     }
 }

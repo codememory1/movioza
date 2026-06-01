@@ -8,3 +8,9 @@ services:
         class: Movioza\Api\Response\JsonApiResponse
 
     Movioza\Api\Response\ApiResponseInterface: '@movioza.api.json_response'
+
+    # Cache
+    movioza.api.redis_response_cache:
+        class: Movioza\Api\Cache\RedisApiResponseCache
+
+    Movioza\Api\Cache\ApiResponseCacheInterface: '@movioza.api.redis_response_cache'
