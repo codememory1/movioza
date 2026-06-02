@@ -1,0 +1,21 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    # Providers
+    movioza.cdn.bunny_provider:
+        class: Movioza\Service\Cdn\Provider\BunnyCdnProvider
+        arguments:
+            $domain: '%env(BUNNY_DOMAIN)%'
+            $secretKey: '%env(BUNNY_SECRET_KEY)%'
+        tags:
+            - { name: movioza.cdn.provider }
+
+    # Url Generator
+    movioza.cdn.url_generator:
+        class: Movioza\Service\Cdn\CdnUrlGenerator
+        arguments:
+            $providers: !tagged_iterator movioza.cdn.provider
+
+    Movioza\Service\Cdn\CdnUrlGeneratorInterface: '@movioza.cdn.url_generator'

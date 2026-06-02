@@ -98,6 +98,24 @@ services:
     networks:
       - www_app
 
+  minio:
+    image: minio/minio:${MINIO_VERSION}
+    container_name: ${DOCKER_CONTAINER_PREFIX}-minio
+    restart: unless-stopped
+    platform: linux/amd64
+    hostname: ${MINIO_HOST}
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+    ports:
+      - ${MINIO_API_PORT}:9000
+      - ${MINIO_CONSOLE_PORT}:9001
+    command: server /data --console-address ":9001"
+    volumes:
+      - ${MINIO_VOLUMES}:/data
+    networks:
+      - www_app
+
 networks:
   www_app:
     external: true

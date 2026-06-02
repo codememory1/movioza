@@ -4,6 +4,7 @@ imports:
     - { resource: './services/factory.yaml' }
     - { resource: './services/repository.yaml' }
     - { resource: './services/api.yaml' }
+    - { resource: './services/cdn.yaml' }
 
 parameters: []
 
@@ -23,7 +24,8 @@ services:
     Movioza\EventListener\:
         resource: '%kernel.project_dir%/src/EventListener/*'
 
-    app.redis.client:
+    # Redis
+    movioza.redis.client:
         class: Predis\Client
         arguments:
             - {
@@ -35,7 +37,21 @@ services:
                 read_write_timeout: -1
             }
 
-    Predis\ClientInterface: '@app.redis.client'
+    Predis\ClientInterface: '@movioza.redis.client'
+
+    # AWS
+    movioza.s3.client:
+        class: Aws\S3\S3Client
+        arguments:
+            -   version: '%env(S3_VERSION)%'
+                region: '%env(S3_REGION)%'
+                endpoint: '%env(S3_ENDPOINT)%'
+                use_path_style_endpoint: '%env(bool:S3_USE_PATH_STYLE_ENDPOINT)%'
+                credentials:
+                    key: '%env(S3_ACCESS_KEY)%'
+                    secret: '%env(S3_SECRET_KEY)%'
+
+    Aws\S3\S3ClientInterface: '@movioza.s3.client'
 
     # Slug generator
     movioza.slug_generator.cocur:
