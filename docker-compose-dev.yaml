@@ -116,6 +116,22 @@ services:
     networks:
       - www_app
 
+  aria2:
+    image: p3terx/aria2-pro:${ARIA2_VERSION}
+    container_name: ${DOCKER_CONTAINER_PREFIX}-aria2
+    hostname: ${ARIA2_HOST}
+    restart: unless-stopped
+    platform: linux/amd64
+    environment:
+      RPC_SECRET: ${ARIA2_RPC_SECRET}
+      RPC_PORT: ${ARIA2_RPC_PORT}
+    ports:
+      - ${ARIA2_RPC_PORT}:6880
+    volumes:
+      - ${ARIA2_DOWNLOADS_VOLUMES}:/downloads
+    networks:
+      - www_app
+
 networks:
   www_app:
     external: true

@@ -53,6 +53,16 @@ services:
 
     Aws\S3\S3ClientInterface: '@movioza.s3.client'
 
+    # Aria2
+    movioza.aria2.client:
+        class: Movioza\Service\Aria2\Aria2Client
+        arguments:
+            $host: '%env(ARIA2_HOST)%'
+            $port: '%env(ARIA2_PORT)%'
+            $secret: '%env(ARIA2_SECRET)%'
+
+    Movioza\Service\Aria2\Aria2ClientInterface: '@movioza.aria2.client'
+
     # Slug generator
     movioza.slug_generator.cocur:
         class: Movioza\Service\Slug\CocurSlugGenerator
