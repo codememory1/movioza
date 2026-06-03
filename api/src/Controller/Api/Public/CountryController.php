@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Movioza\Controller;
+namespace Movioza\Controller\Api\Public;
 
 use Movioza\Api\Response\ApiResponseInterface;
 use Movioza\Attribute\Controller\Cacheable;
