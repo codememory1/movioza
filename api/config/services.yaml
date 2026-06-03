@@ -5,6 +5,7 @@ imports:
     - { resource: './services/repository.yaml' }
     - { resource: './services/api.yaml' }
     - { resource: './services/cdn.yaml' }
+    - { resource: './services/torrent.yaml' }
 
 parameters: []
 
