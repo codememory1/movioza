@@ -1,0 +1,17 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    # Torrent Tracker
+    Movioza\Service\TorrentTracker\Provider\:
+        resource: '%kernel.project_dir%/src/Service/TorrentTracker/Provider/*Provider.php'
+        tags:
+            - { name: movioza.torrent_tracker.provider }
+
+    movioza.torrent_tracker.manager:
+        class: Movioza\Service\TorrentTracker\TorrentTrackerManager
+        arguments:
+            $providers: !tagged_iterator movioza.torrent_tracker.provider
+
+    Movioza\Service\TorrentTracker\TorrentTrackerManagerInterface: '@movioza.torrent_tracker.manager'
