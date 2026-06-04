@@ -23,3 +23,9 @@ services:
         class: Movioza\Repository\MediaRepository
 
     Movioza\Repository\Interfaces\MediaRepositoryInterface: '@movoiza.repository.media'
+
+    # Media Source
+    movioza.repository.media_source:
+        class: Movioza\Repository\MediaSourceRepository
+
+    Movioza\Repository\Interfaces\MediaSourceRepositoryInterface: '@movioza.repository.media_source'

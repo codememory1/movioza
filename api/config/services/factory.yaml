@@ -20,3 +20,9 @@ services:
         class: Movioza\Factory\MediaFactory
 
     Movioza\Factory\Interfaces\MediaFactoryInterface: '@movioza.factory.media'
+
+    # Media Source
+    movioza.factory.media_source:
+        class: Movioza\Factory\MediaSourceFactory
+
+    Movioza\Factory\Interfaces\MediaSourceFactoryInterface: '@movioza.factory.media_source'

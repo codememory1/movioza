@@ -21,6 +21,10 @@ interface EpisodeInterface
         get;
     }
 
+    public int $number {
+        get;
+    }
+
     public ?string $description {
         get;
     }
@@ -37,6 +41,13 @@ interface EpisodeInterface
      * @var Collection<int, EpisodeImageInterface>
      */
     public Collection $images {
+        get;
+    }
+
+    /**
+     * @var Collection<int, MediaSourceInterface>
+     */
+    public Collection $sources {
         get;
     }
 

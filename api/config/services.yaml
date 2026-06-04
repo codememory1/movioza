@@ -71,3 +71,7 @@ services:
         class: Movioza\Service\Slug\CocurSlugGenerator
 
     Movioza\Service\Slug\SlugGeneratorInterface: '@movioza.slug_generator.cocur'
+
+    # Use Case
+    Movioza\UseCase\:
+        resource: '%kernel.project_dir%/src/UseCase/**/**/*Handler.php'
