@@ -15,6 +15,8 @@ use Movioza\Entity\Traits\BigintIdentifier;
 use Movioza\Entity\Traits\CreatedAtTrait;
 use Movioza\Entity\Traits\UpdatedAtTrait;
 use Movioza\Repository\EpisodeRepository;
+use Movioza\Serializer\Group\MediaSourceGroups;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: EpisodeRepository::class)]
 #[ORM\Table(name: 'episodes')]
@@ -41,6 +43,11 @@ class Episode implements EpisodeInterface
         get => $this->slug;
     }
 
+    #[ORM\Column]
+    public private(set) int $number {
+        get => $this->number;
+    }
+
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     public private(set) ?string $description = null {
         get => $this->description;
@@ -61,10 +68,16 @@ class Episode implements EpisodeInterface
         get => $this->images;
     }
 
+    #[ORM\OneToMany(targetEntity: MediaSource::class, mappedBy: 'episode')]
+    public private(set) Collection $sources {
+        get => $this->sources;
+    }
+
     public function __construct(
         SeasonInterface $season,
         string $title,
         string $slug,
+        int $number,
         ?string $description,
         DateTimeImmutable $releasedAt
     ) {
@@ -75,6 +88,16 @@ class Episode implements EpisodeInterface
         $this->releasedAt = $releasedAt;
 
         $this->images = new ArrayCollection();
+        $this->sources = new ArrayCollection();
+    }
+
+    #[Groups([
+        MediaSourceGroups::CREATE,
+        MediaSourceGroups::LIST,
+    ])]
+    public function getId(): int
+    {
+        return $this->id;
     }
 
     public function setUploadedNow(): static

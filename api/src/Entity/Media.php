@@ -24,6 +24,7 @@ use Movioza\Enum\MediaType;
 use Movioza\Enum\PersonRole;
 use Movioza\Repository\MediaRepository;
 use Movioza\Serializer\Group\MediaGroups;
+use Movioza\Serializer\Group\MediaSourceGroups;
 use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: MediaRepository::class)]
@@ -115,6 +116,11 @@ class Media implements MediaInterface
         get => $this->genres;
     }
 
+    #[ORM\OneToMany(targetEntity: MediaSource::class, mappedBy: 'media')]
+    public private(set) Collection $sources {
+        get => $this->sources;
+    }
+
     /**
      * @param GenreInterface[]   $genres
      * @param CountryInterface[] $countries
@@ -147,6 +153,7 @@ class Media implements MediaInterface
         $this->seasons = new ArrayCollection();
         $this->persons = new ArrayCollection();
         $this->genres = new ArrayCollection();
+        $this->sources = new ArrayCollection();
 
         foreach ($genres as $genre) {
             $this->attachGenre($genre);
@@ -165,7 +172,11 @@ class Media implements MediaInterface
         }
     }
 
-    #[Groups([MediaGroups::DETAIL])]
+    #[Groups([
+        MediaGroups::DETAIL,
+        MediaSourceGroups::CREATE,
+        MediaSourceGroups::LIST,
+    ])]
     public function getId(): int
     {
         return $this->id;

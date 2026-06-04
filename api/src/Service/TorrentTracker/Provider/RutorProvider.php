@@ -26,7 +26,7 @@ class RutorProvider implements ProviderInterface
 
     public function supports(string $url): bool
     {
-        return array_any(self::DOMAINS, fn (): bool => str_starts_with($url, 'https://rutor.info'));
+        return array_any(self::DOMAINS, static fn (string $domain): bool => str_starts_with($url, $domain));
     }
 
     public function downloadTorrentFile(string $url, string $targetPath): bool

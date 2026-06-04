@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Movioza\EventListener\KernelException;
 
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Movioza\Api\Response\ApiResponseInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -65,6 +66,10 @@ readonly class ExceptionEventListener
 
         if ($exception instanceof ServiceUnavailableHttpException) {
             return $this->apiResponse->error('Service temporarily unavailable.', 503);
+        }
+
+        if ($exception instanceof UniqueConstraintViolationException) {
+            return $this->apiResponse->error('The resource already exists.', 409);
         }
 
         if ($exception instanceof HttpException) {

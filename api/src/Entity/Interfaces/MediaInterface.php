@@ -84,6 +84,13 @@ interface MediaInterface extends BigintIdentifierInterface
         get;
     }
 
+    /**
+     * @var Collection<int, MediaSourceInterface>
+     */
+    public Collection $sources {
+        get;
+    }
+
     public function setUploadedNow(): static;
 
     /**

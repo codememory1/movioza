@@ -21,6 +21,10 @@ interface SeasonInterface
         get;
     }
 
+    public int $number {
+        get;
+    }
+
     public ?string $description {
         get;
     }
@@ -40,6 +44,13 @@ interface SeasonInterface
      * @var Collection<int, EpisodeInterface>
      */
     public Collection $episodes {
+        get;
+    }
+
+    /**
+     * @var Collection<int, MediaSourceInterface>
+     */
+    public Collection $sources {
         get;
     }
 }
