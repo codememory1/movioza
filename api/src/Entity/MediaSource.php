@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Movioza\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use InvalidArgumentException;
 use Movioza\Entity\Interfaces\EpisodeInterface;
@@ -13,6 +15,7 @@ use Movioza\Entity\Interfaces\SeasonInterface;
 use Movioza\Entity\Traits\BigintIdentifier;
 use Movioza\Entity\Traits\CreatedAtTrait;
 use Movioza\Entity\Traits\UpdatedAtTrait;
+use Movioza\Enum\MediaSourceStatus;
 use Movioza\Repository\MediaSourceRepository;
 use Movioza\Serializer\Group\MediaSourceGroups;
 use Symfony\Component\Serializer\Attribute\Groups;
@@ -69,8 +72,22 @@ class MediaSource implements MediaSourceInterface
         get => $this->torrentTrackerUrl;
     }
 
-    public function __construct(MediaInterface $media, string $torrentTrackerUrl, ?SeasonInterface $season = null, ?EpisodeInterface $episode = null)
-    {
+    #[ORM\Column(length: 32, enumType: MediaSourceStatus::class)]
+    public private(set) MediaSourceStatus $status {
+        get => $this->status;
+    }
+
+    #[ORM\OneToMany(targetEntity: MediaSourceArtifact::class, mappedBy: 'mediaSource')]
+    public private(set) Collection $artifacts {
+        get => $this->artifacts;
+    }
+
+    public function __construct(
+        MediaInterface $media,
+        string $torrentTrackerUrl,
+        ?SeasonInterface $season = null,
+        ?EpisodeInterface $episode = null
+    ) {
         if ($episode !== null && $season === null) {
             throw new InvalidArgumentException('Episode source requires season.');
         }
@@ -79,6 +96,9 @@ class MediaSource implements MediaSourceInterface
         $this->season = $season;
         $this->episode = $episode;
         $this->torrentTrackerUrl = $torrentTrackerUrl;
+        $this->status = MediaSourceStatus::PENDING;
+
+        $this->artifacts = new ArrayCollection();
     }
 
     #[Groups([
@@ -88,5 +108,26 @@ class MediaSource implements MediaSourceInterface
     public function getId(): int
     {
         return $this->id;
+    }
+
+    public function markAsProcessing(): static
+    {
+        $this->status = MediaSourceStatus::PROCESSING;
+
+        return $this;
+    }
+
+    public function markAsCompleted(): static
+    {
+        $this->status = MediaSourceStatus::COMPLETED;
+
+        return $this;
+    }
+
+    public function markAsFailed(): static
+    {
+        $this->status = MediaSourceStatus::FAILED;
+
+        return $this;
     }
 }
