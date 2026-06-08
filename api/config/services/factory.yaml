@@ -26,3 +26,9 @@ services:
         class: Movioza\Factory\MediaSourceFactory
 
     Movioza\Factory\Interfaces\MediaSourceFactoryInterface: '@movioza.factory.media_source'
+
+    # Outbox Message
+    movioza.factory.outbox_message:
+        class: Movioza\Factory\OutboxMessageFactory
+
+    Movioza\Factory\Interfaces\OutboxMessageFactoryInterface: '@movioza.factory.outbox_message'
