@@ -27,6 +27,15 @@ services:
     Movioza\EventListener\:
         resource: '%kernel.project_dir%/src/EventListener/*'
 
+    Movioza\Message\:
+        resource: '%kernel.project_dir%/src/Message/*Message.php'
+
+    Movioza\MessageHandler\:
+        resource: '%kernel.project_dir%/src/MessageHandler/*MessageHandler.php'
+
+    Movioza\Command\:
+        resource: '%kernel.project_dir%/src/Command/'
+
     # Redis
     movioza.redis.client:
         class: Predis\Client

@@ -29,3 +29,9 @@ services:
         class: Movioza\Repository\MediaSourceRepository
 
     Movioza\Repository\Interfaces\MediaSourceRepositoryInterface: '@movioza.repository.media_source'
+
+    # Outbox Message
+    movioza.repository.outbox_message:
+        class: Movioza\Repository\OutboxMessageRepository
+
+    Movioza\Repository\Interfaces\OutboxMessageRepositoryInterface: '@movioza.repository.outbox_message'

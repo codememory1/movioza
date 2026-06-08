@@ -1,0 +1,29 @@
+framework:
+    messenger:
+        failure_transport: failed_default
+
+        transports:
+            failed_default:
+                dsn: '%env(MESSENGER_FAILED_TRANSPORT_DSN)%'
+                options:
+                    exchange:
+                        name: failed_exchange
+                        type: fanout
+                    queues:
+                        failed_default: ~
+
+            media_sources:
+                dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
+                options:
+                    exchange:
+                        name: media_sources_exchange
+                        type: direct
+                        default_publish_routing_key: 'media_sources_default'
+                    queues:
+                        media_sources_default:
+                            binding_keys: ['media_sources_default']
+                retry_strategy:
+                    max_retries: 3
+                    delay: 5000
+                    multiplier: 2
+                    max_delay: 300000
