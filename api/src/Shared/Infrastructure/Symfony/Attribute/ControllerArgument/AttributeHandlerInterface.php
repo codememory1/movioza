@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace Movioza\Shared\Infrastructure\Symfony\Attribute\ControllerArgument;
 
 use Movioza\Attribute\ControllerArgument\AttributeInterface as T;
+use Movioza\Shared\Attribute\ControllerArgument\AttributeInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
 
 /**
- * @template T of object
+ * @template T of AttributeInterface
  */
 interface AttributeHandlerInterface
 {
@@ -21,5 +22,5 @@ interface AttributeHandlerInterface
     /**
      * @param T $attribute
      */
-    public function handle(object $attribute, Request $request, ArgumentMetadata $argument): mixed;
+    public function handle(AttributeInterface $attribute, Request $request, ArgumentMetadata $argument): mixed;
 }

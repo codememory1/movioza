@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Movioza\Shared\Infrastructure\Symfony\Attribute\ControllerArgument;
 
 use Movioza\Shared\Application\Exception\BadRequestException;
+use Movioza\Shared\Attribute\ControllerArgument\AttributeInterface;
 use Movioza\Shared\Attribute\ControllerArgument\MapRequestPayload;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Request;
@@ -37,7 +38,7 @@ readonly class MapRequestPayloadHandler implements AttributeHandlerInterface
         return MapRequestPayload::class;
     }
 
-    public function handle(object $attribute, Request $request, ArgumentMetadata $argument): object
+    public function handle(AttributeInterface $attribute, Request $request, ArgumentMetadata $argument): object
     {
         $dto = $this->deserialize($request, $argument);
 

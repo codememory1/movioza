@@ -34,7 +34,7 @@ readonly class AttributeValueResolver implements ValueResolverInterface
 
         foreach ($attributes as $attribute) {
             yield $this
-                ->getHandler($attribute)
+                ->getAttributeHandler($attribute)
                 ->handle($attribute, $request, $argument);
         }
     }
@@ -47,7 +47,7 @@ readonly class AttributeValueResolver implements ValueResolverInterface
         return $argument->getAttributes(AttributeInterface::class, ReflectionAttribute::IS_INSTANCEOF);
     }
 
-    private function getHandler(AttributeInterface $attribute): AttributeHandlerInterface
+    private function getAttributeHandler(AttributeInterface $attribute): AttributeHandlerInterface
     {
         $handler = $this->attributeHandlerRegistry->get($attribute::class);
 
