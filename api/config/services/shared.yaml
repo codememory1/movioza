@@ -1,0 +1,27 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    # Attribute Argument Value Resolver
+    Movioza\Shared\Infrastructure\Symfony\Resolver\AttributeValueResolver:
+        tags:
+            - { name: controller.argument_value_resolver }
+
+    # Controller Argument Attribute Handlers
+    Movioza\Shared\Infrastructure\Symfony\Attribute\ControllerArgument\:
+        resource: '%kernel.project_dir%/src/Shared/Infrastructure/Symfony/Attribute/ControllerArgument/*Handler.php'
+        tags:
+            - { name: movioza.attribute_controller_argument.handler }
+
+    # Controller Argument Attribute Handlers Registry
+    movioza.controller_argument_attribute.registry:
+        class: Movioza\Shared\Infrastructure\Symfony\Attribute\ControllerArgument\HandlerRegistry
+        arguments:
+            $handlers: !tagged_iterator movioza.attribute_controller_argument.handler
+
+    Movioza\Shared\Infrastructure\Symfony\Attribute\ControllerArgument\HandlerRegistryInterface: '@movioza.controller_argument_attribute.registry'
+
+    # Event Listeners
+    Movioza\Shared\Infrastructure\Symfony\EventListener\:
+        resource: '%kernel.project_dir%/src/Shared/Infrastructure/Symfony/EventListener/*'

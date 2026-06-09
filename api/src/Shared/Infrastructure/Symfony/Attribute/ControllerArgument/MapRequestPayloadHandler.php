@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Movioza\Attribute\ControllerArgument;
+namespace Movioza\Shared\Infrastructure\Symfony\Attribute\ControllerArgument;
 
-use Movioza\Exception\BadRequestException;
+use Movioza\Shared\Application\Exception\BadRequestException;
 use Movioza\Shared\Attribute\ControllerArgument\MapRequestPayload;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Request;
@@ -32,7 +32,12 @@ readonly class MapRequestPayloadHandler implements AttributeHandlerInterface
     ) {
     }
 
-    public function handle(AttributeInterface $attribute, Request $request, ArgumentMetadata $argument): object
+    public static function getSupportedAttribute(): string
+    {
+        return MapRequestPayload::class;
+    }
+
+    public function handle(object $attribute, Request $request, ArgumentMetadata $argument): object
     {
         $dto = $this->deserialize($request, $argument);
 
@@ -50,11 +55,11 @@ readonly class MapRequestPayloadHandler implements AttributeHandlerInterface
         } catch (NotEncodableValueException $e) {
             throw BadRequestException::invalidRequestPayload($e);
         } catch (MissingConstructorArgumentsException $e) {
-            throw BadRequestException::missingRequiredFields($e->getMissingConstructorArguments(), $this->nameConverter, $e);
+            throw BadRequestException::missingRequiredFields($this->normalizeFields($e->getMissingConstructorArguments()), $e);
         } catch (ExtraAttributesException $e) {
-            throw BadRequestException::extraFields($e->getExtraAttributes(), $this->nameConverter, $e);
+            throw BadRequestException::extraFields($this->normalizeFields($e->getExtraAttributes()), $e);
         } catch (NotNormalizableValueException $e) {
-            throw BadRequestException::invalidFieldValue($e->getPath(), $this->nameConverter, $e);
+            throw BadRequestException::invalidFieldValue($this->nameConverter->normalize($e->getPath()), $e);
         } catch (ExceptionInterface $e) {
             throw new BadRequestException('Invalid request.', previous: $e);
         }
@@ -65,5 +70,10 @@ readonly class MapRequestPayloadHandler implements AttributeHandlerInterface
         foreach ($this->validator->validate($dto) as $constraintViolation) {
             throw new BadRequestException($constraintViolation->getMessage());
         }
+    }
+
+    private function normalizeFields(array $fields): array
+    {
+        return array_map(fn (string $field): string => $this->nameConverter->normalize($field), $fields);
     }
 }
