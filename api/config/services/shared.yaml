@@ -50,5 +50,9 @@ services:
     # Downloader
     movioza.downloader.aria2:
         class: Movioza\Shared\Infrastructure\Aria2\Aria2Downloader
-        
+        arguments:
+            $host: '%env(ARIA2_HOST)%'
+            $port: '%env(ARIA2_PORT)%'
+            $secret: '%env(ARIA2_SECRET)%'
+
     Movioza\Shared\Domain\Downloader\DownloaderInterface: '@movioza.downloader.aria2'
