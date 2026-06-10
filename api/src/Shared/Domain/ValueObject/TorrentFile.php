@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Movioza\Shared\Domain\ValueObject;
 
@@ -17,10 +17,7 @@ class TorrentFile
         }
 
         if (pathinfo($value, PATHINFO_EXTENSION) !== 'torrent') {
-            throw new InvalidArgumentException(sprintf(
-                'File "%s" must have the ".torrent" extension.',
-                $value
-            ));
+            throw new InvalidArgumentException(sprintf('File "%s" must have the ".torrent" extension.', $value));
         }
 
         $this->value = $value;

@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Movioza\Shared\Infrastructure\TorrentTracker\Provider;
 
@@ -42,7 +42,7 @@ class RutorProvider implements TorrentTrackerProviderInterface
 
         try {
             $torrentContent = $this->client->request(Request::METHOD_GET, $downloadUrl)->getContent();
-        } catch (TransportExceptionInterface | HttpExceptionInterface $e) {
+        } catch (TransportExceptionInterface|HttpExceptionInterface $e) {
             throw new TorrentTrackerException($e->getMessage(), $e->getCode(), $e);
         }
 
@@ -66,7 +66,7 @@ class RutorProvider implements TorrentTrackerProviderInterface
     {
         try {
             $content = $this->client->request(Request::METHOD_GET, $url->value)->getContent();
-        } catch (TransportExceptionInterface | HttpExceptionInterface $e) {
+        } catch (TransportExceptionInterface|HttpExceptionInterface $e) {
             throw new TorrentTrackerException($e->getMessage(), $e->getCode(), $e);
         }
 

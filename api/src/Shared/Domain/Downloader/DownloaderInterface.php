@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Movioza\Shared\Domain\Downloader;
 
@@ -27,9 +27,9 @@ interface DownloaderInterface
     public function getMetrics(string $gid): DownloadMetrics;
 
     /**
-     * @throws DownloaderException
-     *
      * @return string[]
+     *
+     * @throws DownloaderException
      */
     public function getActiveGIDs(): array;
 

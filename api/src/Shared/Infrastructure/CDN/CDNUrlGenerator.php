@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Movioza\Shared\Infrastructure\CDN;
 
@@ -36,7 +36,7 @@ readonly class CDNUrlGenerator implements CDNUrlGeneratorInterface
         return $this->selectProvider($availableProviders, $stableId)->generate($type, $path, $ttl);
     }
 
-    private function selectProvider(array $providers, int $stableId): CdnProviderInterface
+    private function selectProvider(array $providers, int $stableId): CDNProviderInterface
     {
         return $providers[$stableId % count($providers)];
     }

@@ -62,7 +62,7 @@ readonly class MapRequestPayloadHandler implements AttributeHandlerInterface
         } catch (NotNormalizableValueException $e) {
             throw BadRequestException::invalidFieldValue($this->nameConverter->normalize($e->getPath()), $e);
         } catch (ExceptionInterface $e) {
-            throw new BadRequestException('Invalid request.', previous: $e);
+            throw new BadRequestException('Invalid request.', $e->getCode(), previous: $e);
         }
     }
 

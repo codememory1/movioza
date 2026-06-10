@@ -1,15 +1,15 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Movioza\Shared\Infrastructure\Symfony\EventListener;
 
 use Movioza\Shared\Attribute\ControllerArgument\AttributeInterface;
+use Movioza\Shared\Infrastructure\Symfony\Attribute\Controller\AttributeHandlerInterface;
 use Movioza\Shared\Infrastructure\Symfony\Attribute\Controller\HandlerRegistryInterface;
 use RuntimeException;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
-use Movioza\Shared\Infrastructure\Symfony\Attribute\Controller\AttributeHandlerInterface;
 
 #[AsEventListener(event: 'kernel.controller', method: 'onKernelController')]
 readonly class ProcessControllerAttributesEventListener

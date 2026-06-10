@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Movioza\Shared\Infrastructure\Aria2;
 
@@ -97,7 +97,7 @@ readonly class Aria2Downloader implements DownloaderInterface
                     ],
                 ],
             ])->toArray();
-        } catch (TransportExceptionInterface | HttpExceptionInterface | DecodingExceptionInterface $e) {
+        } catch (TransportExceptionInterface|HttpExceptionInterface|DecodingExceptionInterface $e) {
             throw new DownloaderException($e->getMessage(), $e->getCode(), $e);
         }
     }
