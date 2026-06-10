@@ -1,0 +1,104 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    # Event Listeners
+    Movioza\Shared\Infrastructure\Symfony\EventListener\:
+        resource: '%kernel.project_dir%/src/Shared/Infrastructure/Symfony/EventListener/*'
+
+    Movioza\Shared\Presentation\Http\EventListener\:
+        resource: '%kernel.project_dir%/src/Shared/Presentation/Http/EventListener/*'
+
+    # Attribute Argument Value Resolver
+    Movioza\Shared\Infrastructure\Symfony\Resolver\AttributeValueResolver:
+        tags:
+            - { name: controller.argument_value_resolver }
+
+    # Controller Argument Attribute Handlers
+    Movioza\Shared\Infrastructure\Symfony\Attribute\ControllerArgument\:
+        resource: '%kernel.project_dir%/src/Shared/Infrastructure/Symfony/Attribute/ControllerArgument/*Handler.php'
+        tags:
+            - { name: movioza.controller_argument_attribute.handler }
+
+    # Controller Argument Attribute Handlers Registry
+    movioza.controller_argument_attribute.registry:
+        class: Movioza\Shared\Infrastructure\Symfony\Attribute\ControllerArgument\HandlerRegistry
+        arguments:
+            $handlers: !tagged_iterator movioza.controller_argument_attribute.handler
+
+    Movioza\Shared\Infrastructure\Symfony\Attribute\ControllerArgument\HandlerRegistryInterface: '@movioza.controller_argument_attribute.registry'
+
+    # Controller Attribute Handlers
+    Movioza\Shared\Infrastructure\Symfony\Attribute\Controller\:
+        resource: '%kernel.project_dir%/src/Shared/Infrastructure/Symfony/Attribute/Controller/*Handler.php'
+        tags:
+            - { name: movioza.controller_attribute.handler }
+
+    # Controller Attribute Handlers Registry
+    movioza.controller_attribute.registry:
+        class: Movioza\Shared\Infrastructure\Symfony\Attribute\Controller\HandlerRegistry
+        arguments:
+            $handlers: !tagged_iterator movioza.controller_attribute.handler
+
+    Movioza\Shared\Infrastructure\Symfony\Attribute\Controller\HandlerRegistryInterface: '@movioza.controller_attribute.registry'
+
+    # Slug
+    movioza.slug_generator.cocur:
+        class: Movioza\Shared\Infrastructure\Slug\CocurSlugGenerator
+
+    Movioza\Shared\Domain\Slug\SlugGeneratorInterface: '@movioza.slug_generator.cocur'
+
+    # Downloader
+    movioza.downloader.aria2:
+        class: Movioza\Shared\Infrastructure\Aria2\Aria2Downloader
+        arguments:
+            $host: '%env(ARIA2_HOST)%'
+            $port: '%env(ARIA2_PORT)%'
+            $secret: '%env(ARIA2_SECRET)%'
+
+    Movioza\Shared\Domain\Downloader\DownloaderInterface: '@movioza.downloader.aria2'
+
+    # CDN
+    Movioza\Shared\Infrastructure\CDN\Provider\:
+        resource: '%kernel.project_dir%/src/Shared/Infrastructure/CDN/Provider/*Provider.php'
+        tags:
+            - { name: movioza.cdn.provider }
+
+    movioza.cdn.url_generator:
+        class: Movioza\Shared\Infrastructure\CDN\CDNUrlGenerator
+        arguments:
+            $providers: !tagged_iterator movioza.cdn.provider
+
+    Movioza\Shared\Domain\CDN\CDNUrlGeneratorInterface: '@movioza.cdn.url_generator'
+
+    # Torrent Tracker
+    Movioza\Shared\Infrastructure\TorrentTracker\Provider\:
+        resource: '%kernel.project_dir%/src/Shared/Infrastructure/TorrentTracker/Provider/*Provider.php'
+        tags:
+            - { name: movioza.torrent_tracker.provider }
+
+    movioza.torrent_tracker.manager:
+        class: Movioza\Shared\Infrastructure\TorrentTracker\TorrentTrackerManager
+        arguments:
+            $providers: !tagged_iterator movioza.torrent_tracker.provider
+
+    Movioza\Shared\Domain\TorrentTracker\TorrentTrackerManagerInterface: '@movioza.torrent_tracker.manager'
+
+    # Response Cache
+    movioza.cache.redis_response_cache:
+        class: Movioza\Shared\Infrastructure\Cache\RedisResponseCache
+
+    Movioza\Shared\Presentation\Http\Cache\ResponseCacheInterface: '@movioza.cache.redis_response_cache'
+
+    # Response Formatters
+    Movioza\Shared\Presentation\Http\Formatter\:
+        resource: '%kernel.project_dir%/src/Shared/Presentation/Http/Formatter/*Formatter.php'
+        tags:
+            - { name: movioza.response.formatter }
+
+    # Respond Event Listener
+    Movioza\Shared\Presentation\Http\EventListener\RespondEventListener:
+        arguments:
+            $formatters: !tagged_iterator movioza.response.formatter
+

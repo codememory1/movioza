@@ -6,6 +6,7 @@ imports:
     - { resource: './services/api.yaml' }
     - { resource: './services/cdn.yaml' }
     - { resource: './services/torrent.yaml' }
+    - { resource: './services/shared.yaml' }
 
 parameters:
     movioza.public_api_host: '%env(APP_PUBLIC_API_HOST)%'
