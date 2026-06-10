@@ -92,8 +92,13 @@ services:
     Movioza\Shared\Presentation\Http\Cache\ResponseCacheInterface: '@movioza.cache.redis_response_cache'
 
     # Response Formatters
-    Movioza\Shared\Presentation\Formatter\:
-        resource: '%kernel.project_dir%/src/Shared/Presentation/Formatter/*Formatter.php'
+    Movioza\Shared\Presentation\Http\Formatter\:
+        resource: '%kernel.project_dir%/src/Shared/Presentation/Http/Formatter/*Formatter.php'
         tags:
             - { name: movioza.response.formatter }
+
+    # Respond Event Listener
+    Movioza\Shared\Presentation\Http\EventListener\RespondEventListener:
+        arguments:
+            $formatters: !tagged_iterator movioza.response.formatter
 
