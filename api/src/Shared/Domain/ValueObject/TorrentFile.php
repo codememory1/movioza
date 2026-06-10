@@ -2,7 +2,7 @@
 
 declare(strict_types = 1);
 
-namespace Movioza\Shared\Domain\Downloader\ValueObject;
+namespace Movioza\Shared\Domain\ValueObject;
 
 use InvalidArgumentException;
 

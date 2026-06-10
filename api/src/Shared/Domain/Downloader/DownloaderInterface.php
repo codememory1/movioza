@@ -6,8 +6,8 @@ namespace Movioza\Shared\Domain\Downloader;
 
 use Movioza\Shared\Domain\Downloader\Exception\DownloaderException;
 use Movioza\Shared\Domain\Downloader\ValueObject\DownloadMetrics;
-use Movioza\Shared\Domain\Downloader\ValueObject\MagnetLink;
-use Movioza\Shared\Domain\Downloader\ValueObject\TorrentFile;
+use Movioza\Shared\Domain\ValueObject\MagnetLink;
+use Movioza\Shared\Domain\ValueObject\TorrentFile;
 
 interface DownloaderInterface
 {
