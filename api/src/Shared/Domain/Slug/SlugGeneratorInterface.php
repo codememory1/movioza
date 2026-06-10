@@ -2,7 +2,7 @@
 
 declare(strict_types = 1);
 
-namespace Movioza\Shared\Domain;
+namespace Movioza\Shared\Domain\Slug;
 
 interface SlugGeneratorInterface
 {

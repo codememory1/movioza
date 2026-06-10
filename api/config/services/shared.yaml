@@ -45,7 +45,7 @@ services:
     movioza.slug_generator.cocur:
         class: Movioza\Shared\Infrastructure\Slug\CocurSlugGenerator
 
-    Movioza\Shared\Domain\SlugGeneratorInterface: '@movioza.slug_generator.cocur'
+    Movioza\Shared\Domain\Slug\SlugGeneratorInterface: '@movioza.slug_generator.cocur'
 
     # Downloader
     movioza.downloader.aria2:
@@ -56,3 +56,16 @@ services:
             $secret: '%env(ARIA2_SECRET)%'
 
     Movioza\Shared\Domain\Downloader\DownloaderInterface: '@movioza.downloader.aria2'
+
+    # CDN
+    Movioza\Shared\Infrastructure\CDN\Provider\:
+        resource: '%kernel.project_dir%/src/Shared/Infrastructure/CDN/Provider/*Provider.php'
+        tags:
+            - { name: movioza.cdn.provider }
+
+    movioza.cdn.url_generator:
+        class: Movioza\Shared\Infrastructure\CDN\CDNUrlGenerator
+        arguments:
+            $providers: !tagged_iterator movioza.cdn.provider
+
+    Movioza\Shared\Domain\CDN\CDNUrlGeneratorInterface: '@movioza.cdn.url_generator'

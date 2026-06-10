@@ -4,6 +4,6 @@ declare(strict_types = 1);
 
 namespace Movioza\Shared\Domain\Downloader\Exception;
 
-use RuntimeException;
+use DomainException;
 
-class DownloaderException extends RuntimeException {}
+class DownloaderException extends DomainException {}

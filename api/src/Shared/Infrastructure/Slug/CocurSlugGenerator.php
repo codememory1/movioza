@@ -7,7 +7,7 @@ namespace Movioza\Shared\Infrastructure\Slug;
 use Cocur\Slugify\RuleProvider\RuleProviderInterface;
 use Cocur\Slugify\Slugify;
 use Cocur\Slugify\SlugifyInterface;
-use Movioza\Shared\Domain\SlugGeneratorInterface;
+use Movioza\Shared\Domain\Slug\SlugGeneratorInterface;
 
 readonly class CocurSlugGenerator implements SlugGeneratorInterface
 {
