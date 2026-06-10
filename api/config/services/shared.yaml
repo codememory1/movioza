@@ -46,3 +46,9 @@ services:
         class: Movioza\Shared\Infrastructure\Slug\CocurSlugGenerator
 
     Movioza\Shared\Domain\SlugGeneratorInterface: '@movioza.slug_generator.cocur'
+
+    # Downloader
+    movioza.downloader.aria2:
+        class: Movioza\Shared\Infrastructure\Aria2\Aria2Downloader
+        
+    Movioza\Shared\Domain\Downloader\DownloaderInterface: '@movioza.downloader.aria2'
