@@ -7,6 +7,8 @@ services:
     Movioza\Shared\Infrastructure\Symfony\EventListener\:
         resource: '%kernel.project_dir%/src/Shared/Infrastructure/Symfony/EventListener/*'
 
+    Movioza\Shared\Presentation\Http\EventListener\:
+        resource: '%kernel.project_dir%/src/Shared/Presentation/Http/EventListener/*'
 
     # Attribute Argument Value Resolver
     Movioza\Shared\Infrastructure\Symfony\Resolver\AttributeValueResolver:
@@ -82,3 +84,16 @@ services:
             $providers: !tagged_iterator movioza.torrent_tracker.provider
 
     Movioza\Shared\Domain\TorrentTracker\TorrentTrackerManagerInterface: '@movioza.torrent_tracker.manager'
+
+    # Response Cache
+    movioza.cache.redis_response_cache:
+        class: Movioza\Shared\Infrastructure\Cache\RedisResponseCache
+
+    Movioza\Shared\Presentation\Http\Cache\ResponseCacheInterface: '@movioza.cache.redis_response_cache'
+
+    # Response Formatters
+    Movioza\Shared\Presentation\Formatter\:
+        resource: '%kernel.project_dir%/src/Shared/Presentation/Formatter/*Formatter.php'
+        tags:
+            - { name: movioza.response.formatter }
+
