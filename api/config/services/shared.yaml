@@ -32,7 +32,7 @@ services:
         resource: '%kernel.project_dir%/src/Shared/Infrastructure/Symfony/Attribute/Controller/*Handler.php'
         tags:
             - { name: movioza.controller_attribute.handler }
-    
+
     # Controller Attribute Handlers Registry
     movioza.controller_attribute.registry:
         class: Movioza\Shared\Infrastructure\Symfony\Attribute\Controller\HandlerRegistry
@@ -40,3 +40,9 @@ services:
             $handlers: !tagged_iterator movioza.controller_attribute.handler
 
     Movioza\Shared\Infrastructure\Symfony\Attribute\Controller\HandlerRegistryInterface: '@movioza.controller_attribute.registry'
+
+    # Slug
+    movioza.slug_generator.cocur:
+        class: Movioza\Shared\Infrastructure\Slug\CocurSlugGenerator
+
+    Movioza\Shared\Domain\SlugGeneratorInterface: '@movioza.slug_generator.cocur'
