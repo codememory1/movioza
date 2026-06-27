@@ -1,8 +1,18 @@
 framework:
     messenger:
+        default_bus: command.bus
         failure_transport: failed_default
 
+        buses:
+            command.bus:
+                middleware:
+                    - movioza.messenger.middleware.idempotency
+                    - doctrine_close_connection
+
         transports:
+            sync:
+                dsn: 'sync://'
+
             failed_default:
                 dsn: '%env(MESSENGER_FAILED_TRANSPORT_DSN)%'
                 options:
@@ -27,3 +37,4 @@ framework:
                     delay: 5000
                     multiplier: 2
                     max_delay: 300000
+        routing: []

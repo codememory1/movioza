@@ -1,25 +1,20 @@
 doctrine:
     dbal:
         url: '%env(resolve:DATABASE_URL)%'
-
-        # IMPORTANT: You MUST configure your server version,
-        # either here or in the DATABASE_URL env var (see .env file)
-        #server_version: '16'
-
         profiling_collect_backtrace: '%kernel.debug%'
     orm:
         validate_xml_mapping: true
         naming_strategy: doctrine.orm.naming_strategy.underscore
         identity_generation_preferences:
             Doctrine\DBAL\Platforms\PostgreSQLPlatform: identity
-        auto_mapping: true
+        auto_mapping: false
         mappings:
-            App:
-                type: attribute
+            Shared:
+                type: xml
                 is_bundle: false
-                dir: '%kernel.project_dir%/src/Entity'
-                prefix: 'Movioza\Entity'
-                alias: App
+                dir: '%kernel.project_dir%/src/Shared/Infrastructure/Doctrine/Mapping'
+                prefix: Movioza\Shared\Domain
+                alias: Shared
 
 when@test:
     doctrine:

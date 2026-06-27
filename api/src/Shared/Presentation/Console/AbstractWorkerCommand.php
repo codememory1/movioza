@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace Movioza\Shared\Presentation\Console;
 
 use Override;
-use Psr\Log\LoggerInterface;
+use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerAwareTrait;
 
 use const SIGINT;
 use const SIGQUIT;
@@ -18,17 +19,13 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-abstract class AbstractWorkerCommand extends Command implements SignalableCommandInterface
+abstract class AbstractWorkerCommand extends Command implements SignalableCommandInterface, LoggerAwareInterface
 {
+    use LoggerAwareTrait;
+
     private int $startedAt;
 
     protected bool $shouldStop = false;
-
-    public function __construct(
-        private readonly LoggerInterface $logger
-    ) {
-        parent::__construct();
-    }
 
     protected function configure(): void
     {

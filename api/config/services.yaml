@@ -17,6 +17,11 @@ services:
         autowire: true
         autoconfigure: true
 
+    _instanceof:
+        Psr\Log\LoggerAwareInterface:
+            calls:
+                - [setLogger, ['@logger']]
+
     Movioza\Controller\:
         resource: '%kernel.project_dir%/src/Controller/**/*Controller.php'
         tags:

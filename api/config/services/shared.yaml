@@ -3,102 +3,43 @@ services:
         autowire: true
         autoconfigure: true
 
-    # Event Listeners
-    Movioza\Shared\Infrastructure\Symfony\EventListener\:
-        resource: '%kernel.project_dir%/src/Shared/Infrastructure/Symfony/EventListener/*'
+    Movioza\Shared\Presentation\Console\:
+        resource: '%kernel.project_dir%/src/Shared/Presentation/Console/*'
 
-    Movioza\Shared\Presentation\Http\EventListener\:
-        resource: '%kernel.project_dir%/src/Shared/Presentation/Http/EventListener/*'
+    # Outbox
+    movioza.outbox.repository.doctrine:
+        class: Movioza\Shared\Infrastructure\Doctrine\Repository\DoctrineOutboxMessageRepository
 
-    # Attribute Argument Value Resolver
-    Movioza\Shared\Infrastructure\Symfony\Resolver\AttributeValueResolver:
-        tags:
-            - { name: controller.argument_value_resolver }
+    Movioza\Shared\Domain\Outbox\OutboxMessageRepositoryInterface: '@movioza.outbox.repository.doctrine'
 
-    # Controller Argument Attribute Handlers
-    Movioza\Shared\Infrastructure\Symfony\Attribute\ControllerArgument\:
-        resource: '%kernel.project_dir%/src/Shared/Infrastructure/Symfony/Attribute/ControllerArgument/*Handler.php'
-        tags:
-            - { name: movioza.controller_argument_attribute.handler }
+    movioza.outbox.serializer.symfony:
+        class: Movioza\Shared\Infrastructure\Outbox\SymfonyOutboxCommandSerializer
 
-    # Controller Argument Attribute Handlers Registry
-    movioza.controller_argument_attribute.registry:
-        class: Movioza\Shared\Infrastructure\Symfony\Attribute\ControllerArgument\HandlerRegistry
-        arguments:
-            $handlers: !tagged_iterator movioza.controller_argument_attribute.handler
+    Movioza\Shared\Application\Outbox\OutboxCommandSerializerInterface: '@movioza.outbox.serializer.symfony'
 
-    Movioza\Shared\Infrastructure\Symfony\Attribute\ControllerArgument\HandlerRegistryInterface: '@movioza.controller_argument_attribute.registry'
+    movioza.outbox.bus.doctrine:
+        class: Movioza\Shared\Infrastructure\Bus\Command\DoctrineOutboxCommandBus
 
-    # Controller Attribute Handlers
-    Movioza\Shared\Infrastructure\Symfony\Attribute\Controller\:
-        resource: '%kernel.project_dir%/src/Shared/Infrastructure/Symfony/Attribute/Controller/*Handler.php'
-        tags:
-            - { name: movioza.controller_attribute.handler }
+    Movioza\Shared\Application\Bus\Command\OutboxCommandBusInterface: '@movioza.outbox.bus.doctrine'
 
-    # Controller Attribute Handlers Registry
-    movioza.controller_attribute.registry:
-        class: Movioza\Shared\Infrastructure\Symfony\Attribute\Controller\HandlerRegistry
-        arguments:
-            $handlers: !tagged_iterator movioza.controller_attribute.handler
+    # Inbox
+    movioza.inbox.repository.doctrine:
+        class: Movioza\Shared\Infrastructure\Doctrine\Repository\DoctrineInboxMessageRepository
 
-    Movioza\Shared\Infrastructure\Symfony\Attribute\Controller\HandlerRegistryInterface: '@movioza.controller_attribute.registry'
+    Movioza\Shared\Domain\Inbox\InboxMessageRepositoryInterface: '@movioza.inbox.repository.doctrine'
 
-    # Slug
-    movioza.slug_generator.cocur:
-        class: Movioza\Shared\Infrastructure\Slug\CocurSlugGenerator
+    # Command
+    movioza.command.bus.symfony:
+        class: Movioza\Shared\Infrastructure\Bus\Command\SymfonyCommandBus
 
-    Movioza\Shared\Domain\Slug\SlugGeneratorInterface: '@movioza.slug_generator.cocur'
+    Movioza\Shared\Application\Bus\Command\CommandBusInterface: '@movioza.command.bus.symfony'
 
-    # Downloader
-    movioza.downloader.aria2:
-        class: Movioza\Shared\Infrastructure\Aria2\Aria2Downloader
-        arguments:
-            $host: '%env(ARIA2_HOST)%'
-            $port: '%env(ARIA2_PORT)%'
-            $secret: '%env(ARIA2_SECRET)%'
+    # Messenger
+    movioza.messenger.middleware.idempotency:
+        class: Movioza\Shared\Infrastructure\Messenger\Middleware\IdempotencyMiddleware
 
-    Movioza\Shared\Domain\Downloader\DownloaderInterface: '@movioza.downloader.aria2'
+    # UUID
+    movioza.uuid.generator.symfony:
+        class: Movioza\Shared\Infrastructure\Uuid\SymfonyUuidGenerator
 
-    # CDN
-    Movioza\Shared\Infrastructure\CDN\Provider\:
-        resource: '%kernel.project_dir%/src/Shared/Infrastructure/CDN/Provider/*Provider.php'
-        tags:
-            - { name: movioza.cdn.provider }
-
-    movioza.cdn.url_generator:
-        class: Movioza\Shared\Infrastructure\CDN\CDNUrlGenerator
-        arguments:
-            $providers: !tagged_iterator movioza.cdn.provider
-
-    Movioza\Shared\Domain\CDN\CDNUrlGeneratorInterface: '@movioza.cdn.url_generator'
-
-    # Torrent Tracker
-    Movioza\Shared\Infrastructure\TorrentTracker\Provider\:
-        resource: '%kernel.project_dir%/src/Shared/Infrastructure/TorrentTracker/Provider/*Provider.php'
-        tags:
-            - { name: movioza.torrent_tracker.provider }
-
-    movioza.torrent_tracker.manager:
-        class: Movioza\Shared\Infrastructure\TorrentTracker\TorrentTrackerManager
-        arguments:
-            $providers: !tagged_iterator movioza.torrent_tracker.provider
-
-    Movioza\Shared\Domain\TorrentTracker\TorrentTrackerManagerInterface: '@movioza.torrent_tracker.manager'
-
-    # Response Cache
-    movioza.cache.redis_response_cache:
-        class: Movioza\Shared\Infrastructure\Cache\RedisResponseCache
-
-    Movioza\Shared\Presentation\Http\Cache\ResponseCacheInterface: '@movioza.cache.redis_response_cache'
-
-    # Response Formatters
-    Movioza\Shared\Presentation\Http\Formatter\:
-        resource: '%kernel.project_dir%/src/Shared/Presentation/Http/Formatter/*Formatter.php'
-        tags:
-            - { name: movioza.response.formatter }
-
-    # Respond Event Listener
-    Movioza\Shared\Presentation\Http\EventListener\RespondEventListener:
-        arguments:
-            $formatters: !tagged_iterator movioza.response.formatter
-
+    Movioza\Shared\Domain\Uuid\UuidGeneratorInterface: '@movioza.uuid.generator.symfony'

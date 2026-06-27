@@ -5,14 +5,11 @@ declare(strict_types=1);
 namespace Movioza\Shared\Domain\Entity;
 
 use DateTimeImmutable;
-use Doctrine\ORM\Mapping as ORM;
 
 trait TimestampableTrait
 {
-    #[ORM\Column]
     private ?DateTimeImmutable $createdAt = null;
 
-    #[ORM\Column(nullable: true)]
     private ?DateTimeImmutable $updatedAt = null;
 
     public function getCreatedAt(): ?DateTimeImmutable
@@ -20,7 +17,6 @@ trait TimestampableTrait
         return $this->createdAt;
     }
 
-    #[ORM\PrePersist]
     public function initializeCreatedAt(): self
     {
         $this->createdAt = new DateTimeImmutable();
@@ -33,7 +29,6 @@ trait TimestampableTrait
         return $this->updatedAt;
     }
 
-    #[ORM\PreUpdate]
     public function initializeUpdatedAt(): self
     {
         $this->updatedAt = new DateTimeImmutable();
