@@ -3,12 +3,13 @@
                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-    <entity name="App\Shared\Domain\Entity\Country" table="countries">
-        <id name="id" type="string" length="32" />
+    <entity name="Movioza\Shared\Domain\Entity\Country" table="countries">
+        <id name="id" type="shared_country_id" length="32">
+            <generator strategy="NONE" />
+        </id>
 
-        <field name="name" length="120" unique="true" />
-        <field name="code" length="3" unique="true" />
-
+        <field name="name" type="shared_country_name" length="120" unique="true" />
+        <field name="code" type="shared_country_code" length="3" unique="true" />
         <field name="createdAt" column="created_at" type="datetime_immutable" />
         <field name="updatedAt" column="updated_at" type="datetime_immutable" nullable="true" />
     </entity>
