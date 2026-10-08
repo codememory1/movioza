@@ -6,7 +6,7 @@ namespace Movioza\Shared\Domain\ValueObject;
 
 use InvalidArgumentException;
 
-readonly class CountryCode implements ValueObjectInterface
+final readonly class CountryCode implements ValueObjectInterface
 {
     public function __construct(
         private string $code
@@ -27,7 +27,7 @@ readonly class CountryCode implements ValueObjectInterface
 
     public function equals(ValueObjectInterface $other): bool
     {
-        return $other::class === static::class
+        return $other instanceof self
             && $this->getValue() === $other->getValue();
     }
 

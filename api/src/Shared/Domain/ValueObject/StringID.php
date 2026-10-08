@@ -23,7 +23,7 @@ abstract class StringID implements ValueObjectInterface
 
     public function equals(ValueObjectInterface $other): bool
     {
-        return $other::class === static::class
+        return $other instanceof static
             && $this->getValue() === $other->getValue();
     }
 

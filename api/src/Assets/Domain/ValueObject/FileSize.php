@@ -7,7 +7,7 @@ namespace Movioza\Assets\Domain\ValueObject;
 use InvalidArgumentException;
 use Movioza\Shared\Domain\ValueObject\ValueObjectInterface;
 
-readonly class FileSize implements ValueObjectInterface
+final readonly class FileSize implements ValueObjectInterface
 {
     public function __construct(
         private int $size

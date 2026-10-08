@@ -6,7 +6,7 @@ namespace Movioza\Shared\Domain\ValueObject;
 
 use InvalidArgumentException;
 
-readonly class CountryName implements ValueObjectInterface
+final readonly class CountryName implements ValueObjectInterface
 {
     public function __construct(
         private string $name

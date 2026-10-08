@@ -4,6 +4,6 @@ declare(strict_types = 1);
 
 namespace Movioza\Shared\Domain\ValueObject;
 
-class CountryID extends StringID
+final class CountryID extends StringID
 {
 }

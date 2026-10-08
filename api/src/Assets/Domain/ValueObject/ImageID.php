@@ -6,6 +6,6 @@ namespace Movioza\Assets\Domain\ValueObject;
 
 use Movioza\Shared\Domain\ValueObject\StringID;
 
-class ImageID extends StringID
+final class ImageID extends StringID
 {
 }

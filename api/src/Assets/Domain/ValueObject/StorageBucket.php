@@ -7,7 +7,7 @@ namespace Movioza\Assets\Domain\ValueObject;
 use InvalidArgumentException;
 use Movioza\Shared\Domain\ValueObject\ValueObjectInterface;
 
-readonly class StorageBucket implements ValueObjectInterface
+final readonly class StorageBucket implements ValueObjectInterface
 {
     public function __construct(
         private string $bucket
