@@ -1,25 +1,38 @@
 doctrine:
     dbal:
         url: '%env(resolve:DATABASE_URL)%'
-
-        # IMPORTANT: You MUST configure your server version,
-        # either here or in the DATABASE_URL env var (see .env file)
-        #server_version: '16'
-
         profiling_collect_backtrace: '%kernel.debug%'
+        types:
+            shared_country_id: Movioza\Shared\Infrastructure\Doctrine\Type\CountryIDType
+            shared_country_name: Movioza\Shared\Infrastructure\Doctrine\Type\CountryNameType
+            shared_country_code: Movioza\Shared\Infrastructure\Doctrine\Type\CountryCodeType
+            assets_file_id: Movioza\Shared\Infrastructure\Doctrine\Type\FileIDType
+            assets_image_id: Movioza\Shared\Infrastructure\Doctrine\Type\ImageIDType
+            assets_storage_bucket: Movioza\Shared\Infrastructure\Doctrine\Type\StorageBucketType
+            assets_storage_key: Movioza\Shared\Infrastructure\Doctrine\Type\StorageKeyType
+            assets_blur_hash: Movioza\Shared\Infrastructure\Doctrine\Type\BlurHashType
+            assets_file_extension: Movioza\Shared\Infrastructure\Doctrine\Type\FileExtensionType
+            assets_file_size: Movioza\Shared\Infrastructure\Doctrine\Type\FileSize
+
     orm:
         validate_xml_mapping: true
         naming_strategy: doctrine.orm.naming_strategy.underscore
         identity_generation_preferences:
             Doctrine\DBAL\Platforms\PostgreSQLPlatform: identity
-        auto_mapping: true
+        auto_mapping: false
         mappings:
-            App:
-                type: attribute
+            Shared:
+                type: xml
                 is_bundle: false
-                dir: '%kernel.project_dir%/src/Entity'
-                prefix: 'Movioza\Entity'
-                alias: App
+                dir: '%kernel.project_dir%/src/Shared/Infrastructure/Doctrine/Mapping'
+                prefix: Movioza\Shared\Domain
+                alias: Shared
+            Assets:
+                type: xml
+                is_bundle: false
+                dir: '%kernel.project_dir%/src/Assets/Infrastructure/Doctrine/Mapping'
+                prefix: Movioza\Assets\Domain
+                alias: Assets
 
 when@test:
     doctrine:

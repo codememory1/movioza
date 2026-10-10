@@ -6,6 +6,7 @@ imports:
     - { resource: './services/api.yaml' }
     - { resource: './services/cdn.yaml' }
     - { resource: './services/torrent.yaml' }
+    - { resource: './services/shared.yaml' }
 
 parameters:
     movioza.public_api_host: '%env(APP_PUBLIC_API_HOST)%'
@@ -15,6 +16,11 @@ services:
     _defaults:
         autowire: true
         autoconfigure: true
+
+    _instanceof:
+        Psr\Log\LoggerAwareInterface:
+            calls:
+                - [setLogger, ['@logger']]
 
     Movioza\Controller\:
         resource: '%kernel.project_dir%/src/Controller/**/*Controller.php'

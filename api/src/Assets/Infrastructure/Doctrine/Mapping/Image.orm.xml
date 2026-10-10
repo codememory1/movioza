@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="Movioza\Assets\Domain\Entity\Image" table="images">
+        <id name="id" type="assets_image_id" length="32">
+            <generator strategy="NONE" />
+        </id>
+
+        <field name="fileId" column="file_id" type="assets_file_id" length="32" />
+
+        <embedded name="dimensions" class="Movioza\Assets\Domain\ValueObject\ImageDimensions" use-column-prefix="false" />
+
+        <field name="blurHash" column="blur_hash" type="assets_blur_hash" length="255" />
+        <field name="createdAt" column="created_at" type="datetime_immutable" />
+    </entity>
+</doctrine-mapping>

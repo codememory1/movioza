@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Movioza\Attribute\ControllerArgument;
 
 use Movioza\Exception\BadRequestException;
+use Movioza\Shared\Attribute\ControllerArgument\MapRequestPayload;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
