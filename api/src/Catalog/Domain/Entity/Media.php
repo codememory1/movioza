@@ -14,44 +14,77 @@ use Movioza\Catalog\Domain\Enum\MediaType;
 use Movioza\Catalog\Domain\Event\MediaCreatedEvent;
 use Movioza\Catalog\Domain\Event\MediaRenamed;
 use Movioza\Catalog\Domain\ValueObject\AgeRestriction;
+use Movioza\Catalog\Domain\ValueObject\EpisodeNumber;
+use Movioza\Catalog\Domain\ValueObject\EpisodeTitle;
 use Movioza\Catalog\Domain\ValueObject\GenreID;
 use Movioza\Catalog\Domain\ValueObject\ImageID;
 use Movioza\Catalog\Domain\ValueObject\MediaID;
-use Movioza\Catalog\Domain\ValueObject\MediaSlug;
 use Movioza\Catalog\Domain\ValueObject\MediaTitle;
 use Movioza\Catalog\Domain\ValueObject\PersonID;
+use Movioza\Catalog\Domain\ValueObject\SeasonNumber;
+use Movioza\Catalog\Domain\ValueObject\SeasonTitle;
 use Movioza\Shared\Domain\Aggregate\AggregateRoot;
 use Movioza\Shared\Domain\ValueObject\CountryID;
+use Movioza\Shared\Domain\ValueObject\Slug;
 
+/**
+ * Aggregate root that manages media metadata, seasons, episodes and reference assignments.
+ */
 class Media extends AggregateRoot
 {
     /**
+     * Seasons belonging to this media aggregate.
+     *
+     * @var Collection<int, Season>
+     */
+    private Collection $seasons;
+
+    /**
+     * Image assignments identified by image ID and type.
+     *
      * @var Collection<int, MediaImage>
      */
     private Collection $images;
 
     /**
+     * Person assignments identified by person ID and role.
+     *
      * @var Collection<int, MediaPerson>
      */
     private Collection $persons;
 
     /**
+     * Country assignments belonging to this media.
+     *
      * @var Collection<int, MediaCountry>
      */
     private Collection $countries;
 
     /**
+     * Genre assignments belonging to this media.
+     *
      * @var Collection<int, MediaGenre>
      */
     private Collection $genres;
 
+    /**
+     * Recorded upload time, if available.
+     */
     private ?DateTimeImmutable $uploadedAt = null;
 
+    /**
+     * Recorded release time, if available.
+     */
     private ?DateTimeImmutable $releasedAt = null;
 
+    /**
+     * Time of the last recorded change to the aggregate.
+     */
     private ?DateTimeImmutable $updatedAt = null;
 
     /**
+     * Creates the media aggregate and records its creation event.
+     *
      * @param list<MediaTitle> $alternativeTitles
      */
     public function __construct(
@@ -60,11 +93,12 @@ class Media extends AggregateRoot
         private readonly ?MediaKind $kind,
         private MediaTitle $title,
         private array $alternativeTitles,
-        private readonly MediaSlug $slug,
+        private readonly Slug $slug,
         private string $description,
         private readonly AgeRestriction $ageRestrictions,
         private readonly DateTimeImmutable $createdAt,
     ) {
+        $this->seasons = new ArrayCollection();
         $this->images = new ArrayCollection();
         $this->persons = new ArrayCollection();
         $this->countries = new ArrayCollection();
@@ -73,6 +107,10 @@ class Media extends AggregateRoot
         $this->recordEvent(new MediaCreatedEvent($createdAt));
     }
 
+    /**
+     * Changes the title and records a MediaRenamed event.
+     * Does nothing when the new title equals the current title.
+     */
     public function rename(MediaTitle $title, DateTimeImmutable $changedAt): void
     {
         if ($this->title->equals($title)) {
@@ -85,6 +123,9 @@ class Media extends AggregateRoot
         $this->recordEvent(new MediaRenamed($changedAt));
     }
 
+    /**
+     * Changes the description only when its value differs.
+     */
     public function changeDescription(string $description, DateTimeImmutable $changedAt): void
     {
         if ($this->description === $description) {
@@ -95,6 +136,9 @@ class Media extends AggregateRoot
         $this->updatedAt = $changedAt;
     }
 
+    /**
+     * Adds an alternative title unless an equal title is already present.
+     */
     public function addAlternativeTitle(MediaTitle $title, DateTimeImmutable $changedAt): void
     {
         if (array_any($this->alternativeTitles, static fn ($alternativeTitle) => $alternativeTitle->equals($title))) {
@@ -105,6 +149,10 @@ class Media extends AggregateRoot
         $this->updatedAt = $changedAt;
     }
 
+    /**
+     * Removes an equal alternative title and re-indexes the remaining list.
+     * Does nothing when the title is not present.
+     */
     public function removeAlternativeTitle(MediaTitle $title, DateTimeImmutable $changedAt): void
     {
         $key = array_find_key(
@@ -122,6 +170,122 @@ class Media extends AggregateRoot
         $this->updatedAt = $changedAt;
     }
 
+    /**
+     * Creates a season with a number unique within this media.
+     */
+    public function addSeason(SeasonNumber $number, SeasonTitle $title, Slug $slug, ?string $description, DateTimeImmutable $changedAt): bool
+    {
+        if ($this->hasSeason($number)) {
+            return false;
+        }
+
+        $this->seasons->add(new Season($this, $number, $title, $slug, $description, $changedAt));
+
+        $this->updatedAt = $changedAt;
+
+        return true;
+    }
+
+    /**
+     * Removes the season identified by its number.
+     */
+    public function removeSeason(SeasonNumber $number, DateTimeImmutable $changedAt): bool
+    {
+        $finedSeason = $this->seasons->findFirst(
+            static fn (int $key, Season $season): bool =>
+            $season->getNumber()->equals($number)
+        );
+
+        if ($finedSeason === null) {
+            return false;
+        }
+
+        $this->seasons->removeElement($finedSeason);
+
+        $this->updatedAt = $changedAt;
+
+        return true;
+    }
+
+    /**
+     * Checks whether a season with the given number exists.
+     */
+    public function hasSeason(SeasonNumber $number): bool
+    {
+        return $this->seasons->exists(
+            static fn (int $key, Season $season): bool =>
+            $season->getNumber()->equals($number)
+        );
+    }
+
+    /**
+     * Delegates episode creation to the specified season.
+     * Updates the media modification time after adding the episode.
+     */
+    public function addEpisode(
+        SeasonNumber $seasonNumber,
+        EpisodeNumber $episodeNumber,
+        EpisodeTitle $title,
+        Slug $slug,
+        ?string $description,
+        DateTimeImmutable $changedAt
+    ): bool {
+        $season = $this->getSeason($seasonNumber);
+
+        if ($season === null) {
+            return false;
+        }
+
+        if ($season->hasEpisode($episodeNumber)) {
+            return false;
+        }
+
+        $season->addEpisode($episodeNumber, $title, $slug, $description, $changedAt);
+
+        $this->updatedAt = $changedAt;
+
+        return true;
+    }
+
+    /**
+     * Delegates episode removal to the specified season.
+     * Updates the media modification time only when an episode is removed.
+     */
+    public function removeEpisode(SeasonNumber $seasonNumber, EpisodeNumber $episodeNumber, DateTimeImmutable $changedAt): bool
+    {
+        $season = $this->getSeason($seasonNumber);
+
+        if ($season === null) {
+            return false;
+        }
+
+        if ($season->removeEpisode($episodeNumber, $changedAt)) {
+            $this->updatedAt = $changedAt;
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Checks whether the specified season contains an episode with the given number.
+     * Returns false when the season does not exist.
+     */
+    public function hasEpisode(SeasonNumber $seasonNumber, EpisodeNumber $episodeNumber): bool
+    {
+        $season = $this->getSeason($seasonNumber);
+
+        if ($season === null) {
+            return false;
+        }
+
+        return $season->hasEpisode($episodeNumber);
+    }
+
+    /**
+     * Assigns an image for the specified type unless that assignment already exists.
+     */
     public function assignImage(ImageID $imageID, MediaImageType $type, DateTimeImmutable $changedAt): void
     {
         if ($this->hasImage($imageID, $type)) {
@@ -133,6 +297,10 @@ class Media extends AggregateRoot
         $this->updatedAt = $changedAt;
     }
 
+    /**
+     * Removes the assignment identified by image ID and type.
+     * The referenced image itself is not deleted.
+     */
     public function unassignImage(ImageID $imageID, MediaImageType $type, DateTimeImmutable $changedAt): void
     {
         $finedImage = $this->images->findFirst(
@@ -145,20 +313,26 @@ class Media extends AggregateRoot
             return;
         }
 
-        $this->images->remove($finedImage);
+        $this->images->removeElement($finedImage);
 
         $this->updatedAt = $changedAt;
     }
 
+    /**
+     * Checks for an assignment matching both image ID and type.
+     */
     public function hasImage(ImageID $imageID, MediaImageType $type): bool
     {
         return $this->images->exists(
             static fn (int $key, MediaImage $mediaImage): bool =>
                 $mediaImage->getImageID()->equals($imageID)
-                && $mediaImage === $type
+                && $mediaImage->getType() === $type
         );
     }
 
+    /**
+     * Assigns a person in the specified role unless that assignment already exists.
+     */
     public function assignPerson(PersonID $personID, MediaPersonRole $role, DateTimeImmutable $changedAt): void
     {
         if ($this->hasPerson($personID, $role)) {
@@ -170,6 +344,10 @@ class Media extends AggregateRoot
         $this->updatedAt = $changedAt;
     }
 
+    /**
+     * Removes the assignment identified by person ID and role.
+     * The referenced person itself is not deleted.
+     */
     public function unassignPerson(PersonID $personID, MediaPersonRole $role, DateTimeImmutable $changedAt): void
     {
         $finedPerson = $this->persons->findFirst(
@@ -182,11 +360,14 @@ class Media extends AggregateRoot
             return;
         }
 
-        $this->persons->remove($finedPerson);
+        $this->persons->removeElement($finedPerson);
 
         $this->updatedAt = $changedAt;
     }
 
+    /**
+     * Checks for an assignment matching both person ID and role.
+     */
     public function hasPerson(PersonID $personID, MediaPersonRole $role): bool
     {
         return $this->persons->exists(
@@ -196,6 +377,9 @@ class Media extends AggregateRoot
         );
     }
 
+    /**
+     * Assigns a country unless it is already assigned.
+     */
     public function assignCountry(CountryID $countryID, DateTimeImmutable $changedAt): void
     {
         if ($this->hasCountry($countryID)) {
@@ -207,6 +391,9 @@ class Media extends AggregateRoot
         $this->updatedAt = $changedAt;
     }
 
+    /**
+     * Removes the country assignment without deleting the referenced country.
+     */
     public function unassignCountry(CountryID $countryID, DateTimeImmutable $changedAt): void
     {
         $finedCountry = $this->countries->findFirst(
@@ -218,11 +405,14 @@ class Media extends AggregateRoot
             return;
         }
 
-        $this->countries->remove($finedCountry);
+        $this->countries->removeElement($finedCountry);
 
         $this->updatedAt = $changedAt;
     }
 
+    /**
+     * Checks whether the country is assigned to this media.
+     */
     public function hasCountry(CountryID $countryID): bool
     {
         return $this->countries->exists(
@@ -231,6 +421,9 @@ class Media extends AggregateRoot
         );
     }
 
+    /**
+     * Assigns a genre unless it is already assigned.
+     */
     public function assignGenre(GenreID $genreID, DateTimeImmutable $changedAt): void
     {
         if ($this->hasGenre($genreID)) {
@@ -242,6 +435,10 @@ class Media extends AggregateRoot
         $this->updatedAt = $changedAt;
     }
 
+    /**
+     * Removes the genre assignment without deleting the referenced genre.
+     * Does nothing when the genre is not assigned.
+     */
     public function unassignGenre(GenreID $genreID, DateTimeImmutable $changedAt): void
     {
         $finedGenre = $this->genres->findFirst(
@@ -258,6 +455,9 @@ class Media extends AggregateRoot
         $this->updatedAt = $changedAt;
     }
 
+    /**
+     * Checks whether the genre is assigned to this media.
+     */
     public function hasGenre(GenreID $genreID): bool
     {
         return $this->genres->exists(
@@ -266,27 +466,41 @@ class Media extends AggregateRoot
         );
     }
 
+    /**
+     * Returns the stable identifier of this aggregate.
+     */
     public function getId(): MediaID
     {
         return $this->id;
     }
 
+    /**
+     * Returns the media type.
+     */
     public function getType(): MediaType
     {
         return $this->type;
     }
 
+    /**
+     * Returns the media kind, or null when no kind was specified.
+     */
     public function getKind(): ?MediaKind
     {
         return $this->kind;
     }
 
+    /**
+     * Returns the current primary title.
+     */
     public function getTitle(): MediaTitle
     {
         return $this->title;
     }
 
     /**
+     * Returns alternative titles as a sequential list.
+     *
      * @return list<MediaTitle>
      */
     public function getAlternativeTitles(): array
@@ -294,22 +508,54 @@ class Media extends AggregateRoot
         return $this->alternativeTitles;
     }
 
-    public function getSlug(): MediaSlug
+    /**
+     * Returns the slug assigned at creation.
+     */
+    public function getSlug(): Slug
     {
         return $this->slug;
     }
 
+    /**
+     * Returns the current description.
+     */
     public function getDescription(): string
     {
         return $this->description;
     }
 
+    /**
+     * Returns the age restriction assigned at creation.
+     */
     public function getAgeRestrictions(): AgeRestriction
     {
         return $this->ageRestrictions;
     }
 
     /**
+     * Returns seasons as a sequential list of entity references.
+     *
+     * @return list<Season>
+     */
+    public function getSeasons(): array
+    {
+        return $this->seasons->getValues();
+    }
+
+    /**
+     * Returns the season with the given number, or null when it does not exist.
+     */
+    public function getSeason(SeasonNumber $number): ?Season
+    {
+        return $this->seasons->findFirst(
+            static fn (int $key, Season $season): bool =>
+            $season->getNumber()->equals($number)
+        );
+    }
+
+    /**
+     * Returns image assignments as a sequential list.
+     *
      * @return list<MediaImage>
      */
     public function getImages(): array
@@ -318,6 +564,8 @@ class Media extends AggregateRoot
     }
 
     /**
+     * Returns country assignments as a sequential list.
+     *
      * @return list<MediaCountry>
      */
     public function getCountries(): array
@@ -326,6 +574,8 @@ class Media extends AggregateRoot
     }
 
     /**
+     * Returns genre assignments as a sequential list.
+     *
      * @return list<MediaGenre>
      */
     public function getGenres(): array
@@ -333,21 +583,33 @@ class Media extends AggregateRoot
         return $this->genres->getValues();
     }
 
+    /**
+     * Returns the creation time of this media.
+     */
     public function getCreatedAt(): DateTimeImmutable
     {
         return $this->createdAt;
     }
 
+    /**
+     * Returns the upload time, or null when it has not been recorded.
+     */
     public function getUploadedAt(): ?DateTimeImmutable
     {
         return $this->uploadedAt;
     }
 
+    /**
+     * Returns the release time, or null when it has not been recorded.
+     */
     public function getReleasedAt(): ?DateTimeImmutable
     {
         return $this->releasedAt;
     }
 
+    /**
+     * Returns the last recorded modification time, or null when no modification has been recorded.
+     */
     public function getUpdatedAt(): ?DateTimeImmutable
     {
         return $this->updatedAt;
