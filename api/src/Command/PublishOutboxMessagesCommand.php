@@ -17,7 +17,7 @@ use Symfony\Component\Messenger\MessageBusInterface;
 use Throwable;
 
 #[AsCommand(
-    name: 'movioza:worker:publish-outbox-messages',
+    name: 'movioza:worker:publish-outbox-messages2',
     description: 'A worker that publishes all outbox messages'
 )]
 class PublishOutboxMessagesCommand extends AbstractWorkerCommand

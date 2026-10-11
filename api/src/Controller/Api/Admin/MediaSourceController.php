@@ -6,12 +6,12 @@ namespace Movioza\Controller\Api\Admin;
 
 use Movioza\Api\Response\ApiResponseInterface;
 use Movioza\Attribute\ControllerArgument\MapEntity;
-use Movioza\Attribute\ControllerArgument\MapRequestPayload;
 use Movioza\Dto\Admin\MediaSource\CreateMediaSourceDto;
 use Movioza\Entity\Interfaces\MediaInterface;
 use Movioza\Entity\Media;
 use Movioza\Repository\Interfaces\MediaSourceRepositoryInterface;
 use Movioza\Serializer\Group\MediaSourceGroups;
+use Movioza\Shared\Attribute\ControllerArgument\MapRequestPayload;
 use Movioza\UseCase\Admin\MediaSource\CreateMediaSourceHandler;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
