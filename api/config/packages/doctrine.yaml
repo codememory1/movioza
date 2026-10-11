@@ -22,6 +22,10 @@ doctrine:
             catalog_person_id: Movioza\Catalog\Infrastructure\Doctrine\Type\PersonID
             catalog_media_title: Movioza\Catalog\Infrastructure\Doctrine\Type\MediaTitle
             catalog_age_restriction: Movioza\Catalog\Infrastructure\Doctrine\Type\AgeRestrictionType
+            catalog_season_number: Movioza\Catalog\Infrastructure\Doctrine\Type\SeasonNumberType
+            catalog_episode_number: Movioza\Catalog\Infrastructure\Doctrine\Type\EpisodeNumberType
+            catalog_season_title: Movioza\Catalog\Infrastructure\Doctrine\Type\SeasonTitleType
+            catalog_episode_title: Movioza\Catalog\Infrastructure\Doctrine\Type\EpisodeTitleType
 
     orm:
         validate_xml_mapping: true
