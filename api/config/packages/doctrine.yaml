@@ -6,6 +6,8 @@ doctrine:
             shared_country_id: Movioza\Shared\Infrastructure\Doctrine\Type\CountryIDType
             shared_country_name: Movioza\Shared\Infrastructure\Doctrine\Type\CountryNameType
             shared_country_code: Movioza\Shared\Infrastructure\Doctrine\Type\CountryCodeType
+            shared_slug: Movioza\Shared\Infrastructure\Doctrine\Type\SlugType
+
             assets_file_id: Movioza\Shared\Infrastructure\Doctrine\Type\FileIDType
             assets_image_id: Movioza\Shared\Infrastructure\Doctrine\Type\ImageIDType
             assets_storage_bucket: Movioza\Shared\Infrastructure\Doctrine\Type\StorageBucketType
@@ -13,6 +15,13 @@ doctrine:
             assets_blur_hash: Movioza\Shared\Infrastructure\Doctrine\Type\BlurHashType
             assets_file_extension: Movioza\Shared\Infrastructure\Doctrine\Type\FileExtensionType
             assets_file_size: Movioza\Shared\Infrastructure\Doctrine\Type\FileSize
+
+            catalog_media_id: Movioza\Catalog\Infrastructure\Doctrine\Type\MediaID
+            catalog_genre_id: Movioza\Catalog\Infrastructure\Doctrine\Type\GenreID
+            catalog_image_id: Movioza\Catalog\Infrastructure\Doctrine\Type\ImageID
+            catalog_person_id: Movioza\Catalog\Infrastructure\Doctrine\Type\PersonID
+            catalog_media_title: Movioza\Catalog\Infrastructure\Doctrine\Type\MediaTitle
+            catalog_age_restriction: Movioza\Catalog\Infrastructure\Doctrine\Type\AgeRestrictionType
 
     orm:
         validate_xml_mapping: true
