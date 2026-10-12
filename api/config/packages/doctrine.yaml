@@ -30,6 +30,10 @@ doctrine:
             catalog_season_title: Movioza\Catalog\Infrastructure\Doctrine\Type\SeasonTitleType
             catalog_episode_title: Movioza\Catalog\Infrastructure\Doctrine\Type\EpisodeTitleType
 
+            people_person_id: Movioza\People\Infrastructure\Doctrine\Type\PersonIDType
+            people_image_id: Movioza\People\Infrastructure\Doctrine\Type\ImageIDType
+            people_person_name: Movioza\People\Infrastructure\Doctrine\Type\PersonNameType
+
     orm:
         validate_xml_mapping: true
         naming_strategy: doctrine.orm.naming_strategy.underscore
