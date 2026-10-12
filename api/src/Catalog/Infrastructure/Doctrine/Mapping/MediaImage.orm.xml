@@ -4,7 +4,7 @@
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
     <entity name="Movioza\Catalog\Domain\Entity\MediaImage" table="media_images">
-        <id name="media" column="media" association-key="true" />
+        <id name="media" association-key="true" />
         <id name="imageId" column="image_id" type="catalog_image_id" length="32" />
         <id name="type" column="type" length="32" />
 

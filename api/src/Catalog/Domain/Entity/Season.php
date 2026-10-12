@@ -8,9 +8,11 @@ use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Movioza\Catalog\Domain\Enum\SeasonImageType;
+use Movioza\Catalog\Domain\ValueObject\EpisodeID;
 use Movioza\Catalog\Domain\ValueObject\EpisodeNumber;
 use Movioza\Catalog\Domain\ValueObject\EpisodeTitle;
 use Movioza\Catalog\Domain\ValueObject\ImageID;
+use Movioza\Catalog\Domain\ValueObject\SeasonID;
 use Movioza\Catalog\Domain\ValueObject\SeasonNumber;
 use Movioza\Catalog\Domain\ValueObject\SeasonTitle;
 use Movioza\Shared\Domain\ValueObject\Slug;
@@ -49,6 +51,7 @@ class Season
      * Creates a season within the specified media and initializes its collections.
      */
     public function __construct(
+        private readonly SeasonID $id,
         private readonly Media $media,
         private readonly SeasonNumber $number,
         private readonly SeasonTitle $title,
@@ -66,13 +69,27 @@ class Season
      *
      * @return bool True when added; false when the episode number already exists.
      */
-    public function addEpisode(EpisodeNumber $number, EpisodeTitle $title, Slug $slug, ?string $description, DateTimeImmutable $changedAt): bool
-    {
+    public function addEpisode(
+        EpisodeID $id,
+        EpisodeNumber $number,
+        EpisodeTitle $title,
+        Slug $slug,
+        ?string $description,
+        DateTimeImmutable $changedAt
+    ): bool {
         if ($this->hasEpisode($number)) {
             return false;
         }
 
-        $this->episodes->add(new Episode($this, $number, $title, $slug, $description, $changedAt));
+        $this->episodes->add(new Episode(
+            $id,
+            $this,
+            $number,
+            $title,
+            $slug,
+            $description,
+            $changedAt
+        ));
 
         $this->updatedAt = $changedAt;
 
@@ -168,6 +185,14 @@ class Season
                 $seasonImage->getImageId()->equals($imageID)
                 && $seasonImage->getType() === $type
         );
+    }
+
+    /**
+     *  Returns the identifier specified during creation
+     */
+    public function getId(): SeasonID
+    {
+        return $this->id;
     }
 
     /**

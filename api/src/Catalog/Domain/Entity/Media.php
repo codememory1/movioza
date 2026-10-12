@@ -14,6 +14,7 @@ use Movioza\Catalog\Domain\Enum\MediaType;
 use Movioza\Catalog\Domain\Event\MediaCreatedEvent;
 use Movioza\Catalog\Domain\Event\MediaRenamed;
 use Movioza\Catalog\Domain\ValueObject\AgeRestriction;
+use Movioza\Catalog\Domain\ValueObject\EpisodeID;
 use Movioza\Catalog\Domain\ValueObject\EpisodeNumber;
 use Movioza\Catalog\Domain\ValueObject\EpisodeTitle;
 use Movioza\Catalog\Domain\ValueObject\GenreID;
@@ -21,6 +22,7 @@ use Movioza\Catalog\Domain\ValueObject\ImageID;
 use Movioza\Catalog\Domain\ValueObject\MediaID;
 use Movioza\Catalog\Domain\ValueObject\MediaTitle;
 use Movioza\Catalog\Domain\ValueObject\PersonID;
+use Movioza\Catalog\Domain\ValueObject\SeasonID;
 use Movioza\Catalog\Domain\ValueObject\SeasonNumber;
 use Movioza\Catalog\Domain\ValueObject\SeasonTitle;
 use Movioza\Shared\Domain\Aggregate\AggregateRoot;
@@ -173,13 +175,27 @@ class Media extends AggregateRoot
     /**
      * Creates a season with a number unique within this media.
      */
-    public function addSeason(SeasonNumber $number, SeasonTitle $title, Slug $slug, ?string $description, DateTimeImmutable $changedAt): bool
-    {
+    public function addSeason(
+        SeasonID $id,
+        SeasonNumber $number,
+        SeasonTitle $title,
+        Slug $slug,
+        ?string $description,
+        DateTimeImmutable $changedAt
+    ): bool {
         if ($this->hasSeason($number)) {
             return false;
         }
 
-        $this->seasons->add(new Season($this, $number, $title, $slug, $description, $changedAt));
+        $this->seasons->add(new Season(
+            $id,
+            $this,
+            $number,
+            $title,
+            $slug,
+            $description,
+            $changedAt
+        ));
 
         $this->updatedAt = $changedAt;
 
@@ -223,6 +239,7 @@ class Media extends AggregateRoot
      * Updates the media modification time after adding the episode.
      */
     public function addEpisode(
+        EpisodeID $id,
         SeasonNumber $seasonNumber,
         EpisodeNumber $episodeNumber,
         EpisodeTitle $title,
@@ -240,7 +257,7 @@ class Media extends AggregateRoot
             return false;
         }
 
-        $season->addEpisode($episodeNumber, $title, $slug, $description, $changedAt);
+        $season->addEpisode($id, $episodeNumber, $title, $slug, $description, $changedAt);
 
         $this->updatedAt = $changedAt;
 

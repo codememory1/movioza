@@ -4,7 +4,7 @@
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
     <entity name="Movioza\Catalog\Domain\Entity\MediaCountry" table="media_countries">
-        <id name="media" column="media" association-key="true" />
+        <id name="media" association-key="true" />
         <id name="countryId" column="country_id" type="shared_country_id" length="32" />
 
         <many-to-one field="media" target-entity="Movioza\Catalog\Domain\Entity\Media" inversed-by="countries">

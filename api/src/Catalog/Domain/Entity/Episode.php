@@ -8,6 +8,7 @@ use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Movioza\Catalog\Domain\Enum\EpisodeImageType;
+use Movioza\Catalog\Domain\ValueObject\EpisodeID;
 use Movioza\Catalog\Domain\ValueObject\EpisodeNumber;
 use Movioza\Catalog\Domain\ValueObject\EpisodeTitle;
 use Movioza\Catalog\Domain\ValueObject\ImageID;
@@ -45,6 +46,7 @@ class Episode
      * Creates an episode within the specified season and initializes its images.
      */
     public function __construct(
+        private readonly EpisodeID $id,
         private readonly Season $season,
         private readonly EpisodeNumber $number,
         private readonly EpisodeTitle $title,
@@ -63,7 +65,7 @@ class Episode
      */
     public function assignImage(ImageID $imageID, EpisodeImageType $type, DateTimeImmutable $changedAt): bool
     {
-        if ($this->hasImages($imageID, $type)) {
+        if ($this->hasImage($imageID, $type)) {
             return false;
         }
 
@@ -80,7 +82,7 @@ class Episode
      *
      * @return bool True when unassigned; false when the assignment does not exist.
      */
-    public function unassingImage(ImageID $imageID, EpisodeImageType $type, DateTimeImmutable $changedAt): bool
+    public function unassignImage(ImageID $imageID, EpisodeImageType $type, DateTimeImmutable $changedAt): bool
     {
         $finedImage = $this->images->findFirst(
             static fn (int $key, EpisodeImage $episodeImage): bool =>
@@ -102,13 +104,21 @@ class Episode
     /**
      * Checks for an assignment matching both image ID and type.
      */
-    public function hasImages(ImageID $imageID, EpisodeImageType $type): bool
+    public function hasImage(ImageID $imageID, EpisodeImageType $type): bool
     {
         return $this->images->exists(
             static fn (int $key, EpisodeImage $episodeImage): bool =>
                 $episodeImage->getImageId()->equals($imageID)
                 && $episodeImage->getType() === $type
         );
+    }
+
+    /**
+     * Returns the identifier specified during creation
+     */
+    public function getId(): EpisodeID
+    {
+        return $this->id;
     }
 
     /**

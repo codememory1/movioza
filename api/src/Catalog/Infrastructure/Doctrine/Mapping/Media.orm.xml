@@ -9,7 +9,7 @@
         <field name="type" column="type" length="32" enum-type="Movioza\Catalog\Domain\Enum\MediaType" />
         <field name="kind" column="kind" nullable="true" length="32" enum-type="Movioza\Catalog\Domain\Enum\MediaKind" />
         <field name="title" column="title" type="catalog_media_title" length="255" />
-        <field name="alternativeTitles" column="alternative_titles" type="json" />
+        <field name="alternativeTitles" column="alternative_titles" type="catalog_media_titles" />
         <field name="slug" column="slug" type="shared_slug" length="280" />
         <field name="description" column="description" type="text" />
         <field name="ageRestrictions" column="age_restrictions" type="catalog_age_restriction" />
@@ -18,6 +18,12 @@
         <field name="releasedAt" column="released_at" type="datetime_immutable" nullable="true" />
         <field name="createdAt" column="created_at" type="datetime_immutable" />
         <field name="updatedAt" column="updated_at" type="datetime_immutable" nullable="true" />
+
+        <one-to-many field="seasons" target-entity="Movioza\Catalog\Domain\Entity\Season" mapped-by="media" orphan-removal="true">
+            <cascade>
+                <cascade-persist />
+            </cascade>
+        </one-to-many>
 
         <one-to-many field="images" target-entity="Movioza\Catalog\Domain\Entity\MediaImage" mapped-by="media" orphan-removal="true">
             <cascade>
