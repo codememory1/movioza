@@ -6,7 +6,6 @@ framework:
         buses:
             command.bus:
                 middleware:
-                    - movioza.messenger.middleware.idempotency
                     - doctrine_close_connection
 
         transports:

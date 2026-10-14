@@ -1,13 +1,13 @@
-api_public_controllers:
-    resource:
-        path: '../src/Controller/Api/Public'
-        namespace: Movioza\Controller\Api\Public
-    type: attribute
-    host: '%movioza.public_api_host%'
-
-api_admin_controllers:
-    resource:
-        path: '../src/Controller/Api/Admin'
-        namespace: Movioza\Controller\Api\Admin
-    type: attribute
-    host: '%movioza.admin_api_host%'
+#api_public_controllers:
+#    resource:
+#        path: '../src/Controller/Api/Public'
+#        namespace: Movioza\Controller\Api\Public
+#    type: attribute
+#    host: '%movioza.public_api_host%'
+#
+#api_admin_controllers:
+#    resource:
+#        path: '../src/Controller/Api/Admin'
+#        namespace: Movioza\Controller\Api\Admin
+#    type: attribute
+#    host: '%movioza.admin_api_host%'

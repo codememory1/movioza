@@ -1,0 +1,33 @@
+services:
+    _defaults:
+        autoconfigure: false
+        autowire: true
+
+    # HTTP Attribute Handlers Registry
+    Movioza\Shared\Infrastructure\Http\Attribute\Controller\HandlerRegistry:
+        autowire: true
+
+    Movioza\Shared\Infrastructure\Http\Attribute\ControllerArgument\HandlerRegistry:
+        autowire: true
+
+    # HTTP Event Listeners
+    Movioza\Shared\Infrastructure\Http\EventListener\KernelController\:
+        resource: '../../src/Shared/Infrastructure/Http/EventListener/*EventListener.php'
+        tags:
+            - { name: kernel.event_listener, event: kernel.controller, method: onKernelController }
+
+    # HTTP Resolvers
+    Movioza\Shared\Infrastructure\Http\Resolver\AttributeValueResolver:
+        tags:
+            - { name: controller.argument_value_resolver, priority: 150 }
+
+    # HTTP Attribute Handlers
+    Movioza\Shared\Infrastructure\Http\Attribute\Controller\:
+        resource: '../../src/Shared/Infrastructure/Http/Attribute/Controller/*Handlers.php'
+        tags:
+            - { name: movioza.controller.attribute_handler }
+
+    Movioza\Shared\Infrastructure\Http\Attribute\ControllerArgument\:
+        resource: '../../src/Shared/Infrastructure/Http/Attribute/ControllerArgument/*Handlers.php'
+        tags:
+            - { name: movioza.controller.argument_attribute_handler }
