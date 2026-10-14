@@ -6,13 +6,13 @@ namespace Movioza\Assets\Infrastructure\Doctrine\Type;
 
 use Movioza\Shared\Infrastructure\Doctrine\Type\AbstractBigIntegerValueObjectType;
 
-class FileSize extends AbstractBigIntegerValueObjectType
+class FileSizeType extends AbstractBigIntegerValueObjectType
 {
     public const string NAME = 'assets_file_size';
 
     protected function getValueObjectClass(): string
     {
-        return FileSize::class;
+        return FileSizeType::class;
     }
 
     public function getName(): string
