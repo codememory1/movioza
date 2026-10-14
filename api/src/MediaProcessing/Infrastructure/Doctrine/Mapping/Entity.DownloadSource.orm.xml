@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="Movioza\MediaProcessing\Domain\Entity\DownloadSource" table="download_sources">
+        <id name="id" column="id" type="media_processing_download_source_id" />
+
+        <field name="type" column="type" length="32" enum-type="Movioza\MediaProcessing\Domain\Enum\DownloadSourceType" />
+        <field name="source" column="source" type="text" />
+        <field name="createdAt" column="created_at" type="datetime_immutable" />
+
+        <many-to-one field="mediaSource" target-entity="Movioza\MediaProcessing\Domain\Entity\MediaSource" inversed-by="downloadSources">
+            <join-column name="media_source_id" nullable="false" on-delete="CASCADE" />
+        </many-to-one>
+    </entity>
+</doctrine-mapping>
