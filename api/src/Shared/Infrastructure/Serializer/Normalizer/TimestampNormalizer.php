@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Movioza\Serializer\Normalizer;
+namespace Movioza\Shared\Infrastructure\Serializer\Normalizer;
 
 use ArrayObject;
 use DateTimeInterface;

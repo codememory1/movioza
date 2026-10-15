@@ -1,12 +1,11 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
-namespace Movioza\Attribute\ControllerArgument;
+namespace Movioza\Shared\Infrastructure\Http\Attribute\ControllerArgument;
 
-use Movioza\Exception\BadRequestException;
-use Movioza\Shared\Attribute\ControllerArgument\MapRequestPayload;
-use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Movioza\Shared\Infrastructure\Http\Exception\InvalidRequestPayloadException;
+use Movioza\Shared\Infrastructure\Http\Exception\RequestValidationException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
@@ -22,17 +21,19 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 /**
  * @implements AttributeHandlerInterface<MapRequestPayload>
  */
-readonly class MapRequestPayloadHandler implements AttributeHandlerInterface
+final readonly class MapRequestPayloadHandler implements AttributeHandlerInterface
 {
     public function __construct(
-        #[Autowire(service: 'movioza.serializer.request_payload')]
         private SerializerInterface $serializer,
         private ValidatorInterface $validator,
         private CamelCaseToSnakeCaseNameConverter $nameConverter
     ) {
     }
 
-    public function handle(AttributeInterface $attribute, Request $request, ArgumentMetadata $argument): object
+    /**
+     * @throws ExceptionInterface
+     */
+    public function handle(AttributeInterface $attribute, Request $request, ArgumentMetadata $argument): mixed
     {
         $dto = $this->deserialize($request, $argument);
 
@@ -41,6 +42,9 @@ readonly class MapRequestPayloadHandler implements AttributeHandlerInterface
         return $dto;
     }
 
+    /**
+     * @throws ExceptionInterface
+     */
     private function deserialize(Request $request, ArgumentMetadata $argument): object
     {
         try {
@@ -48,22 +52,28 @@ readonly class MapRequestPayloadHandler implements AttributeHandlerInterface
                 AbstractNormalizer::ALLOW_EXTRA_ATTRIBUTES => false,
             ]);
         } catch (NotEncodableValueException $e) {
-            throw BadRequestException::invalidRequestPayload($e);
+            throw InvalidRequestPayloadException::invalidJson($e);
         } catch (MissingConstructorArgumentsException $e) {
-            throw BadRequestException::missingRequiredFields($e->getMissingConstructorArguments(), $this->nameConverter, $e);
+            $fields = array_map(
+                fn (string $field): string =>
+                $this->nameConverter->normalize($field),
+                $e->getMissingConstructorArguments()
+            );
+
+            throw InvalidRequestPayloadException::missingRequiredFields($fields, $e);
         } catch (ExtraAttributesException $e) {
-            throw BadRequestException::extraFields($e->getExtraAttributes(), $this->nameConverter, $e);
+            throw InvalidRequestPayloadException::unknownFields($e->getExtraAttributes(), $e);
         } catch (NotNormalizableValueException $e) {
-            throw BadRequestException::invalidFieldValue($e->getPath(), $this->nameConverter, $e);
-        } catch (ExceptionInterface $e) {
-            throw new BadRequestException('Invalid request.', previous: $e);
+            throw InvalidRequestPayloadException::invalidField($this->nameConverter->normalize($e->getPath()), $e);
         }
     }
 
     private function validate(object $dto): void
     {
-        foreach ($this->validator->validate($dto) as $constraintViolation) {
-            throw new BadRequestException($constraintViolation->getMessage());
+        $errors = $this->validator->validate($dto);
+
+        if ($errors->count() > 0) {
+            throw RequestValidationException::fromViolations($errors);
         }
     }
 }

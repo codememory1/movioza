@@ -3,6 +3,10 @@ services:
         autoconfigure: false
         autowire: true
 
+        bind:
+            $appProtocol: '%env(APP_PROTOCOL)%'
+            $apiHost: '%env(APP_API_HOST)%'
+
     # HTTP Attribute Handlers Registry
     Movioza\Shared\Infrastructure\Http\Attribute\Controller\HandlerRegistry:
         autowire: true
@@ -12,9 +16,14 @@ services:
 
     # HTTP Event Listeners
     Movioza\Shared\Infrastructure\Http\EventListener\KernelController\:
-        resource: '../../src/Shared/Infrastructure/Http/EventListener/*EventListener.php'
+        resource: '../../src/Shared/Infrastructure/Http/EventListener/KernelController/*EventListener.php'
         tags:
             - { name: kernel.event_listener, event: kernel.controller, method: onKernelController }
+
+    Movioza\Shared\Infrastructure\Http\EventListener\KernelException\:
+        resource: '../../src/Shared/Infrastructure/Http/EventListener/KernelException/*EventListener.php'
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception, method: onKernelException }
 
     # HTTP Resolvers
     Movioza\Shared\Infrastructure\Http\Resolver\AttributeValueResolver:
@@ -23,11 +32,79 @@ services:
 
     # HTTP Attribute Handlers
     Movioza\Shared\Infrastructure\Http\Attribute\Controller\:
-        resource: '../../src/Shared/Infrastructure/Http/Attribute/Controller/*Handlers.php'
+        resource: '../../src/Shared/Infrastructure/Http/Attribute/Controller/*Handler.php'
         tags:
             - { name: movioza.controller.attribute_handler }
 
     Movioza\Shared\Infrastructure\Http\Attribute\ControllerArgument\:
-        resource: '../../src/Shared/Infrastructure/Http/Attribute/ControllerArgument/*Handlers.php'
+        resource: '../../src/Shared/Infrastructure/Http/Attribute/ControllerArgument/*Handler.php'
         tags:
             - { name: movioza.controller.argument_attribute_handler }
+
+    # HTTP Request ID Resolver
+    Movioza\Shared\Infrastructure\Http\RequestIDResolver: ~
+
+    # CDN
+    movioza.shared.cdn_provider.bunny:
+        class: Movioza\Shared\Infrastructure\Cdn\Provider\BunnyCdnProvider
+        arguments:
+            $domain: '%env(BUNNY_DOMAIN)%'
+            $secretKey: '%env(BUNNY_SECRET_KEY)%'
+        tags:
+            - { name: movioza.cdn.provider }
+
+    movioza.shared.cdn_generator.default:
+        class: Movioza\Shared\Infrastructure\Cdn\CdnUrlGenerator
+        arguments:
+            $providers: !tagged_iterator movioza.cdn.provider
+
+    Movioza\Shared\Application\Cdn\CdnUrlGeneratorInterface: '@movioza.shared.cdn_generator.default'
+
+    # Slug
+    movioza.shared.slug_generaror.cocur:
+        class: Movioza\Shared\Infrastructure\Slug\CocurSlugGenerator
+
+    Movioza\Shared\Application\Slug\SlugGeneratorInterface: '@movioza.shared.slug_generaror.cocur'
+
+    # Event
+    movioza.shared.domain_event_dispatcher.symfony:
+        class: Movioza\Shared\Infrastructure\Event\SymfonyDomainEventDispatcher
+
+    Movioza\Shared\Application\Event\DomainEventDispatcherInterface: '@movioza.shared.domain_event_dispatcher.symfony'
+
+    # Transaction
+    movioza.shared.transaction_manager.doctrine:
+        class: Movioza\Shared\Infrastructure\Doctrine\Transaction\DoctrineTransactionManager
+
+    Movioza\Shared\Application\Transaction\TransactionManagerInterface: '@movioza.shared.transaction_manager.doctrine'
+
+    # Controller
+    Movioza\Shared\Presentation\Http\Controller\:
+        resource: '%kernel.project_dir%/src/Shared/Presentation/Http/Controller/*Controller.php'
+        tags:
+            - { name: controller.service_arguments }
+
+    # Serializer
+    Symfony\Component\Serializer\Normalizer\BackedEnumNormalizer:
+        tags:
+            - { name: serializer.normalizer }
+
+    Movioza\Shared\Infrastructure\Serializer\Normalizer\:
+        resource: '%kernel.project_dir%/src/Shared/Infrastructure/Serializer/Normalizer/*Normalizer.php'
+        tags:
+            - { name: serializer.normalizer }
+
+    Symfony\Component\Serializer\NameConverter\CamelCaseToSnakeCaseNameConverter: ~
+
+    movioza.serializer.normalizer.request_object:
+        class: Symfony\Component\Serializer\Normalizer\ObjectNormalizer
+        arguments:
+            $nameConverter: '@serializer.name_converter.camel_case_to_snake_case'
+
+    movioza.serializer.request_payload:
+        class: Symfony\Component\Serializer\Serializer
+        arguments:
+            $normalizers:
+                - '@movioza.serializer.normalizer.request_object'
+            $encoders:
+                - '@serializer.encoder.json'

@@ -1,13 +1,13 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
-namespace Movioza\Attribute\ControllerArgument;
+namespace Movioza\Shared\Infrastructure\Http\Attribute\ControllerArgument;
 
 use Attribute;
 
 #[Attribute(Attribute::TARGET_PARAMETER)]
-class MapRequestPayload implements AttributeInterface
+final class MapRequestPayload implements AttributeInterface
 {
     public function handler(): string
     {
