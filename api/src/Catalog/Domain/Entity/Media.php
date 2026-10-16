@@ -106,7 +106,7 @@ class Media extends AggregateRoot
         $this->countries = new ArrayCollection();
         $this->genres = new ArrayCollection();
 
-        $this->recordEvent(new MediaCreatedEvent($createdAt));
+        $this->recordEvent(new MediaCreatedEvent($this->id, $this->type, $this->title, $createdAt));
     }
 
     /**
@@ -119,10 +119,12 @@ class Media extends AggregateRoot
             return;
         }
 
+        $oldTitle = $this->title;
+
         $this->title = $title;
         $this->updatedAt = $changedAt;
 
-        $this->recordEvent(new MediaRenamed($changedAt));
+        $this->recordEvent(new MediaRenamed($this->id, $oldTitle, $title, $changedAt));
     }
 
     /**
@@ -207,10 +209,7 @@ class Media extends AggregateRoot
      */
     public function removeSeason(SeasonNumber $number, DateTimeImmutable $changedAt): bool
     {
-        $finedSeason = $this->seasons->findFirst(
-            static fn (int $key, Season $season): bool =>
-            $season->getNumber()->equals($number)
-        );
+        $finedSeason = $this->findSeason($number);
 
         if ($finedSeason === null) {
             return false;
@@ -247,7 +246,7 @@ class Media extends AggregateRoot
         ?string $description,
         DateTimeImmutable $changedAt
     ): bool {
-        $season = $this->getSeason($seasonNumber);
+        $season = $this->findSeason($seasonNumber);
 
         if ($season === null) {
             return false;
@@ -270,7 +269,7 @@ class Media extends AggregateRoot
      */
     public function removeEpisode(SeasonNumber $seasonNumber, EpisodeNumber $episodeNumber, DateTimeImmutable $changedAt): bool
     {
-        $season = $this->getSeason($seasonNumber);
+        $season = $this->findSeason($seasonNumber);
 
         if ($season === null) {
             return false;
@@ -291,7 +290,7 @@ class Media extends AggregateRoot
      */
     public function hasEpisode(SeasonNumber $seasonNumber, EpisodeNumber $episodeNumber): bool
     {
-        $season = $this->getSeason($seasonNumber);
+        $season = $this->findSeason($seasonNumber);
 
         if ($season === null) {
             return false;
@@ -550,27 +549,6 @@ class Media extends AggregateRoot
     }
 
     /**
-     * Returns seasons as a sequential list of entity references.
-     *
-     * @return list<Season>
-     */
-    public function getSeasons(): array
-    {
-        return $this->seasons->getValues();
-    }
-
-    /**
-     * Returns the season with the given number, or null when it does not exist.
-     */
-    public function getSeason(SeasonNumber $number): ?Season
-    {
-        return $this->seasons->findFirst(
-            static fn (int $key, Season $season): bool =>
-            $season->getNumber()->equals($number)
-        );
-    }
-
-    /**
      * Returns image assignments as a sequential list.
      *
      * @return list<MediaImage>
@@ -630,5 +608,13 @@ class Media extends AggregateRoot
     public function getUpdatedAt(): ?DateTimeImmutable
     {
         return $this->updatedAt;
+    }
+
+    private function findSeason(SeasonNumber $number): ?Season
+    {
+        return $this->seasons->findFirst(
+            static fn (int $key, Season $season): bool =>
+            $season->getNumber()->equals($number)
+        );
     }
 }
