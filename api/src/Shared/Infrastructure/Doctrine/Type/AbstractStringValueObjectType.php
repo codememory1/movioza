@@ -42,14 +42,8 @@ abstract class AbstractStringValueObjectType extends Type
             return $value;
         }
 
-        if (!is_int($value) && !is_string($value)) {
-            throw new InvalidArgumentException('Expected int or an integer string.');
-        }
-
-        $integer = filter_var($value, FILTER_VALIDATE_INT);
-
-        if ($integer === false) {
-            throw new InvalidArgumentException('Invalid integer value.');
+        if (!is_string($value)) {
+            throw new InvalidArgumentException('Expected string.');
         }
 
         $className = $this->getValueObjectClass();

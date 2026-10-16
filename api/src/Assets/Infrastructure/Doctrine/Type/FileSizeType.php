@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace Movioza\Assets\Infrastructure\Doctrine\Type;
 
+use Movioza\Assets\Domain\ValueObject\FileSize;
 use Movioza\Shared\Infrastructure\Doctrine\Type\AbstractBigIntegerValueObjectType;
 
 class FileSizeType extends AbstractBigIntegerValueObjectType
@@ -12,7 +13,7 @@ class FileSizeType extends AbstractBigIntegerValueObjectType
 
     protected function getValueObjectClass(): string
     {
-        return FileSizeType::class;
+        return FileSize::class;
     }
 
     public function getName(): string
