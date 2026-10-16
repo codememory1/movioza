@@ -2,3 +2,26 @@ services:
     _defaults:
         autoconfigure: false
         autowire: true
+
+    # Tracker Parsers
+    Movioza\MediaProcessing\Infrastructure\Tracker\RutorParser:
+        tags:
+            - { name: movioza.tracker_parser, tracker: rutor }
+
+    # Tracker Parser Registry
+    movioza.media_processing.tracker_parser_registry:
+        class: Movioza\MediaProcessing\Infrastructure\Tracker\TrackerParserRegistry
+        arguments:
+            $parsers: !tagged_iterator
+                tag: movioza.tracker_parser
+                index_by: tracker
+
+    Movioza\MediaProcessing\Application\Tracker\TrackerParserRegistryInterface: '@movioza.media_processing.tracker_parser_registry'
+
+    # Tracker Storage
+    movioza.media_processing.tracker_storage.local_file:
+        class: Movioza\MediaProcessing\Infrastructure\Tracker\Storage\LocalTorrentFileStorage
+        arguments:
+            $directory: '%kernel.project_dir%/var/torrents'
+
+    Movioza\MediaProcessing\Infrastructure\Tracker\Storage\TorrentFileStorageInterface: '@movioza.media_processing.tracker_storage.local_file'
