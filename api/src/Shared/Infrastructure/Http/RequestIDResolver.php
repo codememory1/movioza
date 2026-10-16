@@ -30,7 +30,7 @@ final class RequestIDResolver
 
         $requestId = Uuid::v7()->toString();
 
-        $request->attributes->set(self::ATTRIBUTE, $request);
+        $request->attributes->set(self::ATTRIBUTE, $requestId);
 
         return $requestId;
     }
