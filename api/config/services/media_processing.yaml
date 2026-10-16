@@ -3,6 +3,27 @@ services:
         autoconfigure: false
         autowire: true
 
+    # Repositories
+    movioza.media_processing.media_source_repository.doctrine:
+        class: Movioza\MediaProcessing\Infrastructure\Doctrine\Repository\DoctrineMediaSourceRepository
+
+    Movioza\MediaProcessing\Domain\Repository\MediaSourceRepositoryInterface: '@movioza.media_processing.media_source_repository.doctrine'
+
+    # Aria2
+    movioza.media_processing.aria2.rpc_client:
+        class: Movioza\MediaProcessing\Infrastructure\Download\Aria2\Aria2RpcClient
+        arguments:
+            $endpoint: '%env(ARIA2_ENDPOINT)%'
+            $secret: '%env(ARIA2_SECRET)%'
+
+    movioza.media_processing.downloader.aria2:
+        class: Movioza\MediaProcessing\Infrastructure\Download\Aria2\Aria2Downloader
+        arguments:
+            $rpc: '@movioza.media_processing.aria2.rpc_client'
+
+    # Downloader
+    Movioza\MediaProcessing\Application\Download\DownloaderInterface: '@movioza.media_processing.downloader.aria2'
+
     # Tracker Parsers
     Movioza\MediaProcessing\Infrastructure\Tracker\RutorParser:
         tags:

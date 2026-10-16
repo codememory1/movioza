@@ -2,3 +2,9 @@ services:
     _defaults:
         autoconfigure: false
         autowire: true
+
+    # Repositories
+    movioza.catalog.media_repository.doctrine:
+        class: Movioza\Catalog\Infrastructure\Doctrine\Repository\DoctrineMediaRepository
+
+    Movioza\Catalog\Domain\Repository\MediaRepositoryInterface: '@movioza.catalog.media_repository.doctrine'

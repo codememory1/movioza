@@ -7,6 +7,12 @@ services:
             $appProtocol: '%env(APP_PROTOCOL)%'
             $apiHost: '%env(APP_API_HOST)%'
 
+    # Repositories
+    movioza.shared.country_repository.doctrine:
+        class: Movioza\Shared\Infrastructure\Doctrine\Repository\DoctrineCountryRepository
+
+    Movioza\Shared\Domain\Repository\CountryRepositoryInterface: '@movioza.shared.country_repository.doctrine'
+
     # HTTP Attribute Handlers Registry
     Movioza\Shared\Infrastructure\Http\Attribute\Controller\HandlerRegistry:
         autowire: true

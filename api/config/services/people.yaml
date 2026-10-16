@@ -2,3 +2,9 @@ services:
     _defaults:
         autoconfigure: false
         autowire: true
+
+    # Repositories
+    movioza.people.person_repository.doctrine:
+        class: Movioza\People\Infrastructure\Doctrine\Repository\DoctrinePersonRepository
+
+    Movioza\People\Domain\Repository\PersonRepositoryInterface: '@movioza.people.person_repository.doctrine'
