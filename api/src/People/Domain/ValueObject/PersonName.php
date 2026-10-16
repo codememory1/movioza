@@ -14,7 +14,7 @@ final class PersonName implements ValueObjectInterface
     public function __construct(
         private readonly string $name
     ) {
-        if (trim($name) !== '') {
+        if (trim($name) === '') {
             throw new InvalidArgumentException('Person name cannot be empty.');
         }
 
