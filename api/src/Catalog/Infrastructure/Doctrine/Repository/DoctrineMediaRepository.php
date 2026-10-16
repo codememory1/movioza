@@ -16,15 +16,8 @@ class DoctrineMediaRepository extends ServiceEntityRepository implements MediaRe
         parent::__construct($registry, Media::class);
     }
 
-    public function update(Media $media): bool
-    {
-        // TODO: Code
-
-        return false;
-    }
-
     public function save(Media $media): void
     {
-        // TODO: Code
+        $this->getEntityManager()->persist($media);
     }
 }

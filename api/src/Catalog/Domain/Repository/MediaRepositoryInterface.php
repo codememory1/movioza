@@ -8,7 +8,5 @@ use Movioza\Catalog\Domain\Entity\Media;
 
 interface MediaRepositoryInterface
 {
-    public function update(Media $media): bool;
-
     public function save(Media $media): void;
 }
