@@ -83,7 +83,7 @@ class MediaSource extends AggregateRoot
     {
         return $this->downloadSources->exists(
             static fn (int $key, DownloadSource $downloadSource): bool =>
-            $downloadSource->getId()->equals($id) === $id
+            $downloadSource->getId()->equals($id)
         );
     }
 
