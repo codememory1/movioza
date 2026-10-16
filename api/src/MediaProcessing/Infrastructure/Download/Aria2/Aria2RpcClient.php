@@ -24,6 +24,9 @@ final readonly class Aria2RpcClient
     }
 
     /**
+     * @param list<string> $uris
+     * @param array<string, mixed> $options
+     *
      * @throws TransportExceptionInterface
      * @throws RandomException
      * @throws ServerExceptionInterface
@@ -33,10 +36,15 @@ final readonly class Aria2RpcClient
      */
     public function addUri(array $uris, array $options = []): string
     {
-        return $this->request('aria2.addUri', [$uris, ...$options]);
+        return $this->request('aria2.addUri', [
+            $uris,
+            (object) $options,
+        ]);
     }
 
     /**
+     * @param array<string, mixed> $options
+     *
      * @throws TransportExceptionInterface
      * @throws RandomException
      * @throws ServerExceptionInterface
@@ -44,10 +52,20 @@ final readonly class Aria2RpcClient
      * @throws DecodingExceptionInterface
      * @throws ClientExceptionInterface
      */
-    public function addTorrent(string $torrent, array $options = []): string {
+    public function addTorrent(string $torrent, array $options = []): string
+    {
+        $content = @file_get_contents($torrent);
+
+        if ($content === false) {
+            throw new RuntimeException(
+                sprintf('Cannot read torrent file "%s".', $torrent),
+            );
+        }
+
         return $this->request('aria2.addTorrent', [
-            base64_encode(file_get_contents($torrent)),
-            ...$options
+            base64_encode($content),
+            [],
+            (object) $options,
         ]);
     }
 
@@ -96,7 +114,7 @@ final readonly class Aria2RpcClient
     private function request(string $method, array $params): mixed
     {
         if (trim($this->secret) !== '') {
-            $params[] = sprintf("token:%s", $this->secret);
+            array_unshift($params, sprintf('token:%s', $this->secret));
         }
 
         $requestId = bin2hex(random_bytes(8));
