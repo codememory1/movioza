@@ -64,7 +64,13 @@ final readonly class MapRequestPayloadHandler implements AttributeHandlerInterfa
         } catch (ExtraAttributesException $e) {
             throw InvalidRequestPayloadException::unknownFields($e->getExtraAttributes(), $e);
         } catch (NotNormalizableValueException $e) {
-            throw InvalidRequestPayloadException::invalidField($this->nameConverter->normalize($e->getPath()), $e);
+            $path = null;
+
+            if ($e->getPath() !== null) {
+                $path = $this->nameConverter->normalize($e->getPath());
+            }
+
+            throw InvalidRequestPayloadException::invalidField($path, $e);
         }
     }
 

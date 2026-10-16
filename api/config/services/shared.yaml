@@ -78,12 +78,6 @@ services:
 
     Movioza\Shared\Application\Transaction\TransactionManagerInterface: '@movioza.shared.transaction_manager.doctrine'
 
-    # Controller
-    Movioza\Shared\Presentation\Http\Controller\:
-        resource: '%kernel.project_dir%/src/Shared/Presentation/Http/Controller/*Controller.php'
-        tags:
-            - { name: controller.service_arguments }
-
     # Serializer
     Symfony\Component\Serializer\Normalizer\BackedEnumNormalizer:
         tags:
@@ -95,16 +89,3 @@ services:
             - { name: serializer.normalizer }
 
     Symfony\Component\Serializer\NameConverter\CamelCaseToSnakeCaseNameConverter: ~
-
-    movioza.serializer.normalizer.request_object:
-        class: Symfony\Component\Serializer\Normalizer\ObjectNormalizer
-        arguments:
-            $nameConverter: '@serializer.name_converter.camel_case_to_snake_case'
-
-    movioza.serializer.request_payload:
-        class: Symfony\Component\Serializer\Serializer
-        arguments:
-            $normalizers:
-                - '@movioza.serializer.normalizer.request_object'
-            $encoders:
-                - '@serializer.encoder.json'
