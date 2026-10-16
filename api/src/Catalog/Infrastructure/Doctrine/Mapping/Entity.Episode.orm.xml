@@ -8,7 +8,9 @@
             <unique-constraint name="uniq_episode_season_number" columns="season_id,number" />
         </unique-constraints>
 
-        <id name="id" column="id" type="catalog_episode_id" />
+        <id name="id" column="id" type="catalog_episode_id">
+            <generator strategy="NONE" />
+        </id>
 
         <field name="number" column="number" type="catalog_episode_number" />
         <field name="title" column="title" type="catalog_episode_title" />

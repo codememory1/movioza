@@ -5,9 +5,9 @@ declare(strict_types = 1);
 namespace Movioza\People\Infrastructure\Doctrine\Type;
 
 use Movioza\People\Domain\ValueObject\PersonID;
-use Movioza\Shared\Infrastructure\Doctrine\Type\AbstractStringValueObjectType;
+use Movioza\Shared\Infrastructure\Doctrine\Type\AbstractBigIntegerValueObjectType;
 
-final class PersonIDType extends AbstractStringValueObjectType
+final class PersonIDType extends AbstractBigIntegerValueObjectType
 {
     public const string NAME = 'people_person_id';
 

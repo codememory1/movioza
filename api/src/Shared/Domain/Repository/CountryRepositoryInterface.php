@@ -12,13 +12,6 @@ use Movioza\Shared\Domain\Entity\Country;
 interface CountryRepositoryInterface
 {
     /**
-     * Updates an existing country.
-     *
-     * @return bool Whether the update succeeded.
-     */
-    public function update(Country $country): bool;
-
-    /**
      * Persists a country.
      */
     public function save(Country $country): void;

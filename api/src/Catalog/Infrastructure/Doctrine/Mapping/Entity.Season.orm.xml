@@ -8,7 +8,9 @@
             <unique-constraint name="uniq_season_media_number" columns="media_id,number" />
         </unique-constraints>
 
-        <id name="id" column="id" type="catalog_season_id" />
+        <id name="id" column="id" type="catalog_season_id">
+            <generator strategy="NONE" />
+        </id>
 
         <field name="number" column="number" type="catalog_season_number" />
         <field name="title" column="title" type="catalog_season_title" />

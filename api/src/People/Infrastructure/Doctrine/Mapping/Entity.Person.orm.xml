@@ -4,7 +4,9 @@
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
     <entity name="Movioza\People\Domain\Entity\Person" table="persons">
-        <id name="id" column="id" type="people_person_id" />
+        <id name="id" column="id" type="people_person_id">
+            <generator strategy="NONE" />
+        </id>
 
         <field name="name" column="name" type="people_person_name" length="120" />
         <field name="slug" column="slug" type="shared_slug" length="280" />

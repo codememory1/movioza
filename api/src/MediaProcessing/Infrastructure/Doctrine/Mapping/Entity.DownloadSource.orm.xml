@@ -4,7 +4,9 @@
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
     <entity name="Movioza\MediaProcessing\Domain\Entity\DownloadSource" table="download_sources">
-        <id name="id" column="id" type="media_processing_download_source_id" />
+        <id name="id" column="id" type="media_processing_download_source_id">
+            <generator strategy="NONE" />
+        </id>
 
         <field name="type" column="type" length="32" enum-type="Movioza\MediaProcessing\Domain\Enum\DownloadSourceType" />
         <field name="source" column="source" type="text" />

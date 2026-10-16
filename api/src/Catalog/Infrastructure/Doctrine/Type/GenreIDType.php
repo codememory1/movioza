@@ -5,9 +5,9 @@ declare(strict_types = 1);
 namespace Movioza\Catalog\Infrastructure\Doctrine\Type;
 
 use Movioza\Catalog\Domain\ValueObject\GenreID;
-use Movioza\Shared\Infrastructure\Doctrine\Type\AbstractStringValueObjectType;
+use Movioza\Shared\Infrastructure\Doctrine\Type\AbstractBigIntegerValueObjectType;
 
-class GenreIDType extends AbstractStringValueObjectType
+final class GenreIDType extends AbstractBigIntegerValueObjectType
 {
     public const string NAME = 'catalog_genre_id';
 

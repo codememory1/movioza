@@ -4,7 +4,9 @@
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
     <entity name="Movioza\MediaProcessing\Domain\Entity\MediaSource" table="media_sources">
-        <id name="id" column="id" type="media_processing_media_source_id" />
+        <id name="id" column="id" type="media_processing_media_source_id">
+            <generator strategy="NONE" />
+        </id>
 
         <field name="mediaId" column="media_id" type="media_processing_media_id" />
         <field name="pageUrl" column="page_url" type="media_processing_page_url" length="1024" />
@@ -19,7 +21,7 @@
         <one-to-many
             field="downloadSources"
             target-entity="Movioza\MediaProcessing\Domain\Entity\DownloadSource"
-            mapped-by="downloadSource"
+            mapped-by="mediaSource"
             orphan-removal="true"
         >
             <cascade>

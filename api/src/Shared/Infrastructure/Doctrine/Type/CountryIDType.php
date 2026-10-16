@@ -6,7 +6,7 @@ namespace Movioza\Shared\Infrastructure\Doctrine\Type;
 
 use Movioza\Shared\Domain\ValueObject\CountryID;
 
-class CountryIDType extends AbstractStringValueObjectType
+final class CountryIDType extends AbstractBigIntegerValueObjectType
 {
     public const string NAME = 'shared_country_id';
 

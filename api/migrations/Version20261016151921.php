@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20261014202642 extends AbstractMigration
+final class Version20261016151921 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -20,35 +20,43 @@ final class Version20261014202642 extends AbstractMigration
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('CREATE TABLE countries (name VARCHAR(120) NOT NULL, code VARCHAR(3) NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, id VARCHAR(32) NOT NULL, PRIMARY KEY (id))');
+        $this->addSql('CREATE SEQUENCE shared_country_id_seq AS BIGINT INCREMENT BY 1 MINVALUE 1 START WITH 1');
+        $this->addSql('CREATE SEQUENCE people_person_id_seq AS BIGINT INCREMENT BY 1 MINVALUE 1 START WITH 1');
+        $this->addSql('CREATE SEQUENCE catalog_media_id_seq AS BIGINT INCREMENT BY 1 MINVALUE 1 START WITH 1');
+        $this->addSql('CREATE SEQUENCE catalog_episode_id_seq AS BIGINT INCREMENT BY 1 MINVALUE 1 START WITH 1');
+        $this->addSql('CREATE SEQUENCE catalog_season_id_seq AS BIGINT INCREMENT BY 1 MINVALUE 1 START WITH 1');
+        $this->addSql('CREATE SEQUENCE media_processing_media_source_id_seq AS BIGINT INCREMENT BY 1 MINVALUE 1 START WITH 1');
+        $this->addSql('CREATE SEQUENCE media_processing_download_source_id_seq AS BIGINT INCREMENT BY 1 MINVALUE 1 START WITH 1');
+
+        $this->addSql('CREATE TABLE countries (name VARCHAR(120) NOT NULL, code VARCHAR(3) NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, id BIGINT NOT NULL, PRIMARY KEY (id))');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_5D66EBAD5E237E06 ON countries (name)');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_5D66EBAD77153098 ON countries (code)');
-        $this->addSql('CREATE TABLE download_sources (type VARCHAR(32) NOT NULL, source TEXT NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, id VARCHAR NOT NULL, media_source_id VARCHAR NOT NULL, PRIMARY KEY (id))');
+        $this->addSql('CREATE TABLE download_sources (type VARCHAR(32) NOT NULL, source TEXT NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, id BIGINT NOT NULL, media_source_id BIGINT NOT NULL, PRIMARY KEY (id))');
         $this->addSql('CREATE INDEX IDX_7E236437B05CAFEF ON download_sources (media_source_id)');
-        $this->addSql('CREATE TABLE episode_images (created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, image_id VARCHAR NOT NULL, type VARCHAR(32) NOT NULL, episode_id VARCHAR NOT NULL, PRIMARY KEY (image_id, type, episode_id))');
+        $this->addSql('CREATE TABLE episode_images (created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, image_id VARCHAR NOT NULL, type VARCHAR(32) NOT NULL, episode_id BIGINT NOT NULL, PRIMARY KEY (image_id, type, episode_id))');
         $this->addSql('CREATE INDEX IDX_8C222171362B62A0 ON episode_images (episode_id)');
-        $this->addSql('CREATE TABLE episodes (number INT NOT NULL, title VARCHAR NOT NULL, slug VARCHAR(280) NOT NULL, description TEXT DEFAULT NULL, released_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, uploaded_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, id VARCHAR NOT NULL, season_id VARCHAR NOT NULL, PRIMARY KEY (id))');
+        $this->addSql('CREATE TABLE episodes (number INT NOT NULL, title VARCHAR NOT NULL, slug VARCHAR(280) NOT NULL, description TEXT DEFAULT NULL, released_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, uploaded_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, id BIGINT NOT NULL, season_id BIGINT NOT NULL, PRIMARY KEY (id))');
         $this->addSql('CREATE INDEX IDX_7DD55EDD4EC001D1 ON episodes (season_id)');
         $this->addSql('CREATE UNIQUE INDEX uniq_episode_season_number ON episodes (season_id, number)');
         $this->addSql('CREATE TABLE files (storage_type VARCHAR(32) NOT NULL, bucket VARCHAR(255) NOT NULL, key VARCHAR(1024) NOT NULL, extension VARCHAR(16) NOT NULL, size BIGINT NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, id VARCHAR(32) NOT NULL, PRIMARY KEY (id))');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_63540598A90ABA9 ON files (key)');
         $this->addSql('CREATE TABLE images (file_id VARCHAR(32) NOT NULL, blur_hash VARCHAR(255) NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, id VARCHAR(32) NOT NULL, width INT NOT NULL, height INT NOT NULL, PRIMARY KEY (id))');
-        $this->addSql('CREATE TABLE media (type VARCHAR(32) NOT NULL, kind VARCHAR(32) DEFAULT NULL, title VARCHAR(255) NOT NULL, alternative_titles JSON NOT NULL, slug VARCHAR(280) NOT NULL, description TEXT NOT NULL, age_restrictions INT NOT NULL, uploaded_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, released_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, id VARCHAR NOT NULL, PRIMARY KEY (id))');
-        $this->addSql('CREATE TABLE media_countries (created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, country_id VARCHAR(32) NOT NULL, media_id VARCHAR NOT NULL, PRIMARY KEY (country_id, media_id))');
+        $this->addSql('CREATE TABLE media (type VARCHAR(32) NOT NULL, kind VARCHAR(32) DEFAULT NULL, title VARCHAR(255) NOT NULL, alternative_titles JSON NOT NULL, slug VARCHAR(280) NOT NULL, description TEXT NOT NULL, age_restrictions INT NOT NULL, uploaded_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, released_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, id BIGINT NOT NULL, PRIMARY KEY (id))');
+        $this->addSql('CREATE TABLE media_countries (created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, country_id BIGINT NOT NULL, media_id BIGINT NOT NULL, PRIMARY KEY (country_id, media_id))');
         $this->addSql('CREATE INDEX IDX_78065823EA9FDD75 ON media_countries (media_id)');
-        $this->addSql('CREATE TABLE media_genres (created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, genre_id VARCHAR(32) NOT NULL, media_id VARCHAR NOT NULL, PRIMARY KEY (genre_id, media_id))');
+        $this->addSql('CREATE TABLE media_genres (created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, genre_id BIGINT NOT NULL, media_id BIGINT NOT NULL, PRIMARY KEY (genre_id, media_id))');
         $this->addSql('CREATE INDEX IDX_14927FC8EA9FDD75 ON media_genres (media_id)');
-        $this->addSql('CREATE TABLE media_images (created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, image_id VARCHAR(32) NOT NULL, type VARCHAR(32) NOT NULL, media_id VARCHAR NOT NULL, PRIMARY KEY (image_id, type, media_id))');
+        $this->addSql('CREATE TABLE media_images (created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, image_id VARCHAR(32) NOT NULL, type VARCHAR(32) NOT NULL, media_id BIGINT NOT NULL, PRIMARY KEY (image_id, type, media_id))');
         $this->addSql('CREATE INDEX IDX_5C6624B4EA9FDD75 ON media_images (media_id)');
-        $this->addSql('CREATE TABLE media_persons (created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, person_id VARCHAR(32) NOT NULL, role VARCHAR(32) NOT NULL, media_id VARCHAR NOT NULL, PRIMARY KEY (person_id, role, media_id))');
+        $this->addSql('CREATE TABLE media_persons (created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, person_id BIGINT NOT NULL, role VARCHAR(32) NOT NULL, media_id BIGINT NOT NULL, PRIMARY KEY (person_id, role, media_id))');
         $this->addSql('CREATE INDEX IDX_C38B419AEA9FDD75 ON media_persons (media_id)');
-        $this->addSql('CREATE TABLE media_sources (media_id VARCHAR NOT NULL, page_url VARCHAR(1024) NOT NULL, status VARCHAR(32) NOT NULL, error_message TEXT DEFAULT NULL, resolving_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, resolved_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, failed_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, id VARCHAR NOT NULL, PRIMARY KEY (id))');
-        $this->addSql('CREATE TABLE person_images (created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, image_id VARCHAR NOT NULL, type VARCHAR(32) NOT NULL, person_id VARCHAR NOT NULL, PRIMARY KEY (image_id, type, person_id))');
+        $this->addSql('CREATE TABLE media_sources (media_id BIGINT NOT NULL, page_url VARCHAR(1024) NOT NULL, status VARCHAR(32) NOT NULL, error_message TEXT DEFAULT NULL, resolving_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, resolved_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, failed_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, id BIGINT NOT NULL, PRIMARY KEY (id))');
+        $this->addSql('CREATE TABLE person_images (created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, image_id VARCHAR NOT NULL, type VARCHAR(32) NOT NULL, person_id BIGINT NOT NULL, PRIMARY KEY (image_id, type, person_id))');
         $this->addSql('CREATE INDEX IDX_7CBA8EDC217BBB47 ON person_images (person_id)');
-        $this->addSql('CREATE TABLE persons (name VARCHAR(120) NOT NULL, slug VARCHAR(280) NOT NULL, biography TEXT DEFAULT NULL, gender VARCHAR(32) DEFAULT NULL, birth_date DATE DEFAULT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, id VARCHAR NOT NULL, PRIMARY KEY (id))');
-        $this->addSql('CREATE TABLE season_images (created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, image_id VARCHAR NOT NULL, type VARCHAR(32) NOT NULL, season_id VARCHAR NOT NULL, PRIMARY KEY (image_id, type, season_id))');
+        $this->addSql('CREATE TABLE persons (name VARCHAR(120) NOT NULL, slug VARCHAR(280) NOT NULL, biography TEXT DEFAULT NULL, gender VARCHAR(32) DEFAULT NULL, birth_date DATE DEFAULT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, id BIGINT NOT NULL, PRIMARY KEY (id))');
+        $this->addSql('CREATE TABLE season_images (created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, image_id VARCHAR NOT NULL, type VARCHAR(32) NOT NULL, season_id BIGINT NOT NULL, PRIMARY KEY (image_id, type, season_id))');
         $this->addSql('CREATE INDEX IDX_F66440D84EC001D1 ON season_images (season_id)');
-        $this->addSql('CREATE TABLE seasons (number INT NOT NULL, title VARCHAR NOT NULL, slug VARCHAR(280) NOT NULL, description TEXT DEFAULT NULL, released_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, id VARCHAR NOT NULL, media_id VARCHAR NOT NULL, PRIMARY KEY (id))');
+        $this->addSql('CREATE TABLE seasons (number INT NOT NULL, title VARCHAR NOT NULL, slug VARCHAR(280) NOT NULL, description TEXT DEFAULT NULL, released_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, id BIGINT NOT NULL, media_id BIGINT NOT NULL, PRIMARY KEY (id))');
         $this->addSql('CREATE INDEX IDX_B4F4301CEA9FDD75 ON seasons (media_id)');
         $this->addSql('CREATE UNIQUE INDEX uniq_season_media_number ON seasons (media_id, number)');
         $this->addSql('ALTER TABLE download_sources ADD CONSTRAINT FK_7E236437B05CAFEF FOREIGN KEY (media_source_id) REFERENCES media_sources (id) ON DELETE CASCADE');
@@ -92,5 +100,13 @@ final class Version20261014202642 extends AbstractMigration
         $this->addSql('DROP TABLE persons');
         $this->addSql('DROP TABLE season_images');
         $this->addSql('DROP TABLE seasons');
+
+        $this->addSql('DROP SEQUENCE shared_country_id_seq');
+        $this->addSql('DROP SEQUENCE people_person_id_seq');
+        $this->addSql('DROP SEQUENCE catalog_media_id_seq');
+        $this->addSql('DROP SEQUENCE catalog_episode_id_seq');
+        $this->addSql('DROP SEQUENCE catalog_season_id_seq');
+        $this->addSql('DROP SEQUENCE media_processing_media_source_id_seq');
+        $this->addSql('DROP SEQUENCE media_processing_download_source_id_seq');
     }
 }

@@ -4,8 +4,8 @@ declare(strict_types = 1);
 
 namespace Movioza\Catalog\Domain\ValueObject;
 
-use Movioza\Shared\Domain\ValueObject\StringID;
+use Movioza\Shared\Domain\ValueObject\IntegerID;
 
-final class SeasonID extends StringID
+final class SeasonID extends IntegerID
 {
 }
