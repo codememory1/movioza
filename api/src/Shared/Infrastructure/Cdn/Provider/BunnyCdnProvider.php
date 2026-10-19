@@ -25,14 +25,15 @@ readonly class BunnyCdnProvider implements CdnProviderInterface
 
     public function generate(CdnFileType $type, string $path, int $ttl): string
     {
+        $path = sprintf('/%s', ltrim($path, '/'));
         $expires = time() + $ttl;
 
         return sprintf(
-            '%s/%s?token=%s&expires=%s',
+            '%s%s?token=%s&expires=%d',
             rtrim($this->domain, '/'),
-            ltrim($path, '/'),
+            $path,
             $this->token($this->signature($path, $expires)),
-            $expires
+            $expires,
         );
     }
 
