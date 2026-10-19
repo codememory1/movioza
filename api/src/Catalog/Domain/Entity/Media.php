@@ -7,6 +7,7 @@ namespace Movioza\Catalog\Domain\Entity;
 use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use InvalidArgumentException;
 use Movioza\Catalog\Domain\Enum\MediaImageType;
 use Movioza\Catalog\Domain\Enum\MediaKind;
 use Movioza\Catalog\Domain\Enum\MediaPersonRole;
@@ -34,6 +35,8 @@ use Movioza\Shared\Domain\ValueObject\Slug;
  */
 class Media extends AggregateRoot
 {
+    private array $alternativeTitles;
+
     /**
      * Seasons belonging to this media aggregate.
      *
@@ -94,7 +97,7 @@ class Media extends AggregateRoot
         private readonly MediaType $type,
         private readonly ?MediaKind $kind,
         private MediaTitle $title,
-        private array $alternativeTitles,
+        array $alternativeTitles,
         private readonly Slug $slug,
         private string $description,
         private readonly AgeRestriction $ageRestrictions,
@@ -105,6 +108,8 @@ class Media extends AggregateRoot
         $this->persons = new ArrayCollection();
         $this->countries = new ArrayCollection();
         $this->genres = new ArrayCollection();
+
+        $this->alternativeTitles = $this->normalizeAlternativeTitles($alternativeTitles);
 
         $this->recordEvent(new MediaCreatedEvent($this->id, $this->type, $this->title, $createdAt));
     }
@@ -608,6 +613,38 @@ class Media extends AggregateRoot
     public function getUpdatedAt(): ?DateTimeImmutable
     {
         return $this->updatedAt;
+    }
+
+    /**
+     * @param array<array-key, mixed> $titles
+     *
+     * @return list<MediaTitle>
+     */
+    private function normalizeAlternativeTitles(array $titles): array
+    {
+        if (!array_is_list($titles)) {
+            throw new InvalidArgumentException('Alternative titles must be a list.');
+        }
+
+        $result = [];
+
+        foreach ($titles as $title) {
+            if (!$title instanceof MediaTitle) {
+                throw new InvalidArgumentException('Alternative titles must contain MediaTitle objects.');
+            }
+
+            $alreadyExists = array_any(
+                $result,
+                static fn (MediaTitle $existing): bool =>
+                $existing->equals($title),
+            );
+
+            if (!$alreadyExists) {
+                $result[] = $title;
+            }
+        }
+
+        return $result;
     }
 
     private function findSeason(SeasonNumber $number): ?Season
