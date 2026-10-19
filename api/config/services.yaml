@@ -18,6 +18,9 @@ services:
             calls:
                 - [setLogger, ['@logger']]
 
+    Movioza\Command\:
+        resource: '../src/Command/*'
+
     # Redis
     movioza.redis.client:
         class: Predis\Client

@@ -6,5 +6,4 @@ namespace Movioza\Shared\Application\Bus\Query;
 
 interface QueryHandlerInterface
 {
-    public function handle(QueryInterface $query): mixed;
 }
