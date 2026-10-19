@@ -9,6 +9,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Movioza\MediaProcessing\Domain\Enum\DownloadSourceType;
 use Movioza\MediaProcessing\Domain\Enum\MediaSourceStatus;
+use Movioza\MediaProcessing\Domain\Enum\MediaSourceTransition;
+use Movioza\MediaProcessing\Domain\StateMachine\MediaSourceStateMachineInterface;
 use Movioza\MediaProcessing\Domain\ValueObject\DownloadSourceID;
 use Movioza\MediaProcessing\Domain\ValueObject\MediaID;
 use Movioza\MediaProcessing\Domain\ValueObject\MediaSourceID;
@@ -42,6 +44,15 @@ class MediaSource extends AggregateRoot
     ) {
         $this->downloadSources = new ArrayCollection();
         $this->status = MediaSourceStatus::PENDING;
+    }
+
+    public function applyTransition(
+        MediaSourceTransition $transition,
+        DateTimeImmutable $changedAt,
+        MediaSourceStateMachineInterface $stateMachine
+    ): void {
+        $this->status = $stateMachine->apply($this, $transition);
+        $this->updatedAt = $changedAt;
     }
 
     public function addDownloadSource(

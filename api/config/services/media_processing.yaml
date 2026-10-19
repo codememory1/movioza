@@ -46,3 +46,11 @@ services:
             $directory: '%kernel.project_dir%/var/torrents'
 
     Movioza\MediaProcessing\Infrastructure\Tracker\Storage\TorrentFileStorageInterface: '@movioza.media_processing.tracker_storage.local_file'
+
+    # State Machines
+    movioza.media_processing.media_source_state_machine.symfony:
+        class: Movioza\MediaProcessing\Infrastructure\Workflow\SymfonyMediaSourceWorkflow
+        arguments:
+            $stateMachine: '@state_machine.media_source'
+
+    Movioza\MediaProcessing\Domain\StateMachine\MediaSourceStateMachineInterface: '@movioza.media_processing.media_source_state_machine.symfony'

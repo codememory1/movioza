@@ -65,6 +65,7 @@ readonly class Aria2Downloader implements DownloaderInterface
             $result->completedLength,
             $result->totalLength,
             $result->downloadSpeed,
+            $result->errorMessage
         );
     }
 
@@ -78,7 +79,9 @@ readonly class Aria2Downloader implements DownloaderInterface
      */
     public function cancel(DownloadID $id): void
     {
-        $this->rpc->remove($id->id);
+        $status = $this->resolveCurrentStatus($id);
+
+        $this->rpc->remove($status->gid);
     }
 
     /**

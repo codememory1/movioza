@@ -1,0 +1,27 @@
+framework:
+    workflows:
+        media_source:
+            type: state_machine
+
+            supports:
+                - Movioza\MediaProcessing\Infrastructure\Workflow\MediaSourceWorkflowState
+
+            marking_store:
+                type: method
+                property: status
+
+            initial_marking: !php/enum Movioza\MediaProcessing\Domain\Enum\MediaSourceStatus::PENDING
+            places: !php/enum Movioza\MediaProcessing\Domain\Enum\MediaSourceStatus
+
+            transitions:
+                !php/enum Movioza\MediaProcessing\Domain\Enum\MediaSourceTransition::START_RESOLVING->value:
+                    from: !php/enum Movioza\MediaProcessing\Domain\Enum\MediaSourceStatus::PENDING
+                    to: !php/enum Movioza\MediaProcessing\Domain\Enum\MediaSourceStatus::RESOLVING
+
+                !php/enum Movioza\MediaProcessing\Domain\Enum\MediaSourceTransition::RESOLVE->value:
+                    from: !php/enum Movioza\MediaProcessing\Domain\Enum\MediaSourceStatus::RESOLVING
+                    to: !php/enum Movioza\MediaProcessing\Domain\Enum\MediaSourceStatus::RESOLVED
+
+                !php/enum Movioza\MediaProcessing\Domain\Enum\MediaSourceTransition::FAIL->value:
+                    from: !php/enum Movioza\MediaProcessing\Domain\Enum\MediaSourceStatus::RESOLVING
+                    to: !php/enum Movioza\MediaProcessing\Domain\Enum\MediaSourceStatus::FAILED

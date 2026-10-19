@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace Movioza\MediaProcessing\Domain\Entity;
 
 use DateTimeImmutable;
+use InvalidArgumentException;
 use Movioza\MediaProcessing\Domain\Enum\DownloadSourceType;
 use Movioza\MediaProcessing\Domain\ValueObject\DownloadSourceID;
 
@@ -17,6 +18,9 @@ readonly class DownloadSource
         private string $source,
         private DateTimeImmutable $createdAt,
     ) {
+        if (trim($source) === '') {
+            throw new InvalidArgumentException('Download source cannot be empty.');
+        }
     }
 
     public function getId(): DownloadSourceID
