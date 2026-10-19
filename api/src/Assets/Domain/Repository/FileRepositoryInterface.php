@@ -8,7 +8,5 @@ use Movioza\Assets\Domain\Entity\File;
 
 interface FileRepositoryInterface
 {
-    public function update(File $file): bool;
-
     public function save(File $file): void;
 }

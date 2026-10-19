@@ -4,4 +4,9 @@ declare(strict_types = 1);
 
 namespace Movioza\People\Domain\Repository;
 
-interface PersonRepositoryInterface {}
+use Movioza\People\Domain\Entity\Person;
+
+interface PersonRepositoryInterface
+{
+    public function save(Person $person): void;
+}

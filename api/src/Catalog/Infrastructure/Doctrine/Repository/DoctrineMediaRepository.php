@@ -9,7 +9,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use Movioza\Catalog\Domain\Entity\Media;
 use Movioza\Catalog\Domain\Repository\MediaRepositoryInterface;
 
-class DoctrineMediaRepository extends ServiceEntityRepository implements MediaRepositoryInterface
+final class DoctrineMediaRepository extends ServiceEntityRepository implements MediaRepositoryInterface
 {
     public function __construct(ManagerRegistry $registry)
     {
