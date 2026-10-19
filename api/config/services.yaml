@@ -1,40 +1,22 @@
 imports:
-    - { resource: './services/attribute.yaml' }
-    - { resource: './services/serializer.yaml' }
-    - { resource: './services/factory.yaml' }
-    - { resource: './services/repository.yaml' }
-    - { resource: './services/api.yaml' }
-    - { resource: './services/cdn.yaml' }
-    - { resource: './services/torrent.yaml' }
+    - { resource: './services/shared.yaml' }
+    - { resource: './services/assets.yaml' }
+    - { resource: './services/people.yaml' }
+    - { resource: './services/catalog.yaml' }
+    - { resource: './services/media_processing.yaml' }
 
 parameters:
-    movioza.public_api_host: '%env(APP_PUBLIC_API_HOST)%'
-    movioza.admin_api_host: '%env(APP_ADMIN_API_HOST)%'
+    movioza.api_host: '%env(APP_API_HOST)%'
 
 services:
     _defaults:
         autowire: true
         autoconfigure: true
 
-    Movioza\Controller\:
-        resource: '%kernel.project_dir%/src/Controller/**/*Controller.php'
-        tags:
-            - { name: controller.service_arguments }
-
-    Movioza\DataFixtures\:
-        resource: '%kernel.project_dir%/src/DataFixtures/*Fixtures.php'
-
-    Movioza\EventListener\:
-        resource: '%kernel.project_dir%/src/EventListener/*'
-
-    Movioza\Message\:
-        resource: '%kernel.project_dir%/src/Message/*Message.php'
-
-    Movioza\MessageHandler\:
-        resource: '%kernel.project_dir%/src/MessageHandler/*MessageHandler.php'
-
-    Movioza\Command\:
-        resource: '%kernel.project_dir%/src/Command/'
+    _instanceof:
+        Psr\Log\LoggerAwareInterface:
+            calls:
+                - [setLogger, ['@logger']]
 
     # Redis
     movioza.redis.client:
@@ -64,23 +46,3 @@ services:
                     secret: '%env(S3_SECRET_KEY)%'
 
     Aws\S3\S3ClientInterface: '@movioza.s3.client'
-
-    # Aria2
-    movioza.aria2.client:
-        class: Movioza\Service\Aria2\Aria2Client
-        arguments:
-            $host: '%env(ARIA2_HOST)%'
-            $port: '%env(ARIA2_PORT)%'
-            $secret: '%env(ARIA2_SECRET)%'
-
-    Movioza\Service\Aria2\Aria2ClientInterface: '@movioza.aria2.client'
-
-    # Slug generator
-    movioza.slug_generator.cocur:
-        class: Movioza\Service\Slug\CocurSlugGenerator
-
-    Movioza\Service\Slug\SlugGeneratorInterface: '@movioza.slug_generator.cocur'
-
-    # Use Case
-    Movioza\UseCase\:
-        resource: '%kernel.project_dir%/src/UseCase/**/**/*Handler.php'

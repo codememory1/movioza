@@ -1,0 +1,56 @@
+services:
+    _defaults:
+        autoconfigure: false
+        autowire: true
+
+    # Repositories
+    movioza.media_processing.media_source_repository.doctrine:
+        class: Movioza\MediaProcessing\Infrastructure\Doctrine\Repository\DoctrineMediaSourceRepository
+
+    Movioza\MediaProcessing\Domain\Repository\MediaSourceRepositoryInterface: '@movioza.media_processing.media_source_repository.doctrine'
+
+    # Aria2
+    movioza.media_processing.aria2.rpc_client:
+        class: Movioza\MediaProcessing\Infrastructure\Download\Aria2\Aria2RpcClient
+        arguments:
+            $endpoint: '%env(ARIA2_ENDPOINT)%'
+            $secret: '%env(ARIA2_SECRET)%'
+
+    movioza.media_processing.downloader.aria2:
+        class: Movioza\MediaProcessing\Infrastructure\Download\Aria2\Aria2Downloader
+        arguments:
+            $rpc: '@movioza.media_processing.aria2.rpc_client'
+
+    # Downloader
+    Movioza\MediaProcessing\Application\Download\DownloaderInterface: '@movioza.media_processing.downloader.aria2'
+
+    # Tracker Parsers
+    Movioza\MediaProcessing\Infrastructure\Tracker\RutorParser:
+        tags:
+            - { name: movioza.tracker_parser, tracker: rutor }
+
+    # Tracker Parser Registry
+    movioza.media_processing.tracker_parser_registry:
+        class: Movioza\MediaProcessing\Infrastructure\Tracker\TrackerParserRegistry
+        arguments:
+            $parsers: !tagged_iterator
+                tag: movioza.tracker_parser
+                index_by: tracker
+
+    Movioza\MediaProcessing\Application\Tracker\TrackerParserRegistryInterface: '@movioza.media_processing.tracker_parser_registry'
+
+    # Tracker Storage
+    movioza.media_processing.tracker_storage.local_file:
+        class: Movioza\MediaProcessing\Infrastructure\Tracker\Storage\LocalTorrentFileStorage
+        arguments:
+            $directory: '%kernel.project_dir%/var/torrents'
+
+    Movioza\MediaProcessing\Infrastructure\Tracker\Storage\TorrentFileStorageInterface: '@movioza.media_processing.tracker_storage.local_file'
+
+    # State Machines
+    movioza.media_processing.media_source_state_machine.symfony:
+        class: Movioza\MediaProcessing\Infrastructure\Workflow\SymfonyMediaSourceWorkflow
+        arguments:
+            $stateMachine: '@state_machine.media_source'
+
+    Movioza\MediaProcessing\Domain\StateMachine\MediaSourceStateMachineInterface: '@movioza.media_processing.media_source_state_machine.symfony'

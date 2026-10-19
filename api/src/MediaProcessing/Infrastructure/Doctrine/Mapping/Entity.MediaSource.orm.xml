@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="Movioza\MediaProcessing\Domain\Entity\MediaSource" table="media_sources">
+        <id name="id" column="id" type="media_processing_media_source_id">
+            <generator strategy="NONE" />
+        </id>
+
+        <field name="mediaId" column="media_id" type="media_processing_media_id" />
+        <field name="pageUrl" column="page_url" type="media_processing_page_url" length="1024" />
+        <field name="status" column="status" length="32" enum-type="Movioza\MediaProcessing\Domain\Enum\MediaSourceStatus" />
+        <field name="errorMessage" column="error_message" type="text" nullable="true" />
+        <field name="resolvingAt" column="resolving_at" type="datetime_immutable" nullable="true" />
+        <field name="resolvedAt" column="resolved_at" type="datetime_immutable" nullable="true" />
+        <field name="failedAt" column="failed_at" type="datetime_immutable" nullable="true" />
+        <field name="createdAt" column="created_at" type="datetime_immutable" />
+        <field name="updatedAt" column="updated_at" type="datetime_immutable" nullable="true" />
+
+        <one-to-many
+            field="downloadSources"
+            target-entity="Movioza\MediaProcessing\Domain\Entity\DownloadSource"
+            mapped-by="mediaSource"
+            orphan-removal="true"
+        >
+            <cascade>
+                <cascade-persist />
+            </cascade>
+        </one-to-many>
+    </entity>
+</doctrine-mapping>

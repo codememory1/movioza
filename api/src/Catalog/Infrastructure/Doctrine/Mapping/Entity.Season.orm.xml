@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="Movioza\Catalog\Domain\Entity\Season" table="seasons">
+        <unique-constraints>
+            <unique-constraint name="uniq_season_media_number" columns="media_id,number" />
+        </unique-constraints>
+
+        <id name="id" column="id" type="catalog_season_id">
+            <generator strategy="NONE" />
+        </id>
+
+        <field name="number" column="number" type="catalog_season_number" />
+        <field name="title" column="title" type="catalog_season_title" />
+        <field name="slug" column="slug" type="shared_slug" length="280" />
+        <field name="description" column="description" type="text" nullable="true" />
+        <field name="releasedAt" column="released_at" type="datetime_immutable" nullable="true" />
+        <field name="createdAt" column="created_at" type="datetime_immutable" />
+        <field name="updatedAt" column="updated_at" type="datetime_immutable" nullable="true" />
+
+        <many-to-one field="media" target-entity="Movioza\Catalog\Domain\Entity\Media" inversed-by="seasons">
+            <join-column name="media_id" nullable="false" on-delete="CASCADE" />
+        </many-to-one>
+
+        <one-to-many field="episodes" target-entity="Movioza\Catalog\Domain\Entity\Episode" mapped-by="season" orphan-removal="true">
+            <cascade>
+                <cascade-persist />
+            </cascade>
+        </one-to-many>
+
+        <one-to-many field="images" target-entity="Movioza\Catalog\Domain\Entity\SeasonImage" mapped-by="season" orphan-removal="true">
+            <cascade>
+                <cascade-persist />
+            </cascade>
+        </one-to-many>
+    </entity>
+</doctrine-mapping>

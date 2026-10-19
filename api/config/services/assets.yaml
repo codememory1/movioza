@@ -1,0 +1,15 @@
+services:
+    _defaults:
+        autoconfigure: false
+        autowire: true
+
+    # Repositories
+    movioza.assets.file_repository.doctrine:
+        class: Movioza\Assets\Infrastructure\Doctrine\Repository\DoctrineFileRepository
+
+    Movioza\Assets\Domain\Repository\FileRepositoryInterface: '@movioza.assets.file_repository.doctrine'
+
+    movioza.assets.image_repository.doctrine:
+        class: Movioza\Assets\Infrastructure\Doctrine\Repository\DoctrineImageRepository
+
+    Movioza\Assets\Domain\Repository\ImageRepositoryInterface: '@movioza.assets.image_repository.doctrine'

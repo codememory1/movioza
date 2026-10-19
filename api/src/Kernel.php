@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Movioza;
 
-use Movioza\DependencyInjection\Compiler\ControllerArgumentAttributeHandlerPass;
-use Movioza\DependencyInjection\Compiler\ControllerAttributeHandlerPass;
+use Movioza\Shared\Infrastructure\DependencyInjection\CompilerPass\RegisterControllerArgumentAttributeHandlersPass;
+use Movioza\Shared\Infrastructure\DependencyInjection\CompilerPass\RegisterControllerAttributeHandlersPass;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Kernel as BaseKernel;
@@ -16,7 +16,7 @@ class Kernel extends BaseKernel
 
     protected function build(ContainerBuilder $container): void
     {
-        $container->addCompilerPass(new ControllerArgumentAttributeHandlerPass());
-        $container->addCompilerPass(new ControllerAttributeHandlerPass());
+        $container->addCompilerPass(new RegisterControllerAttributeHandlersPass());
+        $container->addCompilerPass(new RegisterControllerArgumentAttributeHandlersPass());
     }
 }

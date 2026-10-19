@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="Movioza\Catalog\Domain\Entity\MediaImage" table="media_images">
+        <id name="media" association-key="true" />
+        <id name="imageId" column="image_id" type="catalog_image_id" length="32" />
+        <id name="type" column="type" length="32" />
+
+        <many-to-one field="media" target-entity="Movioza\Catalog\Domain\Entity\Media" inversed-by="images">
+            <join-column name="media_id" nullable="false" on-delete="CASCADE" />
+        </many-to-one>
+
+        <field name="createdAt" column="created_at" type="datetime_immutable" />
+    </entity>
+</doctrine-mapping>

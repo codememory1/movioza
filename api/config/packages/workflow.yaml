@@ -1,0 +1,2 @@
+imports:
+    - { resource: '../workflows/media_source.yaml' }

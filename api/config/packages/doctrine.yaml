@@ -1,25 +1,83 @@
 doctrine:
     dbal:
         url: '%env(resolve:DATABASE_URL)%'
-
-        # IMPORTANT: You MUST configure your server version,
-        # either here or in the DATABASE_URL env var (see .env file)
-        #server_version: '16'
-
         profiling_collect_backtrace: '%kernel.debug%'
+        types:
+            shared_country_id: Movioza\Shared\Infrastructure\Doctrine\Type\CountryIDType
+            shared_country_name: Movioza\Shared\Infrastructure\Doctrine\Type\CountryNameType
+            shared_country_code: Movioza\Shared\Infrastructure\Doctrine\Type\CountryCodeType
+            shared_slug: Movioza\Shared\Infrastructure\Doctrine\Type\SlugType
+
+            assets_file_id: Movioza\Assets\Infrastructure\Doctrine\Type\FileIDType
+            assets_image_id: Movioza\Assets\Infrastructure\Doctrine\Type\ImageIDType
+            assets_storage_bucket: Movioza\Assets\Infrastructure\Doctrine\Type\StorageBucketType
+            assets_storage_key: Movioza\Assets\Infrastructure\Doctrine\Type\StorageKeyType
+            assets_blur_hash: Movioza\Assets\Infrastructure\Doctrine\Type\BlurHashType
+            assets_file_extension: Movioza\Assets\Infrastructure\Doctrine\Type\FileExtensionType
+            assets_file_size: Movioza\Assets\Infrastructure\Doctrine\Type\FileSizeType
+
+            catalog_media_id: Movioza\Catalog\Infrastructure\Doctrine\Type\MediaIDType
+            catalog_genre_id: Movioza\Catalog\Infrastructure\Doctrine\Type\GenreIDType
+            catalog_image_id: Movioza\Catalog\Infrastructure\Doctrine\Type\ImageIDType
+            catalog_person_id: Movioza\Catalog\Infrastructure\Doctrine\Type\PersonIDType
+            catalog_season_id: Movioza\Catalog\Infrastructure\Doctrine\Type\SeasonIDType
+            catalog_episode_id: Movioza\Catalog\Infrastructure\Doctrine\Type\EpisodeIDType
+            catalog_media_title: Movioza\Catalog\Infrastructure\Doctrine\Type\MediaTitleType
+            catalog_media_titles: Movioza\Catalog\Infrastructure\Doctrine\Type\MediaTitlesType
+            catalog_age_restriction: Movioza\Catalog\Infrastructure\Doctrine\Type\AgeRestrictionType
+            catalog_season_number: Movioza\Catalog\Infrastructure\Doctrine\Type\SeasonNumberType
+            catalog_episode_number: Movioza\Catalog\Infrastructure\Doctrine\Type\EpisodeNumberType
+            catalog_season_title: Movioza\Catalog\Infrastructure\Doctrine\Type\SeasonTitleType
+            catalog_episode_title: Movioza\Catalog\Infrastructure\Doctrine\Type\EpisodeTitleType
+
+            people_person_id: Movioza\People\Infrastructure\Doctrine\Type\PersonIDType
+            people_image_id: Movioza\People\Infrastructure\Doctrine\Type\ImageIDType
+            people_person_name: Movioza\People\Infrastructure\Doctrine\Type\PersonNameType
+
+            media_processing_media_source_id: Movioza\MediaProcessing\Infrastructure\Doctrine\Type\MediaSourceIDType
+            media_processing_media_id: Movioza\MediaProcessing\Infrastructure\Doctrine\Type\MediaIDType
+            media_processing_download_source_id: Movioza\MediaProcessing\Infrastructure\Doctrine\Type\DownloadSourceIDType
+            media_processing_page_url: Movioza\MediaProcessing\Infrastructure\Doctrine\Type\PageUrlType
+
+        schema_filter: '~^(?!.*_seq$)~'
+
     orm:
         validate_xml_mapping: true
         naming_strategy: doctrine.orm.naming_strategy.underscore
         identity_generation_preferences:
             Doctrine\DBAL\Platforms\PostgreSQLPlatform: identity
-        auto_mapping: true
+        auto_mapping: false
         mappings:
-            App:
-                type: attribute
+            Shared:
+                type: xml
                 is_bundle: false
-                dir: '%kernel.project_dir%/src/Entity'
-                prefix: 'Movioza\Entity'
-                alias: App
+                dir: '%kernel.project_dir%/src/Shared/Infrastructure/Doctrine/Mapping'
+                prefix: Movioza\Shared\Domain
+                alias: Shared
+            Assets:
+                type: xml
+                is_bundle: false
+                dir: '%kernel.project_dir%/src/Assets/Infrastructure/Doctrine/Mapping'
+                prefix: Movioza\Assets\Domain
+                alias: Assets
+            People:
+                type: xml
+                is_bundle: false
+                dir: '%kernel.project_dir%/src/People/Infrastructure/Doctrine/Mapping'
+                prefix: Movioza\People\Domain
+                alias: People
+            Catalog:
+                type: xml
+                is_bundle: false
+                dir: '%kernel.project_dir%/src/Catalog/Infrastructure/Doctrine/Mapping'
+                prefix: Movioza\Catalog\Domain
+                alias: Catalog
+            MediaProcessing:
+                type: xml
+                is_bundle: false
+                dir: '%kernel.project_dir%/src/MediaProcessing/Infrastructure/Doctrine/Mapping'
+                prefix: Movioza\MediaProcessing\Domain
+                alias: MediaProcessing
 
 when@test:
     doctrine:
