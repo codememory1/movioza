@@ -9,6 +9,16 @@ services:
 
     Movioza\MediaProcessing\Domain\Repository\MediaSourceRepositoryInterface: '@movioza.media_processing.media_source_repository.doctrine'
 
+    # Controllers
+    Movioza\MediaProcessing\Presentation\Http\Controller\:
+        resource: '%kernel.project_dir%/src/MediaProcessing/Presentation/Http/Controller/**/*Controller.php'
+        tags:
+            - { name: controller.service_arguments }
+
+    # Command Handlers
+    Movioza\MediaProcessing\Application\Command\:
+        resource: '%kernel.project_dir%/src/MediaProcessing/Application/Command/**/*Handler.php'
+
     # Aria2
     movioza.media_processing.aria2.rpc_client:
         class: Movioza\MediaProcessing\Infrastructure\Download\Aria2\Aria2RpcClient
@@ -54,3 +64,19 @@ services:
             $stateMachine: '@state_machine.media_source'
 
     Movioza\MediaProcessing\Domain\StateMachine\MediaSourceStateMachineInterface: '@movioza.media_processing.media_source_state_machine.symfony'
+
+    # Identity
+    movioza.media_processing.media_source_id_generator.postgres:
+        class: Movioza\MediaProcessing\Infrastructure\Identity\PostgresMediaSourceIDGenerator
+        arguments:
+            $connection: '@doctrine.dbal.default_connection'
+            $sequenceName: 'media_processing_media_source_id_seq'
+
+    Movioza\MediaProcessing\Application\Identity\MediaSourceIDGeneratorInterface: '@movioza.media_processing.media_source_id_generator.postgres'
+
+    # Media
+    movioza.media_processing.media_existence_checker.catalog:
+        class: Movioza\MediaProcessing\Infrastructure\Integration\Catalog\CatalogMediaExistenceChecker
+
+    Movioza\MediaProcessing\Application\Media\MediaExistenceCheckerInterface: '@movioza.media_processing.media_existence_checker.catalog'
+
