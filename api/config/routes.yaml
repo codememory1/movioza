@@ -4,3 +4,10 @@ shared_controllers:
         namespace: Movioza\Shared\Presentation\Http\Controller
     type: attribute
     host: '%movioza.api_host%'
+
+media_processing_controllers:
+    resource:
+        path: '../src/MediaProcessing/Presentation/Http/Controller'
+        namespace: Movioza\MediaProcessing\Presentation\Http\Controller
+    type: attribute
+    host: '%movioza.api_host%'
