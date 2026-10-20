@@ -13,6 +13,9 @@ services:
 
     Movioza\Shared\Domain\Repository\CountryRepositoryInterface: '@movioza.shared.country_repository.doctrine'
 
+    # Readers
+    Movioza\Shared\Application\Reader\CountryReaderInterface: '@movioza.shared.country_repository.doctrine'
+
     # Command Bus
     movioza.shared.command_bus.symfony:
         class: Movioza\Shared\Infrastructure\Bus\SymfonyCommandBus
@@ -111,3 +114,15 @@ services:
             - { name: serializer.normalizer }
 
     Symfony\Component\Serializer\NameConverter\CamelCaseToSnakeCaseNameConverter: ~
+
+    # Query Handlers
+    Movioza\Shared\Application\Query\:
+        resource: '%kernel.project_dir%/src/Shared/Application/Query/**/*QueryHandler.php'
+        tags:
+            - { name: messenger.message_handler, bus: query.bus }
+
+    # Controllers
+    Movioza\Shared\Presentation\Http\Controller\:
+        resource: '%kernel.project_dir%/src/Shared/Presentation/Http/Controller/*Controller.php'
+        tags:
+            - { name: controller.service_arguments }
