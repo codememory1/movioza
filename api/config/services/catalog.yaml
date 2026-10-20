@@ -8,3 +8,11 @@ services:
         class: Movioza\Catalog\Infrastructure\Doctrine\Repository\DoctrineMediaRepository
 
     Movioza\Catalog\Domain\Repository\MediaRepositoryInterface: '@movioza.catalog.media_repository.doctrine'
+
+    # Readers
+    movioza.catalog.media_reader.doctrine:
+        class: Movioza\Catalog\Infrastructure\Doctrine\Reader\DoctrineMediaReader
+        arguments:
+            $connection: '@doctrine.dbal.default_connection'
+
+    Movioza\Catalog\Application\Reader\MediaReaderInterface: '@movioza.catalog.media_reader.doctrine'
