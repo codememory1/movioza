@@ -126,3 +126,9 @@ services:
         resource: '%kernel.project_dir%/src/Shared/Presentation/Http/Controller/*Controller.php'
         tags:
             - { name: controller.service_arguments }
+
+    # Clock
+    movioza.shared.clock.system:
+        class: Movioza\Shared\Infrastructure\Clock\SystemClock
+
+    Movioza\Shared\Application\Clock\ClockInterface: '@movioza.shared.clock.system'
