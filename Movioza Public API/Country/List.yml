@@ -1,0 +1,70 @@
+info:
+  name: List
+  type: http
+  seq: 1
+
+http:
+  method: GET
+  url: "{{api_host}}/countries"
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false
+
+docs: |-
+  # List countries
+
+  Returns the list of countries.
+
+  ## Request
+
+  `GET /countries`
+
+  No query parameters are required.
+
+  ## Access
+
+  Public endpoint. Authentication is not required.
+
+  ## Successful response
+
+  HTTP status: `200 OK`.
+
+  ```json
+  {
+      "data": [
+          {
+              "id": 1,
+              "name": "Ukraine",
+              "code": "UA"
+          },
+          {
+              "id": 2,
+              "name": "Georgia",
+              "code": "GE"
+          }
+      ]
+  }
+  ```
+
+  ### Country fields
+
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | id | integer | Country identifier |
+  | name | string | Country name |
+  | code | string | Country code |
+
+  ## Empty result
+
+  If no countries are available, returns `200 OK` with an empty list:
+
+  ```json
+  {
+      "data": []
+  }
+  ```

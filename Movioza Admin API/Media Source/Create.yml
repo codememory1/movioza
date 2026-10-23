@@ -1,0 +1,78 @@
+info:
+  name: Create
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: "{{api_host}}/media-sources"
+  body:
+    type: json
+    data: |-
+      {
+        "media_id": {{?media_id}},
+        "page_url": "{{?page_url}}"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false
+
+docs: |-
+  # Create a media source
+
+  Creates a source for an existing media item using the source page URL.
+
+  ## Request
+
+  `POST /admin/media-sources`
+
+  ## Access
+
+  Administrative endpoint.
+
+  ## Request body
+
+  | Field | Type | Required | Description |
+  | --- | --- | --- | --- |
+  | media_id | integer | Yes | Positive identifier of an existing media item |
+  | page_url | string | Yes | Source page URL using HTTP or HTTPS |
+
+  ### Example
+
+  ```json
+  {
+      "media_id": 42,
+      "page_url": "https://tracker.example.org/details/123"
+  }
+  ```
+
+  ## Successful response
+
+  HTTP status: `201 Created`.
+
+  ```json
+  {
+      "data": {
+          "id": 123
+      }
+  }
+  ```
+
+  ### Response fields
+
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | [data.id](http://data.id) | integer | Identifier of the created media source |
+
+  ## Possible errors
+
+  - Invalid JSON.
+  - Missing required fields.
+  - Invalid field types or values.
+  - The media item specified by media_id does not exist.
+  - Insufficient permissions.
