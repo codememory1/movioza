@@ -18,12 +18,10 @@ final readonly class ListCountriesResponse
 
     public function toArray(): array
     {
-        return [
-            'data' => array_map(static fn (CountryView $country): array => [
-                'id' => $country->id,
-                'name' => $country->name,
-                'code' => $country->code,
-            ], $this->countries),
-        ];
+        return array_map(static fn (CountryView $country): array => [
+            'id' => $country->id,
+            'name' => $country->name,
+            'code' => $country->code,
+        ], $this->countries);
     }
 }

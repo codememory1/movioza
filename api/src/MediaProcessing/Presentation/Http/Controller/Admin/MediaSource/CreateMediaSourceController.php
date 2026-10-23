@@ -13,7 +13,9 @@ use Movioza\MediaProcessing\Domain\ValueObject\PageUrl;
 use Movioza\MediaProcessing\Presentation\Http\Request\Admin\MediaSource\CreateMediaSourceRequest;
 use Movioza\MediaProcessing\Presentation\Http\Response\Admin\MediaSource\CreateMediaSourceResponse;
 use Movioza\Shared\Infrastructure\Http\Attribute\ControllerArgument\MapRequestPayload;
-use Symfony\Component\HttpFoundation\JsonResponse;
+use Movioza\Shared\Infrastructure\Http\Response\ApiResponse;
+use Movioza\Shared\Infrastructure\Http\Response\ApiResponseInterface;
+use Movioza\Shared\Infrastructure\Http\Response\DataDocument;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -33,16 +35,15 @@ final readonly class CreateMediaSourceController
 
     public function __invoke(
         #[MapRequestPayload] CreateMediaSourceRequest $request
-    ): JsonResponse {
+    ): ApiResponseInterface {
         $id = new MediaSourceID($this->IDGenerator->next());
         $mediaID = new MediaID($request->mediaId);
         $pageUrl = new PageUrl($request->pageUrl);
 
         ($this->handler)(new CreateMediaSourceCommand($id, $mediaID, $pageUrl));
 
-        return new JsonResponse(
-            new CreateMediaSourceResponse($id)->toArray(),
-            Response::HTTP_CREATED
-        );
+        return new ApiResponse(new DataDocument(
+            new CreateMediaSourceResponse($id)->toArray()
+        ), Response::HTTP_CREATED);
     }
 }
