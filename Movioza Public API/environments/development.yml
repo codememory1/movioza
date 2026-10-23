@@ -1,0 +1,11 @@
+name: development
+variables:
+  - name: protocol
+    value: http
+    description: ""
+  - name: domain
+    value: movioza.loc
+    description: ""
+  - name: api_host
+    value: "{{protocol}}://api.{{domain}}"
+    description: ""
