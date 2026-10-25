@@ -4,7 +4,7 @@
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
     <entity name="Movioza\Assets\Domain\Entity\File" table="files">
-        <id name="id" type="assets_file_id" length="32">
+        <id name="id" type="assets_file_id" length="36">
             <generator strategy="NONE" />
         </id>
 
