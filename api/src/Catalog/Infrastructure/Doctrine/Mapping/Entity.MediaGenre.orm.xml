@@ -5,7 +5,7 @@
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
     <entity name="Movioza\Catalog\Domain\Entity\MediaGenre" table="media_genres">
         <id name="media" association-key="true" />
-        <id name="genreId" column="genre_id" type="catalog_genre_id" length="32" />
+        <id name="genreId" column="genre_id" type="catalog_genre_id" />
 
         <many-to-one field="media" target-entity="Movioza\Catalog\Domain\Entity\Media" inversed-by="genres">
             <join-column name="media_id" nullable="false" on-delete="CASCADE" />

@@ -564,6 +564,39 @@ class Media extends AggregateRoot
     }
 
     /**
+     * Returns the logo image, or null if none is assigned.
+     */
+    public function getLogo(): ?MediaImage
+    {
+        return array_find(
+            $this->getImages(),
+            static fn ($image) => $image->getType() === MediaImageType::LOGO
+        );
+    }
+
+    /**
+     * Returns the poster image, or null if none is assigned.
+     */
+    public function getPoster(): ?MediaImage
+    {
+        return array_find(
+            $this->getImages(),
+            static fn ($image) => $image->getType() === MediaImageType::POSTER
+        );
+    }
+
+    /**
+     * Returns the backdrop image, or null if none is assigned.
+     */
+    public function getBackdrop(): ?MediaImage
+    {
+        return array_find(
+            $this->getImages(),
+            static fn ($image) => $image->getType() === MediaImageType::BACKDROP
+        );
+    }
+
+    /**
      * Returns country assignments as a sequential list.
      *
      * @return list<MediaCountry>

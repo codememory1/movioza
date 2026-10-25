@@ -5,7 +5,7 @@
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
     <entity name="Movioza\Catalog\Domain\Entity\MediaPerson" table="media_persons">
         <id name="media" association-key="true" />
-        <id name="personId" column="person_id" type="catalog_person_id" length="32" />
+        <id name="personId" column="person_id" type="catalog_person_id" />
         <id name="role" column="role" length="32" />
 
         <many-to-one field="media" target-entity="Movioza\Catalog\Domain\Entity\Media" inversed-by="persons">

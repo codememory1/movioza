@@ -11,3 +11,10 @@ media_processing_controllers:
         namespace: Movioza\MediaProcessing\Presentation\Http\Controller
     type: attribute
     host: '%movioza.api_host%'
+
+catalog_controllers:
+    resource:
+        path: '../src/Catalog/Presentation/Http/Controller'
+        namespace: Movioza\Catalog\Presentation\Http\Controller
+    type: attribute
+    host: '%movioza.api_host%'

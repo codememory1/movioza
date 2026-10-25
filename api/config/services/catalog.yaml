@@ -16,3 +16,20 @@ services:
             $connection: '@doctrine.dbal.default_connection'
 
     Movioza\Catalog\Application\Reader\MediaReaderInterface: '@movioza.catalog.media_reader.doctrine'
+
+    movioza.catalog.image_reader.assets:
+        class: Movioza\Catalog\Infrastructure\Integration\Assets\AssetsImageReader
+
+    Movioza\Catalog\Application\Reader\ExternalImageReaderInterface: '@movioza.catalog.image_reader.assets'
+
+    # Query Handlers
+    Movioza\Catalog\Application\Query\:
+        resource: '%kernel.project_dir%/src/Catalog/Application/Query/**/*QueryHandler.php'
+        tags:
+            - { name: messenger.message_handler, bus: query.bus }
+
+    # Controllers
+    Movioza\Catalog\Presentation\Http\Controller\:
+        resource: '%kernel.project_dir%/src/Catalog/Presentation/Http/Controller/**/*Controller.php'
+        tags:
+            - { name: controller.service_arguments }

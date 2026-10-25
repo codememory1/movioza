@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20261016151921 extends AbstractMigration
+final class Version20261025173548 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -38,15 +38,15 @@ final class Version20261016151921 extends AbstractMigration
         $this->addSql('CREATE TABLE episodes (number INT NOT NULL, title VARCHAR NOT NULL, slug VARCHAR(280) NOT NULL, description TEXT DEFAULT NULL, released_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, uploaded_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, id BIGINT NOT NULL, season_id BIGINT NOT NULL, PRIMARY KEY (id))');
         $this->addSql('CREATE INDEX IDX_7DD55EDD4EC001D1 ON episodes (season_id)');
         $this->addSql('CREATE UNIQUE INDEX uniq_episode_season_number ON episodes (season_id, number)');
-        $this->addSql('CREATE TABLE files (storage_type VARCHAR(32) NOT NULL, bucket VARCHAR(255) NOT NULL, key VARCHAR(1024) NOT NULL, extension VARCHAR(16) NOT NULL, size BIGINT NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, id VARCHAR(32) NOT NULL, PRIMARY KEY (id))');
+        $this->addSql('CREATE TABLE files (storage_type VARCHAR(32) NOT NULL, bucket VARCHAR(255) NOT NULL, key VARCHAR(1024) NOT NULL, extension VARCHAR(16) NOT NULL, size BIGINT NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, id VARCHAR(36) NOT NULL, PRIMARY KEY (id))');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_63540598A90ABA9 ON files (key)');
-        $this->addSql('CREATE TABLE images (file_id VARCHAR(32) NOT NULL, blur_hash VARCHAR(255) NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, id VARCHAR(32) NOT NULL, width INT NOT NULL, height INT NOT NULL, PRIMARY KEY (id))');
+        $this->addSql('CREATE TABLE images (file_id VARCHAR(36) NOT NULL, blur_hash VARCHAR(255) NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, id VARCHAR(36) NOT NULL, width INT NOT NULL, height INT NOT NULL, PRIMARY KEY (id))');
         $this->addSql('CREATE TABLE media (type VARCHAR(32) NOT NULL, kind VARCHAR(32) DEFAULT NULL, title VARCHAR(255) NOT NULL, alternative_titles JSON NOT NULL, slug VARCHAR(280) NOT NULL, description TEXT NOT NULL, age_restrictions INT NOT NULL, uploaded_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, released_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, id BIGINT NOT NULL, PRIMARY KEY (id))');
         $this->addSql('CREATE TABLE media_countries (created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, country_id BIGINT NOT NULL, media_id BIGINT NOT NULL, PRIMARY KEY (country_id, media_id))');
         $this->addSql('CREATE INDEX IDX_78065823EA9FDD75 ON media_countries (media_id)');
         $this->addSql('CREATE TABLE media_genres (created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, genre_id BIGINT NOT NULL, media_id BIGINT NOT NULL, PRIMARY KEY (genre_id, media_id))');
         $this->addSql('CREATE INDEX IDX_14927FC8EA9FDD75 ON media_genres (media_id)');
-        $this->addSql('CREATE TABLE media_images (created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, image_id VARCHAR(32) NOT NULL, type VARCHAR(32) NOT NULL, media_id BIGINT NOT NULL, PRIMARY KEY (image_id, type, media_id))');
+        $this->addSql('CREATE TABLE media_images (created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, image_id VARCHAR(36) NOT NULL, type VARCHAR(32) NOT NULL, media_id BIGINT NOT NULL, PRIMARY KEY (image_id, type, media_id))');
         $this->addSql('CREATE INDEX IDX_5C6624B4EA9FDD75 ON media_images (media_id)');
         $this->addSql('CREATE TABLE media_persons (created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, person_id BIGINT NOT NULL, role VARCHAR(32) NOT NULL, media_id BIGINT NOT NULL, PRIMARY KEY (person_id, role, media_id))');
         $this->addSql('CREATE INDEX IDX_C38B419AEA9FDD75 ON media_persons (media_id)');

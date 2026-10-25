@@ -1,0 +1,21 @@
+info:
+  name: Get by id
+  type: http
+  seq: 1
+
+http:
+  method: GET
+  url: "{{api_host}}/media/:id"
+  params:
+    - name: id
+      value: "1"
+      type: path
+      description: media id
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false
