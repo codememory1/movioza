@@ -13,3 +13,11 @@ services:
         class: Movioza\Assets\Infrastructure\Doctrine\Repository\DoctrineImageRepository
 
     Movioza\Assets\Domain\Repository\ImageRepositoryInterface: '@movioza.assets.image_repository.doctrine'
+
+    # Readers
+    movioza.assets.image_reader.doctrine:
+        class: Movioza\Assets\Infrastructure\Doctrine\Reader\DoctrineImageReader
+        arguments:
+            $connection: '@doctrine.dbal.default_connection'
+
+    Movioza\Assets\Application\Reader\ImageReaderInterface: '@movioza.assets.image_reader.doctrine'
