@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="Movioza\Catalog\Domain\Entity\Genre" table="genres">
+        <id name="id" column="id" type="catalog_genre_id">
+            <generator strategy="NONE" />
+        </id>
+
+        <field name="name" column="name" type="catalog_genre_name" length="80" />
+        <field name="slug" column="slug" type="shared_slug" length="280" />
+        <field name="emoji" column="emoji" type="shared_emoji" length="32" />
+        <field name="shortDescription" column="short_description" type="catalog_genre_short_description" length="80" />
+        <field name="createdAt" column="created_at" type="datetime_immutable" />
+        <field name="updatedAt" column="updated_at" type="datetime_immutable" nullable="true" />
+    </entity>
+</doctrine-mapping>
