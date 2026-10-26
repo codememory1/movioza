@@ -9,7 +9,7 @@ use Movioza\Catalog\Domain\ValueObject\MediaID;
 use Movioza\Catalog\Domain\ValueObject\MediaTitle;
 use Movioza\Shared\Domain\Event\DomainEventInterface;
 
-readonly class MediaRenamed implements DomainEventInterface
+readonly class MediaRenamedEvent implements DomainEventInterface
 {
     public function __construct(
         private MediaID $mediaID,

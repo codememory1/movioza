@@ -13,7 +13,7 @@ use Movioza\Catalog\Domain\Enum\MediaKind;
 use Movioza\Catalog\Domain\Enum\MediaPersonRole;
 use Movioza\Catalog\Domain\Enum\MediaType;
 use Movioza\Catalog\Domain\Event\MediaCreatedEvent;
-use Movioza\Catalog\Domain\Event\MediaRenamed;
+use Movioza\Catalog\Domain\Event\MediaRenamedEvent;
 use Movioza\Catalog\Domain\ValueObject\AgeRestriction;
 use Movioza\Catalog\Domain\ValueObject\EpisodeID;
 use Movioza\Catalog\Domain\ValueObject\EpisodeNumber;
@@ -129,7 +129,7 @@ class Media extends AggregateRoot
         $this->title = $title;
         $this->updatedAt = $changedAt;
 
-        $this->recordEvent(new MediaRenamed($this->id, $oldTitle, $title, $changedAt));
+        $this->recordEvent(new MediaRenamedEvent($this->id, $oldTitle, $title, $changedAt));
     }
 
     /**
