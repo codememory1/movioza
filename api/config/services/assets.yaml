@@ -14,10 +14,18 @@ services:
 
     Movioza\Assets\Domain\Repository\ImageRepositoryInterface: '@movioza.assets.image_repository.doctrine'
 
+    # File Url Generators
+    movioza.assets.image_url_generator:
+        class: Movioza\Assets\Infrastructure\Cdn\CdnFileUrlGenerator
+        arguments:
+            $type: !php/enum Movioza\Shared\Application\Enum\CdnFileType::IMAGE
+            $ttl: '%env(ASSETS_IMAGE_URL_TTL)%'
+
     # Readers
     movioza.assets.image_reader.doctrine:
         class: Movioza\Assets\Infrastructure\Doctrine\Reader\DoctrineImageReader
         arguments:
             $connection: '@doctrine.dbal.default_connection'
+            $imageUrlGenerator: '@movioza.assets.image_url_generator'
 
     Movioza\Assets\Application\Reader\ImageReaderInterface: '@movioza.assets.image_reader.doctrine'

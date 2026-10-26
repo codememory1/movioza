@@ -7,13 +7,17 @@ namespace Movioza\Assets\Infrastructure\Doctrine\Reader;
 use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception;
+use Movioza\Assets\Application\File\FileUrlGeneratorInterface;
 use Movioza\Assets\Application\Reader\ImageReaderInterface;
 use Movioza\Assets\Application\ReadModel\ImageView;
+use Movioza\Shared\Application\Cdn\CdnUrlGeneratorInterface;
+use Movioza\Shared\Application\Enum\CdnFileType;
 
 final readonly class DoctrineImageReader implements ImageReaderInterface
 {
     public function __construct(
-        private Connection $connection
+        private Connection $connection,
+        private FileUrlGeneratorInterface $imageUrlGenerator
     ) {
     }
 
@@ -29,8 +33,16 @@ final readonly class DoctrineImageReader implements ImageReaderInterface
         $views = [];
         $rows = $this->connection
             ->createQueryBuilder()
-            ->select('*')
+            ->select(
+                'i.id',
+                'i.file_id',
+                'i.blur_hash',
+                'i.width',
+                'i.height',
+                'f.key AS file_key'
+            )
             ->from('images', 'i')
+            ->innerJoin('i', 'files', 'f', 'f.id = i.file_id')
             ->where('i.id IN (:ids)')
             ->setParameter('ids', $ids, ArrayParameterType::STRING)
             ->executeQuery()
@@ -39,7 +51,7 @@ final readonly class DoctrineImageReader implements ImageReaderInterface
         foreach ($rows as $row) {
             $views[$row['id']] = new ImageView(
                 $row['id'],
-                '<url>',
+                $this->imageUrlGenerator->generate($row['file_key'], $row['file_id']),
                 $row['blur_hash'],
                 $row['width'],
                 $row['height']
