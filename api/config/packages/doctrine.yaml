@@ -7,6 +7,7 @@ doctrine:
             shared_country_name: Movioza\Shared\Infrastructure\Doctrine\Type\CountryNameType
             shared_country_code: Movioza\Shared\Infrastructure\Doctrine\Type\CountryCodeType
             shared_slug: Movioza\Shared\Infrastructure\Doctrine\Type\SlugType
+            shared_emoji: Movioza\Shared\Infrastructure\Doctrine\Type\EmojiType
 
             assets_file_id: Movioza\Assets\Infrastructure\Doctrine\Type\FileIDType
             assets_image_id: Movioza\Assets\Infrastructure\Doctrine\Type\ImageIDType
@@ -29,6 +30,8 @@ doctrine:
             catalog_episode_number: Movioza\Catalog\Infrastructure\Doctrine\Type\EpisodeNumberType
             catalog_season_title: Movioza\Catalog\Infrastructure\Doctrine\Type\SeasonTitleType
             catalog_episode_title: Movioza\Catalog\Infrastructure\Doctrine\Type\EpisodeTitleType
+            catalog_genre_name: Movioza\Catalog\Infrastructure\Doctrine\Type\GenreNameType
+            catalog_genre_short_description: Movioza\Catalog\Infrastructure\Doctrine\Type\GenreShortDescriptionType
 
             people_person_id: Movioza\People\Infrastructure\Doctrine\Type\PersonIDType
             people_image_id: Movioza\People\Infrastructure\Doctrine\Type\ImageIDType
