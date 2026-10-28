@@ -29,3 +29,9 @@ services:
             $imageUrlGenerator: '@movioza.assets.image_url_generator'
 
     Movioza\Assets\Application\Reader\ImageReaderInterface: '@movioza.assets.image_reader.doctrine'
+
+    # Blur Hash
+    movioza.assets.blur_hash_generator.kornrunner:
+        class: Movioza\Assets\Infrastructure\BlurHash\kornrunnerBlurHashGenerator
+
+    Movioza\Assets\Application\BlurHash\BlurHashGeneratorInterface: '@movioza.assets.blur_hash_generator.kornrunner'
