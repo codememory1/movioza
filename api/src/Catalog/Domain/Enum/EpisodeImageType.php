@@ -6,4 +6,5 @@ namespace Movioza\Catalog\Domain\Enum;
 
 enum EpisodeImageType: string
 {
+    case PREVIEW = 'preview';
 }

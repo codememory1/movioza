@@ -4,6 +4,7 @@ imports:
     - { resource: './services/people.yaml' }
     - { resource: './services/catalog.yaml' }
     - { resource: './services/media_processing.yaml' }
+    - { resource: './services/fixtures.yaml' }
 
 parameters:
     movioza.api_host: '%env(APP_API_HOST)%'

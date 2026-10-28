@@ -6,4 +6,6 @@ namespace Movioza\Catalog\Domain\Enum;
 
 enum SeasonImageType: string
 {
+    case POSTER = 'poster';
+    case BACKDROP = 'backdrop';
 }
