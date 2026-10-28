@@ -1,0 +1,46 @@
+when@dev: &fixtures
+    parameters:
+        movioza.assets.resources_directory: '%kernel.project_dir%/src/Assets/Infrastructure/Doctrine/Fixtures/Resources'
+
+    services:
+        movioza.fixtures.s3:
+            class: Aws\S3\S3Client
+            arguments:
+                -   version: '%env(S3_VERSION)%'
+                    region: '%env(S3_REGION)%'
+                    endpoint: '%env(S3_ENDPOINT)%'
+                    use_path_style_endpoint: '%env(bool:S3_USE_PATH_STYLE_ENDPOINT)%'
+                    credentials:
+                        key: '%env(S3_ACCESS_KEY)%'
+                        secret: '%env(S3_SECRET_KEY)%'
+
+        movioza.fixtures:
+            namespace: Movioza\
+            resource: '%kernel.project_dir%/src/*/Infrastructure/Doctrine/Fixtures/'
+            autowire: true
+            tags:
+                - { name: doctrine.fixture.orm }
+
+        Movioza\Assets\Infrastructure\Doctrine\Fixtures\UploadFilesFixtures:
+            arguments:
+                $s3: '@movioza.fixtures.s3'
+                $bucket: '%env(FIXTURES_S3_BUCKET)%'
+                $resourcesDirectory: '%movioza.assets.resources_directory%'
+            tags:
+                - { name: doctrine.fixture.orm }
+
+        Movioza\Assets\Infrastructure\Doctrine\Fixtures\FileFixtures:
+            arguments:
+                $bucket: '%env(FIXTURES_S3_BUCKET)%'
+                $resourcesDirectory: '%movioza.assets.resources_directory%'
+            tags:
+                - { name: doctrine.fixture.orm }
+
+        Movioza\Assets\Infrastructure\Doctrine\Fixtures\ImageFixtures:
+            autowire: true
+            arguments:
+                $resourcesDirectory: '%movioza.assets.resources_directory%'
+            tags:
+                - { name: doctrine.fixture.orm }
+
+when@test: *fixtures
