@@ -14,7 +14,10 @@ services:
     Movioza\Shared\Domain\Repository\CountryRepositoryInterface: '@movioza.shared.country_repository.doctrine'
 
     # Readers
-    Movioza\Shared\Application\Reader\CountryReaderInterface: '@movioza.shared.country_repository.doctrine'
+    movioza.shared.country_reader.doctrine:
+        class: Movioza\Shared\Infrastructure\Doctrine\Reader\DoctrineCountryReader
+
+    Movioza\Shared\Application\Reader\CountryReaderInterface: '@movioza.shared.country_reader.doctrine'
 
     # Command Bus
     movioza.shared.command_bus.symfony:

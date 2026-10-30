@@ -17,13 +17,15 @@ use Movioza\Catalog\Application\ReadModel\MediaView;
 use Movioza\Catalog\Domain\Enum\MediaImageType;
 use Movioza\Catalog\Domain\Enum\MediaKind;
 use Movioza\Catalog\Domain\Enum\MediaType;
+use Movioza\Shared\Application\Reader\CountryReaderInterface;
 use UnexpectedValueException;
 
 final readonly class DoctrineMediaReader implements MediaReaderInterface
 {
     public function __construct(
         private Connection $connection,
-        private ExternalImageReaderInterface $externalImageReader
+        private ExternalImageReaderInterface $externalImageReader,
+        private CountryReaderInterface $countryReader
     ) {
     }
 
@@ -47,6 +49,7 @@ final readonly class DoctrineMediaReader implements MediaReaderInterface
         }
 
         $images = $this->readRequiredImages($id);
+        $countries = $this->readCountries($id);
 
         return new MediaView(
             (int) $row['id'],
@@ -56,6 +59,7 @@ final readonly class DoctrineMediaReader implements MediaReaderInterface
             $row['slug'],
             $row['description'],
             (int) $row['age_restrictions'],
+            $countries,
             $images[MediaImageType::LOGO->value],
             $images[MediaImageType::POSTER->value],
             $images[MediaImageType::BACKDROP->value],
@@ -133,6 +137,38 @@ final readonly class DoctrineMediaReader implements MediaReaderInterface
         }
 
         return $imagesByType;
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function readCountries(int $mediaId): array
+    {
+        $countryIds = $this->connection
+            ->createQueryBuilder()
+            ->select('mc.country_id')
+            ->from('media_countries', 'mc')
+            ->where('mc.media_id = :media_id')
+            ->setParameter('media_id', $mediaId, ParameterType::INTEGER)
+            ->executeQuery()
+            ->fetchFirstColumn();
+
+        $countriesById = $this->countryReader->findByIds($countryIds);
+        $countries = [];
+
+        foreach ($countryIds as $countryId) {
+            if (!isset($countriesById[$countryId])) {
+                throw new UnexpectedValueException(sprintf(
+                    'Country with ID "%d" assigned to media "%d" was not found.',
+                    $countryId,
+                    $mediaId,
+                ));
+            }
+
+            $countries[] = $countriesById[$countryId];
+        }
+
+        return $countries;
     }
 
     /**
