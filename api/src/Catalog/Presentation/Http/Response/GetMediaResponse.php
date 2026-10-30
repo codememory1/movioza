@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace Movioza\Catalog\Presentation\Http\Response;
 
 use Movioza\Catalog\Application\ReadModel\MediaView;
+use Movioza\Shared\Application\ReadModel\CountryView;
 
 final readonly class GetMediaResponse
 {
@@ -22,6 +23,8 @@ final readonly class GetMediaResponse
             'slug' => $this->mediaView->slug,
             'title' => $this->mediaView->title,
             'description' => $this->mediaView->description,
+            'age_restrictions' => $this->mediaView->ageRestrictions,
+            'countries' => array_map(fn (CountryView $country) => $country->name, $this->mediaView->countries),
             'logo' => $this->mediaView->logo->url,
             'poster' => [
                 'url' => $this->mediaView->poster->url,
