@@ -11,6 +11,7 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\ParameterType;
 use Movioza\Catalog\Application\Reader\ExternalImageReaderInterface;
+use Movioza\Catalog\Application\Reader\GenreReaderInterface;
 use Movioza\Catalog\Application\Reader\MediaReaderInterface;
 use Movioza\Catalog\Application\ReadModel\ImageView;
 use Movioza\Catalog\Application\ReadModel\MediaView;
@@ -25,7 +26,8 @@ final readonly class DoctrineMediaReader implements MediaReaderInterface
     public function __construct(
         private Connection $connection,
         private ExternalImageReaderInterface $externalImageReader,
-        private CountryReaderInterface $countryReader
+        private CountryReaderInterface $countryReader,
+        private GenreReaderInterface $genreReader
     ) {
     }
 
@@ -50,6 +52,7 @@ final readonly class DoctrineMediaReader implements MediaReaderInterface
 
         $images = $this->readRequiredImages($id);
         $countries = $this->readCountries($id);
+        $genres = $this->readGenres($id);
 
         return new MediaView(
             (int) $row['id'],
@@ -63,6 +66,7 @@ final readonly class DoctrineMediaReader implements MediaReaderInterface
             $images[MediaImageType::LOGO->value],
             $images[MediaImageType::POSTER->value],
             $images[MediaImageType::BACKDROP->value],
+            $genres,
             $this->toDateTime($row['released_at']),
             $this->toDateTime($row['uploaded_at']),
             $this->toDateTime($row['updated_at']),
@@ -169,6 +173,38 @@ final readonly class DoctrineMediaReader implements MediaReaderInterface
         }
 
         return $countries;
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function readGenres(int $mediaId): array
+    {
+        $genreIds = $this->connection
+            ->createQueryBuilder()
+            ->select('gm.genre_id')
+            ->from('media_genres', 'gm')
+            ->where('gm.media_id = :media_id')
+            ->setParameter('media_id', $mediaId, ParameterType::INTEGER)
+            ->executeQuery()
+            ->fetchFirstColumn();
+
+        $genresById = $this->genreReader->findByIDs($genreIds);
+        $genres = [];
+
+        foreach ($genreIds as $genreId) {
+            if (!isset($genresById[$genreId])) {
+                throw new UnexpectedValueException(sprintf(
+                    'Genre with ID "%d" assigned to media "%d" was not found.',
+                    $genreId,
+                    $mediaId,
+                ));
+            }
+
+            $genres[] = $genresById[$genreId];
+        }
+
+        return $genres;
     }
 
     /**

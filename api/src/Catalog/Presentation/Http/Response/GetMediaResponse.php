@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace Movioza\Catalog\Presentation\Http\Response;
 
+use Movioza\Catalog\Application\ReadModel\GenreView;
 use Movioza\Catalog\Application\ReadModel\MediaView;
 use Movioza\Shared\Application\ReadModel\CountryView;
 
@@ -38,6 +39,11 @@ final readonly class GetMediaResponse
                 'width' => $this->mediaView->backdrop->width,
                 'height' => $this->mediaView->backdrop->height
             ],
+            'genres' => array_map(fn (GenreView $genre) => [
+                'id' => $genre->id,
+                'slug' => $genre->slug,
+                'name' => $genre->name
+            ], $this->mediaView->genres),
             'released_at' => $this->mediaView->releasedDate?->getTimestamp(),
             'uploaded_at' => $this->mediaView->uploadedAt?->getTimestamp(),
             'updated_at' => $this->mediaView->updatedAt?->getTimestamp()

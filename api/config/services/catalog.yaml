@@ -22,6 +22,13 @@ services:
 
     Movioza\Catalog\Application\Reader\ExternalImageReaderInterface: '@movioza.catalog.image_reader.assets'
 
+    movioza.catalog.genre_reader.doctrine:
+        class: Movioza\Catalog\Infrastructure\Doctrine\Reader\DoctrineGenreReader
+        arguments:
+            $connection: '@doctrine.dbal.default_connection'
+
+    Movioza\Catalog\Application\Reader\GenreReaderInterface: '@movioza.catalog.genre_reader.doctrine'
+
     # Query Handlers
     Movioza\Catalog\Application\Query\:
         resource: '%kernel.project_dir%/src/Catalog/Application/Query/**/*QueryHandler.php'
