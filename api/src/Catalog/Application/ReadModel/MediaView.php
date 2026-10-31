@@ -13,6 +13,7 @@ final readonly class MediaView
 {
     /**
      * @param CountryView[] $countries
+     * @param GenreView[] $genres
      */
     public function __construct(
         public int $id,
@@ -26,6 +27,7 @@ final readonly class MediaView
         public ImageView $logo,
         public ImageView $poster,
         public ImageView $backdrop,
+        public array $genres,
         public ?DateTimeImmutable $releasedDate = null,
         public ?DateTimeImmutable $uploadedAt = null,
         public ?DateTimeImmutable $updatedAt = null
