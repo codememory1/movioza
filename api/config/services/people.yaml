@@ -8,3 +8,11 @@ services:
         class: Movioza\People\Infrastructure\Doctrine\Repository\DoctrinePersonRepository
 
     Movioza\People\Domain\Repository\PersonRepositoryInterface: '@movioza.people.person_repository.doctrine'
+
+    # Readers
+    movioza.people.person_reader.doctrine:
+        class: Movioza\People\Infrastructure\Doctrine\Reader\DoctrinePersonReader
+        arguments:
+            $connection: '@doctrine.dbal.default_connection'
+
+    Movioza\People\Application\Reader\PersonReaderInterface: '@movioza.people.person_reader.doctrine'
