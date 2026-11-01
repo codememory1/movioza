@@ -28,6 +28,8 @@ final readonly class MediaView
         public ImageView $poster,
         public ImageView $backdrop,
         public array $genres,
+        public array $directors,
+        public array $actors,
         public ?DateTimeImmutable $releasedDate = null,
         public ?DateTimeImmutable $uploadedAt = null,
         public ?DateTimeImmutable $updatedAt = null

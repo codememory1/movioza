@@ -11,12 +11,14 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\ParameterType;
 use Movioza\Catalog\Application\Reader\ExternalImageReaderInterface;
+use Movioza\Catalog\Application\Reader\ExternalPersonReaderInterface;
 use Movioza\Catalog\Application\Reader\GenreReaderInterface;
 use Movioza\Catalog\Application\Reader\MediaReaderInterface;
 use Movioza\Catalog\Application\ReadModel\ImageView;
 use Movioza\Catalog\Application\ReadModel\MediaView;
 use Movioza\Catalog\Domain\Enum\MediaImageType;
 use Movioza\Catalog\Domain\Enum\MediaKind;
+use Movioza\Catalog\Domain\Enum\MediaPersonRole;
 use Movioza\Catalog\Domain\Enum\MediaType;
 use Movioza\Shared\Application\Reader\CountryReaderInterface;
 use UnexpectedValueException;
@@ -27,7 +29,8 @@ final readonly class DoctrineMediaReader implements MediaReaderInterface
         private Connection $connection,
         private ExternalImageReaderInterface $externalImageReader,
         private CountryReaderInterface $countryReader,
-        private GenreReaderInterface $genreReader
+        private GenreReaderInterface $genreReader,
+        private ExternalPersonReaderInterface $externalPersonReader
     ) {
     }
 
@@ -53,6 +56,7 @@ final readonly class DoctrineMediaReader implements MediaReaderInterface
         $images = $this->readRequiredImages($id);
         $countries = $this->readCountries($id);
         $genres = $this->readGenres($id);
+        $persons = $this->readPersons($id);
 
         return new MediaView(
             (int) $row['id'],
@@ -67,6 +71,8 @@ final readonly class DoctrineMediaReader implements MediaReaderInterface
             $images[MediaImageType::POSTER->value],
             $images[MediaImageType::BACKDROP->value],
             $genres,
+            $persons[MediaPersonRole::DIRECTOR->value] ?? [],
+            $persons[MediaPersonRole::ACTOR->value] ?? [],
             $this->toDateTime($row['released_at']),
             $this->toDateTime($row['uploaded_at']),
             $this->toDateTime($row['updated_at']),
@@ -205,6 +211,48 @@ final readonly class DoctrineMediaReader implements MediaReaderInterface
         }
 
         return $genres;
+    }
+
+    /**
+     * @param int $mediaId
+     *
+     * @return array
+     * @throws Exception
+     */
+    private function readPersons(int $mediaId): array
+    {
+        $mediaPersons = $this->connection
+            ->createQueryBuilder()
+            ->select('mp.person_id', 'mp.role')
+            ->from('media_persons', 'mp')
+            ->where('mp.media_id = :media_id')
+            ->setParameter('media_id', $mediaId, ParameterType::INTEGER)
+            ->executeQuery()
+            ->fetchAllAssociative();
+
+        if ($mediaPersons === []) {
+            return [];
+        }
+
+        $mediaPersonIDs = array_unique(array_column($mediaPersons, 'person_id'));
+        $personsByID = $this->externalPersonReader->findByIDs($mediaPersonIDs);
+        $personsByRole = [];
+
+        foreach ($mediaPersons as $mediaPerson) {
+            $personID = $mediaPerson['person_id'];
+
+            if (!isset($personsByID[$personID])) {
+                throw new UnexpectedValueException(sprintf(
+                    'Person with ID "%d" assigned to media "%d" was not found.',
+                    $personID,
+                    $mediaId,
+                ));
+            }
+
+            $personsByRole[$mediaPerson['role']][] = $personsByID[$personID];
+        }
+
+        return $personsByRole;
     }
 
     /**
