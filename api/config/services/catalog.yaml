@@ -29,6 +29,11 @@ services:
 
     Movioza\Catalog\Application\Reader\GenreReaderInterface: '@movioza.catalog.genre_reader.doctrine'
 
+    movioza.catalog.external_person_reader.people:
+        class: Movioza\Catalog\Infrastructure\Integration\People\PeoplePersonReader
+
+    Movioza\Catalog\Application\Reader\ExternalPersonReaderInterface: '@movioza.catalog.external_person_reader.people'
+
     # Query Handlers
     Movioza\Catalog\Application\Query\:
         resource: '%kernel.project_dir%/src/Catalog/Application/Query/**/*QueryHandler.php'
