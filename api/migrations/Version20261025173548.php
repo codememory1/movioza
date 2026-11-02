@@ -14,7 +14,7 @@ final class Version20261025173548 extends AbstractMigration
 {
     public function getDescription(): string
     {
-        return '';
+        return 'Create the initial API schema and context-specific ID sequences.';
     }
 
     public function up(Schema $schema): void

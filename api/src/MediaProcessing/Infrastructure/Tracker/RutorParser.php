@@ -27,6 +27,9 @@ final readonly class RutorParser implements TrackerParserInterface
     }
 
     /**
+     * Prefers a magnet link and falls back to downloading and saving a local torrent file.
+     *
+     * @throws RuntimeException When the page has no supported download source.
      * @throws TransportExceptionInterface
      * @throws ServerExceptionInterface
      * @throws RedirectionExceptionInterface
@@ -99,6 +102,12 @@ final readonly class RutorParser implements TrackerParserInterface
         return $this->getDownloadLinks($content);
     }
 
+    /**
+     * @throws RedirectionExceptionInterface
+     * @throws ClientExceptionInterface
+     * @throws TransportExceptionInterface
+     * @throws ServerExceptionInterface
+     */
     private function getDownloadLinks(string $html): Crawler
     {
         $crawler = new Crawler($html);

@@ -9,6 +9,11 @@ use Throwable;
 
 abstract class HttpException extends SymfonyHttpException
 {
+    /**
+     * @param string $errorCode Stable machine-readable API error code.
+     * @param mixed $detail JSON-serializable detail payload for the problem response.
+     * @param array<string, string|list<string>> $headers
+     */
     public function __construct(
         int $statusCode,
         private readonly string $errorCode,

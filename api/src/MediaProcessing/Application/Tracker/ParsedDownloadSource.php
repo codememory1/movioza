@@ -13,6 +13,8 @@ final readonly class ParsedDownloadSource
 {
     public function __construct(
         public DownloadSourceType $type,
+
+        /** Magnet URI for MAGNET, or the saved local .torrent path for TORRENT. */
         public string $source
     ) {
     }

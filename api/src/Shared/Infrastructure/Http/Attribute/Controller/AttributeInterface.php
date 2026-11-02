@@ -6,5 +6,10 @@ namespace Movioza\Shared\Infrastructure\Http\Attribute\Controller;
 
 interface AttributeInterface
 {
+    /**
+     * Returns the handler class used as the registry lookup key.
+     *
+     * @return class-string
+     */
     public function handler(): string;
 }

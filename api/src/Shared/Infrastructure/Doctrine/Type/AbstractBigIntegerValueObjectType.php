@@ -14,6 +14,10 @@ abstract class AbstractBigIntegerValueObjectType extends AbstractIntegerValueObj
         return $platform->getBigIntTypeDeclarationSQL($column);
     }
 
+    /**
+     * Binds BIGINT values as strings at the DBAL parameter boundary.
+     * The value object still represents its value as a PHP integer.
+     */
     public function getBindingType(): ParameterType
     {
         return ParameterType::STRING;

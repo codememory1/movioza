@@ -21,6 +21,9 @@ abstract class StringID implements ValueObjectInterface
         return $this->id;
     }
 
+    /**
+     * Compares both the identifier type and its scalar value.
+     */
     public function equals(ValueObjectInterface $other): bool
     {
         return $other instanceof static

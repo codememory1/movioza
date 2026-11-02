@@ -10,6 +10,11 @@ use Movioza\Shared\Domain\ValueObject\ValueObjectInterface;
 
 abstract class AbstractIntegerValueObjectType extends Type
 {
+    /**
+     * Returns a value object class accepting a single integer and exposing an integer value.
+     *
+     * @return class-string<ValueObjectInterface>
+     */
     abstract protected function getValueObjectClass(): string;
 
     public function getSQLDeclaration(array $column, AbstractPlatform $platform): string

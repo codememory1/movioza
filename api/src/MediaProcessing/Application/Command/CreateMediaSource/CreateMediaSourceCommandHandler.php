@@ -21,6 +21,11 @@ final readonly class CreateMediaSourceCommandHandler implements CommandHandlerIn
     ) {
     }
 
+    /**
+     * Verifies the Catalog reference and persists a pending media source in a transaction.
+     *
+     * @throws ReferencedMediaNotFoundException When the referenced media does not exist.
+     */
     public function __invoke(CreateMediaSourceCommand $command): void
     {
         if (!$this->mediaExistenceChecker->exists($command->mediaID->getValue())) {

@@ -23,6 +23,7 @@ final readonly class LocalTorrentFileStorage implements TorrentFileStorageInterf
             throw new RuntimeException('Torrent content must not be empty.');
         }
 
+        // Another process may create the directory between the first check and mkdir().
         if (!is_dir($this->directory) && !mkdir($this->directory, 0775, recursive: true) && !is_dir($this->directory)) {
             throw new RuntimeException('Cannot create torrent directory.');
         }
@@ -30,6 +31,7 @@ final readonly class LocalTorrentFileStorage implements TorrentFileStorageInterf
         $path = $this->buildPath($this->generateFilename());
         $writtenBytes = file_put_contents($path, $content, LOCK_EX);
 
+        // Remove incomplete output before reporting a failed write.
         if ($writtenBytes === false || $writtenBytes !== strlen($content)) {
             if (is_file($path)) {
                 unlink($path);

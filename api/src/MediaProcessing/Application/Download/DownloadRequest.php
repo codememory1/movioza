@@ -10,6 +10,8 @@ readonly class DownloadRequest
 {
     public function __construct(
         public DownloadSourceType $sourceType,
+
+        /** Magnet URI for MAGNET, or a local .torrent file path for TORRENT. */
         public string $source
     ) {
     }

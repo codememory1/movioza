@@ -8,6 +8,10 @@ use DateTimeImmutable;
 use Movioza\Catalog\Domain\Enum\MediaPersonRole;
 use Movioza\Catalog\Domain\ValueObject\PersonID;
 
+/**
+ * A person reference credited in a role within one media.
+ * Identity consists of media, person ID, and role.
+ */
 readonly class MediaPerson
 {
     public function __construct(

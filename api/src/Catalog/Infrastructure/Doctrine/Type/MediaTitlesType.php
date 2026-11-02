@@ -5,8 +5,10 @@ declare(strict_types = 1);
 namespace Movioza\Catalog\Infrastructure\Doctrine\Type;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
+use Doctrine\DBAL\Types\ConversionException;
 use Doctrine\DBAL\Types\Exception\SerializationFailed;
 use Doctrine\DBAL\Types\JsonType;
+use InvalidArgumentException;
 use Movioza\Catalog\Domain\ValueObject\MediaTitle;
 use UnexpectedValueException;
 
@@ -15,6 +17,10 @@ final class MediaTitlesType extends JsonType
     public const string NAME = 'catalog_media_titles';
 
     /**
+     * Stores a sequential list of MediaTitle values as a JSON array of strings.
+     *
+     * @param list<MediaTitle>|null $value
+     * @throws UnexpectedValueException When the input is not a list of MediaTitle objects.
      * @throws SerializationFailed
      */
     public function convertToDatabaseValue(mixed $value, AbstractPlatform $platform): ?string
@@ -40,6 +46,14 @@ final class MediaTitlesType extends JsonType
         return parent::convertToDatabaseValue($titles, $platform);
     }
 
+    /**
+     * Restores MediaTitle objects from a stored JSON array.
+     *
+     * @return list<MediaTitle>|null
+     * @throws UnexpectedValueException When the stored value is not a list of strings.
+     * @throws InvalidArgumentException When a stored title violates its value object constraints.
+     * @throws ConversionException
+     */
     public function convertToPHPValue(mixed $value, AbstractPlatform $platform): ?array
     {
         if ($value === null) {

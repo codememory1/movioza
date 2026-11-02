@@ -180,7 +180,9 @@ class Media extends AggregateRoot
     }
 
     /**
-     * Creates a season with a number unique within this media.
+     * Creates a season whose number is unique within this media.
+     *
+     * @return bool True when added; false when the season number is already assigned.
      */
     public function addSeason(
         SeasonID $id,
@@ -211,6 +213,9 @@ class Media extends AggregateRoot
 
     /**
      * Removes the season identified by its number.
+     * Updates the media modification time only when a season is removed.
+     *
+     * @return bool True when removed; false when the season does not exist.
      */
     public function removeSeason(SeasonNumber $number, DateTimeImmutable $changedAt): bool
     {
@@ -239,8 +244,9 @@ class Media extends AggregateRoot
     }
 
     /**
-     * Delegates episode creation to the specified season.
-     * Updates the media modification time after adding the episode.
+     * Adds an episode to an existing season and updates the media modification time.
+     *
+     * @return bool False when the season is missing or the episode number already exists.
      */
     public function addEpisode(
         EpisodeID $id,
@@ -269,8 +275,10 @@ class Media extends AggregateRoot
     }
 
     /**
-     * Delegates episode removal to the specified season.
-     * Updates the media modification time only when an episode is removed.
+     * Removes an episode from the specified season.
+     * Updates the media modification time only after a successful removal.
+     *
+     * @return bool False when the season or episode does not exist.
      */
     public function removeEpisode(SeasonNumber $seasonNumber, EpisodeNumber $episodeNumber, DateTimeImmutable $changedAt): bool
     {
@@ -352,7 +360,8 @@ class Media extends AggregateRoot
     }
 
     /**
-     * Assigns a person in the specified role unless that assignment already exists.
+     * Assigns a person in a media-specific role.
+     * An existing person-and-role pair is a no-op; the same person may have other roles.
      */
     public function assignPerson(PersonID $personID, MediaPersonRole $role, DateTimeImmutable $changedAt): void
     {
@@ -649,9 +658,11 @@ class Media extends AggregateRoot
     }
 
     /**
-     * @param array<array-key, mixed> $titles
+     * Validates a sequential list and removes equal titles, preserving first occurrence order.
      *
+     * @param array<array-key, mixed> $titles
      * @return list<MediaTitle>
+     * @throws InvalidArgumentException When the input is not a list of MediaTitle objects.
      */
     private function normalizeAlternativeTitles(array $titles): array
     {

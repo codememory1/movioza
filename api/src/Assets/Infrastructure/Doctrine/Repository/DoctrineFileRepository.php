@@ -9,6 +9,9 @@ use Doctrine\Persistence\ManagerRegistry;
 use Movioza\Assets\Domain\Entity\File;
 use Movioza\Assets\Domain\Repository\FileRepositoryInterface;
 
+/**
+ * @extends ServiceEntityRepository<File>
+ */
 final class DoctrineFileRepository extends ServiceEntityRepository implements FileRepositoryInterface
 {
     public function __construct(ManagerRegistry $registry)

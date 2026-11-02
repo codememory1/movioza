@@ -16,6 +16,7 @@ final readonly class Emoji implements ValueObjectInterface
             throw new InvalidArgumentException('Emoji cannot be longer than 32 characters.');
         }
 
+        // Match one complete emoji sequence, which may contain multiple Unicode code points.
         $pattern = sprintf('/\A(?:%s)\z/u', EmojiPattern::getEmojiPattern());
 
         if (preg_match($pattern, $emoji) !== 1) {

@@ -9,9 +9,11 @@ use Movioza\Assets\Application\ReadModel\ImageView;
 interface ImageReaderInterface
 {
     /**
-     * @param list<string> $ids
+     * Returns found images indexed by image ID.
+     * Missing IDs are omitted; input order is not guaranteed.
      *
-     * @return ImageView[]
+     * @param list<string> $ids
+     * @return array<string, ImageView>
      */
-    public function findByIds(array $ids): array;
+    public function findByIDs(array $ids): array;
 }

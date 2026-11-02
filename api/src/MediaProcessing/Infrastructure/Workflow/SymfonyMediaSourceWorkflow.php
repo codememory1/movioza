@@ -24,10 +24,17 @@ final readonly class SymfonyMediaSourceWorkflow implements MediaSourceStateMachi
         return $this->stateMachine->can($this->buildSubject($mediaSource), $transition->value);
     }
 
+    /**
+     * Applies the transition to a temporary subject and returns the resulting domain status.
+     *
+     * @throws MediaSourceTransitionNotAllowedException
+     */
     public function apply(MediaSource $mediaSource, MediaSourceTransition $transition): MediaSourceStatus
     {
         try {
             $marking = $this->stateMachine->apply($this->buildSubject($mediaSource), $transition->value);
+
+            // The configured state machine has one active place representing the resulting status.
             $status = array_key_first($marking->getPlaces());
 
             return MediaSourceStatus::from($status);

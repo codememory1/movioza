@@ -17,6 +17,11 @@ use Movioza\Shared\Domain\ValueObject\Slug;
 
 final class GenreFixtures extends Fixture implements FixtureGroupInterface
 {
+    /**
+     * Rows contain genre ID, name, slug, emoji, and short description.
+     *
+     * @var list<array{int, string, string, string, string}>
+     */
     private const array GENRES = [
         [1, 'Драма', 'drama', '🎭', 'Истории о человеческих отношениях и переживаниях.'],
         [2, 'Комедия', 'comedy', '😂', 'Юмористические истории и забавные ситуации.'],

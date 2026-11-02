@@ -30,6 +30,7 @@ class SymfonyQueryBus implements QueryBusInterface
         } catch (HandlerFailedException $e) {
             $exceptions = array_values($e->getWrappedExceptions(recursive: true));
 
+            // Expose a single original failure; preserve the wrapper when several failures must be reported.
             if (count($exceptions) === 1) {
                 throw $exceptions[0];
             }

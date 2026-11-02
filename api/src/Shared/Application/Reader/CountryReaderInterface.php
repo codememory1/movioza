@@ -9,13 +9,17 @@ use Movioza\Shared\Application\ReadModel\CountryView;
 interface CountryReaderInterface
 {
     /**
-     * @param int[] $ids
+     * Returns found countries indexed by country ID.
+     * Missing IDs are omitted; result order is not guaranteed.
      *
-     * @return CountryView[]
+     * @param array<array-key, int> $ids
+     * @return array<int, CountryView>
      */
     public function findByIDs(array $ids): array;
 
     /**
+     * Returns countries ordered by name, then by ID.
+     *
      * @return list<CountryView>
      */
     public function findAll(): array;

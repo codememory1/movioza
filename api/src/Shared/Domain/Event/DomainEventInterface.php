@@ -8,5 +8,8 @@ use DateTimeImmutable;
 
 interface DomainEventInterface
 {
+    /**
+     * Returns when the domain change occurred, independently of event delivery time.
+     */
     public function getOccurredAt(): DateTimeImmutable;
 }

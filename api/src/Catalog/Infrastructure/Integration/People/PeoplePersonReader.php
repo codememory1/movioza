@@ -9,6 +9,10 @@ use Movioza\People\Application\Reader\PersonReaderInterface;
 use Movioza\People\Application\ReadModel\PersonView as PeoplePersonView;
 use Movioza\Catalog\Application\ReadModel\PersonView;
 
+/**
+ * Maps People read models to Catalog person projections.
+ * Media roles are resolved from Catalog assignments by the caller.
+ */
 final readonly class PeoplePersonReader implements ExternalPersonReaderInterface
 {
     public function __construct(
@@ -24,6 +28,7 @@ final readonly class PeoplePersonReader implements ExternalPersonReaderInterface
 
         $persons = $this->personReader->findByIds($ids);
 
+        // A single-array map preserves the person-ID keys returned by People.
         return array_map(static fn (PeoplePersonView $person): PersonView => new PersonView(
             $person->id,
             $person->slug,

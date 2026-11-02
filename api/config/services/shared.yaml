@@ -58,7 +58,7 @@ services:
         tags:
             - { name: kernel.event_listener, event: kernel.view, method: onKernelView }
 
-    # HTTP Resolvers
+    # Run the custom attribute resolver early; it must yield nothing for unsupported arguments.
     Movioza\Shared\Infrastructure\Http\Resolver\AttributeValueResolver:
         tags:
             - { name: controller.argument_value_resolver, priority: 150 }

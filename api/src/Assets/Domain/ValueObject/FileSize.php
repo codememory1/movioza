@@ -7,6 +7,9 @@ namespace Movioza\Assets\Domain\ValueObject;
 use InvalidArgumentException;
 use Movioza\Shared\Domain\ValueObject\ValueObjectInterface;
 
+/**
+ * File size in bytes; zero represents an empty file.
+ */
 final readonly class FileSize implements ValueObjectInterface
 {
     public function __construct(

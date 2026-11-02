@@ -9,6 +9,9 @@ use Doctrine\Persistence\ManagerRegistry;
 use Movioza\MediaProcessing\Domain\Entity\MediaSource;
 use Movioza\MediaProcessing\Domain\Repository\MediaSourceRepositoryInterface;
 
+/**
+ * @extends ServiceEntityRepository<MediaSource>
+ */
 final class DoctrineMediaSourceRepository extends ServiceEntityRepository implements MediaSourceRepositoryInterface
 {
     public function __construct(ManagerRegistry $registry)

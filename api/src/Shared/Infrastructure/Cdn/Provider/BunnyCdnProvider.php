@@ -37,11 +37,18 @@ readonly class BunnyCdnProvider implements CdnProviderInterface
         );
     }
 
+    /**
+     * Signs the normalized path followed by the expiration timestamp using HMAC-SHA256.
+     * Returns raw signature bytes for token encoding.
+     */
     private function signature(string $path, int $expires): string
     {
         return hash_hmac('sha256', $path . $expires, $this->secretKey, true);
     }
 
+    /**
+     * Encodes the raw signature as unpadded Base64url with the HS256- prefix.
+     */
     private function token(string $signature): string
     {
         return sprintf('HS256-%s', rtrim(strtr(base64_encode($signature), '+/', '-_'), '='));

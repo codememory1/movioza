@@ -6,6 +6,9 @@ namespace Movioza\Shared\Infrastructure\Http\Response;
 
 final readonly class ApiResponse implements ApiResponseInterface
 {
+    /**
+     * @param array<string, string|list<string>> $headers
+     */
     public function __construct(
         private DocumentInterface $document,
         private int $statusCode = 200,

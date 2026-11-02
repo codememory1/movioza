@@ -35,6 +35,13 @@ readonly class CdnUrlGenerator implements CdnUrlGeneratorInterface
         return $this->selectProvider($availableProviders, $stableId)->generate($type, $path, $ttl);
     }
 
+    /**
+     * Selects a provider deterministically for an unchanged ordered provider set.
+     * Changing provider order or count may remap the same stable ID.
+     *
+     * @param non-empty-list<CdnProviderInterface> $providers
+     * @param int $stableId Non-negative routing key.
+     */
     private function selectProvider(array $providers, int $stableId): CdnProviderInterface
     {
         return $providers[$stableId % count($providers)];

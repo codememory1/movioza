@@ -20,6 +20,11 @@ use RuntimeException;
 
 final class FileFixtures extends Fixture implements FixtureGroupInterface, DependentFixtureInterface
 {
+    /**
+     * Rows contain file ID, resource-relative path, storage key, and extension.
+     *
+     * @var list<array{string, string, string, string}>
+     */
     private const array FILES = [
         [
             '01a17423-ac1b-715e-b3cf-555d3cdfb271',

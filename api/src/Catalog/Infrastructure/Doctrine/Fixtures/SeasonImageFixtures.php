@@ -16,6 +16,11 @@ use Movioza\Catalog\Domain\ValueObject\ImageID;
 
 final class SeasonImageFixtures extends Fixture implements FixtureGroupInterface, DependentFixtureInterface
 {
+    /**
+     * Rows contain season slug, Assets image ID, and assignment type. Demo images are reused.
+     *
+     * @var list<array{string, string, SeasonImageType}>
+     */
     private const array SEASON_IMAGES = [
         ['ostrye-kozyrki-sezon-1', '01a17423-ac1b-715e-b3cf-555d3cdfb285', SeasonImageType::POSTER],
         ['ostrye-kozyrki-sezon-1', '01a17423-ac1b-715e-b3cf-555d3cdfb286', SeasonImageType::BACKDROP],

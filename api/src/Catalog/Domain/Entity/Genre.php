@@ -17,6 +17,9 @@ final class Genre extends AggregateRoot
 {
     private ?DateTimeImmutable $updatedAt = null;
 
+    /**
+     * Creates a genre and records a GenreCreatedEvent for later release.
+     */
     public function __construct(
         private readonly GenreID $id,
         private readonly GenreName $name,

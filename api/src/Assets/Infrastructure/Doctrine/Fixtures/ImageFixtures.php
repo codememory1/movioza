@@ -18,6 +18,11 @@ use Movioza\Assets\Domain\ValueObject\ImageID;
 
 final class ImageFixtures extends Fixture implements FixtureGroupInterface, DependentFixtureInterface
 {
+    /**
+     * Rows contain image ID, file ID, resource-relative path, width, and height in pixels.
+     *
+     * @var list<array{string, string, string, int, int}>
+     */
     private const array IMAGES = [
         // media logo
         [

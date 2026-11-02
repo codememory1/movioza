@@ -16,6 +16,11 @@ use Movioza\Catalog\Domain\ValueObject\PersonID;
 
 final class MediaPersonFixtures extends Fixture implements FixtureGroupInterface, DependentFixtureInterface
 {
+    /**
+     * Maps media slugs to person ID and media-specific role pairs.
+     *
+     * @var array<string, list<array{int, MediaPersonRole}>>
+     */
     private const array MEDIA_PERSONS = [
         'nachalo' => [
             [10, MediaPersonRole::DIRECTOR], // Christopher Nolan

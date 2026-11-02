@@ -14,6 +14,9 @@ interface MediaSourceStateMachineInterface
     public function can(MediaSource $mediaSource, MediaSourceTransition $transition): bool;
 
     /**
+     * Validates the transition and returns the resulting status.
+     * The caller is responsible for applying the returned status to the media source.
+     *
      * @throws MediaSourceTransitionNotAllowedException
      */
     public function apply(MediaSource $mediaSource, MediaSourceTransition $transition): MediaSourceStatus;

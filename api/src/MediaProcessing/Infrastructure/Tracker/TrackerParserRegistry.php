@@ -17,6 +17,8 @@ final class TrackerParserRegistry implements TrackerParserRegistryInterface
     private array $parsers;
 
     /**
+     * Indexes parsers by TorrentTracker values supplied by the tagged iterator.
+     *
      * @param iterable<string, TrackerParserInterface> $parsers
      */
     public function __construct(iterable $parsers)

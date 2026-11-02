@@ -31,6 +31,10 @@ final readonly class MapRequestPayloadHandler implements AttributeHandlerInterfa
     }
 
     /**
+     * Deserializes the request body, then validates the resulting DTO.
+     *
+     * @throws InvalidRequestPayloadException When the JSON cannot be mapped to the DTO.
+     * @throws RequestValidationException When DTO constraints fail.
      * @throws ExceptionInterface
      */
     public function handle(AttributeInterface $attribute, Request $request, ArgumentMetadata $argument): mixed
@@ -48,12 +52,14 @@ final readonly class MapRequestPayloadHandler implements AttributeHandlerInterfa
     private function deserialize(Request $request, ArgumentMetadata $argument): object
     {
         try {
+            // Reject unknown payload fields instead of silently ignoring them.
             return $this->serializer->deserialize($request->getContent(), $argument->getType(), 'json', [
                 AbstractNormalizer::ALLOW_EXTRA_ATTRIBUTES => false,
             ]);
         } catch (NotEncodableValueException $e) {
             throw InvalidRequestPayloadException::invalidJson($e);
         } catch (MissingConstructorArgumentsException $e) {
+            // Report missing constructor fields using the configured payload naming convention.
             $fields = array_map(
                 fn (string $field): string =>
                 $this->nameConverter->normalize($field),

@@ -26,6 +26,10 @@ final class RequestValidationException extends HttpException
         );
     }
 
+    /**
+     * Builds a 422 validation problem with one detail entry per violation.
+     * Each entry contains path, code, and message; paths are taken directly from the validator.
+     */
     public static function fromViolations(ConstraintViolationListInterface $violations): self
     {
         $errors = [];

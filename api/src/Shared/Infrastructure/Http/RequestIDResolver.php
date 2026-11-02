@@ -17,6 +17,12 @@ final class RequestIDResolver
     ) {
     }
 
+    /**
+     * Reuses the ID stored on the main HTTP request, or generates and stores a UUIDv7.
+     * Subsequent calls in the same main request return the same ID.
+     *
+     * @throws LogicException When no main HTTP request is active.
+     */
     public function resolve(): string
     {
         $request = $this->requestStack->getMainRequest()

@@ -14,13 +14,16 @@ use Movioza\Catalog\Application\Reader\ExternalImageReaderInterface;
 use Movioza\Catalog\Application\Reader\ExternalPersonReaderInterface;
 use Movioza\Catalog\Application\Reader\GenreReaderInterface;
 use Movioza\Catalog\Application\Reader\MediaReaderInterface;
+use Movioza\Catalog\Application\ReadModel\GenreView;
 use Movioza\Catalog\Application\ReadModel\ImageView;
 use Movioza\Catalog\Application\ReadModel\MediaView;
+use Movioza\Catalog\Application\ReadModel\PersonView;
 use Movioza\Catalog\Domain\Enum\MediaImageType;
 use Movioza\Catalog\Domain\Enum\MediaKind;
 use Movioza\Catalog\Domain\Enum\MediaPersonRole;
 use Movioza\Catalog\Domain\Enum\MediaType;
 use Movioza\Shared\Application\Reader\CountryReaderInterface;
+use Movioza\Shared\Application\ReadModel\CountryView;
 use UnexpectedValueException;
 
 final readonly class DoctrineMediaReader implements MediaReaderInterface
@@ -35,10 +38,14 @@ final readonly class DoctrineMediaReader implements MediaReaderInterface
     }
 
     /**
+     * Builds media details from Catalog data and referenced read models.
+     * Returns null only when the media row itself is absent.
+     *
      * @throws DateMalformedStringException
      * @throws Exception
+     * @throws UnexpectedValueException When a required referenced record is missing.
      */
-    public function findById(int $id): ?MediaView
+    public function findByID(int $id): ?MediaView
     {
         $row = $this->connection
             ->createQueryBuilder()
@@ -96,10 +103,11 @@ final readonly class DoctrineMediaReader implements MediaReaderInterface
     }
 
     /**
-     * @return array<string, ImageView> Images indexed by media image type.
+     * Resolves the logo, poster, and backdrop required by the media details response.
      *
+     * @return array<string, ImageView> Images keyed by MediaImageType values.
      * @throws Exception
-     * @throws UnexpectedValueException
+     * @throws UnexpectedValueException When an assignment or its referenced image is missing.
      */
     private function readRequiredImages(int $mediaId): array
     {
@@ -126,7 +134,7 @@ final readonly class DoctrineMediaReader implements MediaReaderInterface
             }
         }
 
-        $imagesById = $this->externalImageReader->findByIds(
+        $imagesById = $this->externalImageReader->findByIDs(
             array_values(array_unique($imageIdsByType))
         );
 
@@ -150,7 +158,11 @@ final readonly class DoctrineMediaReader implements MediaReaderInterface
     }
 
     /**
+     * Resolves country assignments into a sequential list.
+     *
+     * @return list<CountryView>
      * @throws Exception
+     * @throws UnexpectedValueException When an assigned country cannot be resolved.
      */
     private function readCountries(int $mediaId): array
     {
@@ -182,7 +194,11 @@ final readonly class DoctrineMediaReader implements MediaReaderInterface
     }
 
     /**
+     * Resolves genre assignments into a sequential list.
+     *
+     * @return list<GenreView>
      * @throws Exception
+     * @throws UnexpectedValueException When an assigned genre cannot be resolved.
      */
     private function readGenres(int $mediaId): array
     {
@@ -214,10 +230,12 @@ final readonly class DoctrineMediaReader implements MediaReaderInterface
     }
 
     /**
-     * @param int $mediaId
+     * Resolves each distinct person once and groups person views by media role.
+     * A person assigned to multiple roles appears in each corresponding group.
      *
-     * @return array
+     * @return array<string, list<PersonView>>
      * @throws Exception
+     * @throws UnexpectedValueException When an assigned person cannot be resolved.
      */
     private function readPersons(int $mediaId): array
     {
@@ -234,10 +252,12 @@ final readonly class DoctrineMediaReader implements MediaReaderInterface
             return [];
         }
 
+        // Deduplicate person lookups only; retain every assignment to preserve multiple roles.
         $mediaPersonIDs = array_unique(array_column($mediaPersons, 'person_id'));
         $personsByID = $this->externalPersonReader->findByIDs($mediaPersonIDs);
         $personsByRole = [];
 
+        // Group the original assignments, not the deduplicated person result.
         foreach ($mediaPersons as $mediaPerson) {
             $personID = $mediaPerson['person_id'];
 

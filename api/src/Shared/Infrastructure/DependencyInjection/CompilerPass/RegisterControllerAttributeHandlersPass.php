@@ -13,6 +13,11 @@ use Symfony\Component\DependencyInjection\Reference;
 
 class RegisterControllerAttributeHandlersPass implements CompilerPassInterface
 {
+    /**
+     * Wires tagged attribute handlers into the registry during container compilation.
+     *
+     * @throws LogicException When a tagged service does not implement the required handler interface.
+     */
     public function process(ContainerBuilder $container): void
     {
         $handlerRegistry = $container->findDefinition(HandlerRegistry::class);

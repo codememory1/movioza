@@ -9,9 +9,11 @@ use Movioza\Catalog\Application\ReadModel\GenreView;
 interface GenreReaderInterface
 {
     /**
-     * @param int[] $ids
+     * Returns found genres indexed by genre ID.
+     * Missing IDs are omitted; result order is not guaranteed.
      *
-     * @return GenreView[]
+     * @param array<array-key, int> $ids
+     * @return array<int, GenreView>
      */
     public function findByIDs(array $ids): array;
 }

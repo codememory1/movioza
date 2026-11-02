@@ -8,5 +8,8 @@ use Movioza\Assets\Domain\Entity\Image;
 
 interface ImageRepositoryInterface
 {
+    /**
+     * Registers the entity for persistence within the caller-managed transaction boundary.
+     */
     public function save(Image $image): void;
 }

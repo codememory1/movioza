@@ -9,6 +9,9 @@ use Doctrine\Persistence\ManagerRegistry;
 use Movioza\People\Domain\Entity\Person;
 use Movioza\People\Domain\Repository\PersonRepositoryInterface;
 
+/**
+ * @extends ServiceEntityRepository<Person>
+ */
 final class DoctrinePersonRepository extends ServiceEntityRepository implements PersonRepositoryInterface
 {
     public function __construct(ManagerRegistry $registry)

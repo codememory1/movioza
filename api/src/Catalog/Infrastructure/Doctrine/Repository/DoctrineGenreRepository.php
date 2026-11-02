@@ -9,6 +9,9 @@ use Doctrine\Persistence\ManagerRegistry;
 use Movioza\Catalog\Domain\Entity\Genre;
 use Movioza\Catalog\Domain\Repository\GenreRepositoryInterface;
 
+/**
+ * @extends ServiceEntityRepository<Genre>
+ */
 final class DoctrineGenreRepository extends ServiceEntityRepository implements GenreRepositoryInterface
 {
     public function __construct(ManagerRegistry $registry)

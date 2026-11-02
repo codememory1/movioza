@@ -4,6 +4,9 @@ declare(strict_types = 1);
 
 namespace Movioza\Shared\Infrastructure\Http\Response;
 
+/**
+ * Controller result converted to an HTTP response by ApiResponseEventListener.
+ */
 interface ApiResponseInterface
 {
     public function getDocument(): DocumentInterface;
