@@ -16,9 +16,7 @@ final readonly class CreateMediaSourceResponse
     public function toArray(): array
     {
         return [
-            'data' => [
-                'id' => $this->ID->getValue(),
-            ]
+            'id' => $this->ID->getValue(),
         ];
     }
 }

@@ -17,6 +17,8 @@ final readonly class PostgresMediaSourceIDGenerator implements MediaSourceIDGene
     }
 
     /**
+     * Allocates an ID from the configured PostgreSQL sequence before entity persistence.
+     *
      * @throws Exception
      */
     public function next(): int

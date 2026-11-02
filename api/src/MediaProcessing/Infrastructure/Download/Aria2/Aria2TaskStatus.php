@@ -31,6 +31,13 @@ class Aria2TaskStatus
     ) {
     }
 
+    /**
+     * Builds a status snapshot from aria2.tellStatus data.
+     * Numeric transfer counters are converted to integers; file entries retain their RPC shape.
+     *
+     * @param array<string, mixed> $data
+     * @throws UnexpectedValueException When a required status field is absent.
+     */
     public static function fromArray(array $data): Aria2TaskStatus
     {
         $expectedKeys = [

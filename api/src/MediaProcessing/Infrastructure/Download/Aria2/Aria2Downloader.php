@@ -115,6 +115,10 @@ readonly class Aria2Downloader implements DownloaderInterface
     }
 
     /**
+     * Follows aria2 successor GIDs to the current download task.
+     * Only a single-successor chain is supported.
+     *
+     * @throws UnexpectedValueException When the chain contains a cycle or branches.
      * @throws TransportExceptionInterface
      * @throws RandomException
      * @throws ServerExceptionInterface
@@ -144,6 +148,7 @@ readonly class Aria2Downloader implements DownloaderInterface
                 throw new UnexpectedValueException('Expected exactly one download in followedBy.');
             }
 
+            // Continue with the task spawned after metadata resolution instead of reporting metadata completion.
             $gid = $status->followedBy[0];
         }
     }

@@ -43,8 +43,12 @@ final readonly class Aria2RpcClient
     }
 
     /**
-     * @param array<string, mixed> $options
+     * Reads a local torrent file and submits its Base64-encoded contents to aria2.
      *
+     * @param string $torrent Local filesystem path to a .torrent file.
+     * @param array<string, mixed> $options
+     * @throws RuntimeException When the local file cannot be read or aria2 reports an RPC error.
+     * @throws UnexpectedValueException When the RPC response is malformed.
      * @throws TransportExceptionInterface
      * @throws RandomException
      * @throws ServerExceptionInterface
@@ -104,6 +108,11 @@ final readonly class Aria2RpcClient
     }
 
     /**
+     * Executes an aria2 JSON-RPC request and validates its response envelope.
+     *
+     * @param list<mixed> $params Positional method arguments before authentication is prepended.
+     * @throws RuntimeException When aria2 returns an RPC error.
+     * @throws UnexpectedValueException When the response ID or result envelope is invalid.
      * @throws TransportExceptionInterface
      * @throws RandomException
      * @throws ServerExceptionInterface
@@ -113,6 +122,7 @@ final readonly class Aria2RpcClient
      */
     private function request(string $method, array $params): mixed
     {
+        // aria2 expects the optional authentication token before all method arguments.
         if (trim($this->secret) !== '') {
             array_unshift($params, sprintf('token:%s', $this->secret));
         }

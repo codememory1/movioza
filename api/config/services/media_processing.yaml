@@ -39,7 +39,7 @@ services:
         tags:
             - { name: movioza.tracker_parser, tracker: rutor }
 
-    # Tracker Parser Registry
+    # Each tracker tag must match a TorrentTracker value; the registry is indexed by that value.
     movioza.media_processing.tracker_parser_registry:
         class: Movioza\MediaProcessing\Infrastructure\Tracker\TrackerParserRegistry
         arguments:
