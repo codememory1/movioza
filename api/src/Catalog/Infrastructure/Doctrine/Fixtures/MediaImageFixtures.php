@@ -16,6 +16,11 @@ use Movioza\Catalog\Domain\ValueObject\ImageID;
 
 final class MediaImageFixtures extends Fixture implements FixtureGroupInterface, DependentFixtureInterface
 {
+    /**
+     * Rows contain media slug, Assets image ID, and assignment type. Demo images are reused.
+     *
+     * @var list<array{string, string, MediaImageType}>
+     */
     private const array MEDIA_IMAGES = [
         ['nachalo', '01a17423-ac1b-715e-b3cf-555d3cdfb281', MediaImageType::LOGO],
         ['nachalo', '01a17423-ac1b-715e-b3cf-555d3cdfb283', MediaImageType::POSTER],

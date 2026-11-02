@@ -16,10 +16,15 @@ final readonly class GetMediaQueryHandler implements QueryHandlerInterface
     ) {
     }
 
+    /**
+     * Returns media details or fails when the requested media does not exist.
+     *
+     * @throws MediaNotFoundException
+     */
     public function __invoke(GetMediaQuery $query): MediaView
     {
         $mediaID = $query->id->getValue();
-        $media = $this->mediaReader->findById($mediaID);
+        $media = $this->mediaReader->findByID($mediaID);
 
         if ($media === null) {
             throw new MediaNotFoundException($mediaID);

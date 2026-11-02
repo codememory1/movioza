@@ -18,6 +18,11 @@ use Movioza\Shared\Domain\ValueObject\Slug;
 
 final class SeasonFixtures extends Fixture implements FixtureGroupInterface, DependentFixtureInterface
 {
+    /**
+     * Keys are media slugs; rows contain season ID, number, title, slug, and description.
+     *
+     * @var array<string, list<array{int, int, string, string, string}>>
+     */
     private const array SEASONS = [
         'ostrye-kozyrki' => [
             [1, 1, 'Сезон 1', 'ostrye-kozyrki-sezon-1', 'Семья Шелби начинает борьбу за расширение своего влияния.'],

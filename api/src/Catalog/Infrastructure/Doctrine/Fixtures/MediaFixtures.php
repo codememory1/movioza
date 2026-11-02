@@ -18,6 +18,11 @@ use Movioza\Shared\Domain\ValueObject\Slug;
 
 final class MediaFixtures extends Fixture implements FixtureGroupInterface
 {
+    /**
+     * Rows contain ID, type, kind, title, alternative titles, slug, description, and minimum age.
+     *
+     * @var list<array{int, MediaType, MediaKind|null, string, list<string>, string, string, int}>
+     */
     private const array MEDIA = [
         [
             1,

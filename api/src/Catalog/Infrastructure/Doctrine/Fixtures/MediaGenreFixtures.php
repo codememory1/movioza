@@ -15,6 +15,11 @@ use Movioza\Catalog\Domain\ValueObject\GenreID;
 
 final class MediaGenreFixtures extends Fixture implements FixtureGroupInterface, DependentFixtureInterface
 {
+    /**
+     * Maps media slugs to Catalog genre IDs.
+     *
+     * @var array<string, list<int>>
+     */
     private const array MEDIA_GENRES = [
         'nachalo' => [3, 4, 5, 7],
         'interstellar' => [1, 4, 7],

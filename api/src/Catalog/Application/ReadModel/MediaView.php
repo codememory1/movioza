@@ -12,8 +12,10 @@ use Movioza\Shared\Application\ReadModel\CountryView;
 final readonly class MediaView
 {
     /**
-     * @param CountryView[] $countries
-     * @param GenreView[] $genres
+     * @param list<CountryView> $countries
+     * @param list<GenreView> $genres
+     * @param list<PersonView> $directors
+     * @param list<PersonView> $actors
      */
     public function __construct(
         public int $id,

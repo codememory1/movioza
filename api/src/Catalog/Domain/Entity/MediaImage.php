@@ -8,6 +8,10 @@ use DateTimeImmutable;
 use Movioza\Catalog\Domain\Enum\MediaImageType;
 use Movioza\Catalog\Domain\ValueObject\ImageID;
 
+/**
+ * An image reference assigned to a media-specific image type.
+ * The referenced image is owned by Assets.
+ */
 readonly class MediaImage
 {
     public function __construct(

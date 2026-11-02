@@ -17,6 +17,29 @@ final readonly class GetMediaResponse
     ) {
     }
 
+    /**
+     * Serializes media details; date-time fields use Unix seconds.
+     *
+     * @return array{
+     *     id: int,
+     *     slug: string,
+     *     type: string,
+     *     kind: string|null,
+     *     title: string,
+     *     description: string,
+     *     age_restrictions: int,
+     *     logo: string,
+     *     poster: array{url: string, blur_hash: string, width: int, height: int},
+     *     backdrop: array{url: string, blur_hash: string, width: int, height: int},
+     *     countries: list<string>,
+     *     genres: list<array{id: int, slug: string, name: string}>,
+     *     directors: list<array{id: int, slug: string, name: string}>,
+     *     actors: list<array{id: int, slug: string, name: string}>,
+     *     released_at: int|null,
+     *     uploaded_at: int|null,
+     *     updated_at: int|null
+     * }
+     */
     public function toArray(): array
     {
         return [
@@ -28,7 +51,7 @@ final readonly class GetMediaResponse
             'description' => $this->mediaView->description,
             'age_restrictions' => $this->mediaView->ageRestrictions,
             'logo' => $this->mediaView->logo->url,
-            'poster' => $this->mapImage($this->mediaView->logo),
+            'poster' => $this->mapImage($this->mediaView->poster),
             'backdrop' => $this->mapImage($this->mediaView->backdrop),
             'countries' => array_map(fn (CountryView $country) => $country->name, $this->mediaView->countries),
             'genres' => array_map(fn (GenreView $genre) => [
@@ -44,6 +67,9 @@ final readonly class GetMediaResponse
         ];
     }
 
+    /**
+     * @return array{url: string, blur_hash: string, width: int, height: int}
+     */
     private function mapImage(ImageView $image): array
     {
         return [
@@ -55,7 +81,8 @@ final readonly class GetMediaResponse
     }
 
     /**
-     * @param PersonView[] $persons
+     * @param list<PersonView> $persons
+     * @return list<array{id: int, slug: string, name: string}>
      */
     private function mapPersons(array $persons): array
     {

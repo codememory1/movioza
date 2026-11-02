@@ -8,5 +8,8 @@ use Movioza\Catalog\Domain\Entity\Genre;
 
 interface GenreRepositoryInterface
 {
+    /**
+     * Registers the entity for persistence within the caller-managed transaction boundary.
+     */
     public function save(Genre $genre): void;
 }

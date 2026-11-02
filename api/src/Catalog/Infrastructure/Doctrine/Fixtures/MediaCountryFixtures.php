@@ -15,6 +15,11 @@ use Movioza\Shared\Domain\ValueObject\CountryID;
 
 final class MediaCountryFixtures extends Fixture implements FixtureGroupInterface, DependentFixtureInterface
 {
+    /**
+     * Maps media slugs to Shared country IDs.
+     *
+     * @var array<string, list<int>>
+     */
     private const array MEDIA_COUNTRIES = [
         'nachalo' => [1, 2],
         'interstellar' => [1, 2],

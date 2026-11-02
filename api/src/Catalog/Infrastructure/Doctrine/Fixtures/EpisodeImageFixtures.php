@@ -16,6 +16,11 @@ use Movioza\Catalog\Domain\ValueObject\ImageID;
 
 final class EpisodeImageFixtures extends Fixture implements FixtureGroupInterface, DependentFixtureInterface
 {
+    /**
+     * Rows contain episode slug, Assets image ID, and assignment type. Demo images are reused.
+     *
+     * @var list<array{string, string, EpisodeImageType}>
+     */
     private const array EPISODE_IMAGES = [
         ['ostrye-kozyrki-s01e01', '01a17423-ac1b-715e-b3cf-555d3cdfb284', EpisodeImageType::PREVIEW],
         ['ostrye-kozyrki-s01e02', '01a17423-ac1b-715e-b3cf-555d3cdfb284', EpisodeImageType::PREVIEW],
