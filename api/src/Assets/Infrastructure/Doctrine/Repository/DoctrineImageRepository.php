@@ -9,6 +9,9 @@ use Doctrine\Persistence\ManagerRegistry;
 use Movioza\Assets\Domain\Entity\Image;
 use Movioza\Assets\Domain\Repository\ImageRepositoryInterface;
 
+/**
+ * @extends ServiceEntityRepository<Image>
+ */
 final class DoctrineImageRepository extends ServiceEntityRepository implements ImageRepositoryInterface
 {
     public function __construct(ManagerRegistry $registry)

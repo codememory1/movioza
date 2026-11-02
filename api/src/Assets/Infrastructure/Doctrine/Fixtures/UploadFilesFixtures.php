@@ -11,6 +11,8 @@ use Doctrine\Persistence\ObjectManager;
 final class UploadFilesFixtures extends Fixture
 {
     /**
+     * Rows contain resource-relative path, storage key, and MIME content type.
+     *
      * @var list<array{string, string, string}>
      */
     private const array FILES = [
@@ -30,6 +32,10 @@ final class UploadFilesFixtures extends Fixture
     ) {
     }
 
+    /**
+     * Creates the configured fixture bucket when needed and uploads the demo objects.
+     * Object-storage writes are outside the ORM transaction.
+     */
     public function load(ObjectManager $manager): void
     {
         $this->createBucketIfNotExists();

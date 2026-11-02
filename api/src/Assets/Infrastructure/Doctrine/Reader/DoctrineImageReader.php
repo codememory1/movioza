@@ -24,7 +24,7 @@ final readonly class DoctrineImageReader implements ImageReaderInterface
     /**
      * @throws Exception
      */
-    public function findByIds(array $ids): array
+    public function findByIDs(array $ids): array
     {
         if ($ids === []) {
             return [];

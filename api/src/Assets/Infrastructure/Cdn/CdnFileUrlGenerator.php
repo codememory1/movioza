@@ -27,6 +27,9 @@ final readonly class CdnFileUrlGenerator implements FileUrlGeneratorInterface
         );
     }
 
+    /**
+     * Derives a deterministic 28-bit routing key from the file identity.
+     */
     private function hashPartitionKey(string $id): int
     {
         return hexdec(substr(hash('sha256', $id), 0, 7));

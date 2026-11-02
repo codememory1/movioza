@@ -31,6 +31,8 @@ final class kornrunnerBlurHashGenerator implements BlurHashGeneratorInterface
 
         $sourceWidth = imagesx($source);
         $sourceHeight = imagesy($source);
+
+        // Bound encoding work to a 64-pixel longest edge without upscaling the source.
         $scale = min(1.0, 64 / max($sourceWidth, $sourceHeight));
         $width = max(1, (int) round($sourceWidth * $scale));
         $height = max(1, (int) round($sourceHeight * $scale));
@@ -83,6 +85,7 @@ final class kornrunnerBlurHashGenerator implements BlurHashGeneratorInterface
             $pixels[] = $row;
         }
 
+        // Encode four horizontal and three vertical BlurHash components.
         return Blurhash::encode($pixels, 4, 3);
     }
 }
