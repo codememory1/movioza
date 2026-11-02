@@ -23,6 +23,11 @@ final readonly class Metadata implements DocumentMemberInterface
         return 'meta';
     }
 
+    /**
+     * Builds the meta object from uniquely named members.
+     *
+     * @throws LogicException When two members use the same name.
+     */
     public function getValue(): object
     {
         $body = [];

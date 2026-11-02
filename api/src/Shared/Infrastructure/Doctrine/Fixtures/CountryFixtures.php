@@ -15,6 +15,11 @@ use Movioza\Shared\Domain\ValueObject\CountryName;
 
 final class CountryFixtures extends Fixture implements FixtureGroupInterface
 {
+    /**
+     * Rows contain country ID, display name, and stored country code.
+     *
+     * @var list<array{int, string, string}>
+     */
     private const array COUNTRIES = [
         [1, 'США', 'US'],
         [2, 'Великобритания', 'GB'],

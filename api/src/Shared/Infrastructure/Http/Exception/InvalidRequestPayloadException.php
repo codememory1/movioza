@@ -24,6 +24,9 @@ final class InvalidRequestPayloadException extends HttpException
         return new self('invalid_json', 'The request body must contain valid JSON.', previous: $previous);
     }
 
+    /**
+     * @param list<string> $fields Payload field names reported as missing.
+     */
     public static function missingRequiredFields(array $fields, ?Throwable $previous = null): self
     {
         return new self('missing_required_fields', 'Required fields are missing.', [

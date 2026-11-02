@@ -11,6 +11,11 @@ final class DataDocument implements DocumentInterface
     /** @var array<string, mixed> */
     private array $body;
 
+    /**
+     * Wraps the resource payload under data and appends uniquely named document members.
+     *
+     * @throws LogicException When a member name is repeated or conflicts with data.
+     */
     public function __construct(mixed $data, DocumentMemberInterface ...$members)
     {
         $this->body = [

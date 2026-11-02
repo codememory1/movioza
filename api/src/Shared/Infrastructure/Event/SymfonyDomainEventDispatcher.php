@@ -15,6 +15,9 @@ readonly class SymfonyDomainEventDispatcher implements DomainEventDispatcherInte
     ) {
     }
 
+    /**
+     * Dispatches the event synchronously to in-process Symfony listeners.
+     */
     public function dispatch(DomainEventInterface $event): void
     {
         $this->eventDispatcher->dispatch($event);

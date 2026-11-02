@@ -12,7 +12,7 @@ use Movioza\Shared\Domain\Entity\Country;
 interface CountryRepositoryInterface
 {
     /**
-     * Persists a country.
+     * Registers the entity for persistence within the caller-managed transaction boundary.
      */
     public function save(Country $country): void;
 }

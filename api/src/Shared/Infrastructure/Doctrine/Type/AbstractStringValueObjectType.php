@@ -11,7 +11,11 @@ use Movioza\Shared\Domain\ValueObject\ValueObjectInterface;
 
 abstract class AbstractStringValueObjectType extends Type
 {
-    /** @return class-string<ValueObjectInterface> */
+    /**
+     * Returns a value object class accepting a single string and exposing a string value.
+     *
+     * @return class-string<ValueObjectInterface>
+     */
     abstract protected function getValueObjectClass(): string;
 
     public function getSQLDeclaration(array $column, AbstractPlatform $platform): string

@@ -27,6 +27,7 @@ final readonly class ApiExceptionEventListener
 
         $exception = $event->getThrowable();
 
+        // Only project HTTP exceptions are rendered here; other failures remain with the kernel pipeline.
         if (!$exception instanceof HttpException) {
             return;
         }
@@ -40,6 +41,7 @@ final readonly class ApiExceptionEventListener
             'instance' => sprintf('urn:uuid:%s', $this->requestIDResolver->resolve())
         ];
 
+        // The document is already JSON-encoded; json=true prevents encoding it as a JSON string.
         $event->setResponse(new JsonResponse($body, $exception->getStatusCode(), [
             ...$exception->getHeaders(),
             'Content-Type' => 'application/problem+json',

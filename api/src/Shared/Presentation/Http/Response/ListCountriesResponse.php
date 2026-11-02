@@ -16,6 +16,13 @@ final readonly class ListCountriesResponse
     ) {
     }
 
+    /**
+     * @return list<array{
+     *     id: int,
+     *     name: string,
+     *     code: string
+     * }>
+     */
     public function toArray(): array
     {
         return array_map(static fn (CountryView $country): array => [

@@ -17,6 +17,9 @@ readonly class ProcessAttributesEventListener
     ) {
     }
 
+    /**
+     * Executes registered handlers for the project-specific controller attributes.
+     */
     public function onKernelController(ControllerEvent $event): void
     {
         foreach ($this->getAttributes($event) as $attribute) {

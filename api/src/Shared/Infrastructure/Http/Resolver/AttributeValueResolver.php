@@ -22,6 +22,9 @@ readonly class AttributeValueResolver implements ValueResolverInterface
     }
 
     /**
+     * Yields values produced by supported argument-attribute handlers.
+     * Yields nothing when the argument has no supported attributes.
+     *
      * @return Generator<int, mixed>
      */
     public function resolve(Request $request, ArgumentMetadata $argument): iterable

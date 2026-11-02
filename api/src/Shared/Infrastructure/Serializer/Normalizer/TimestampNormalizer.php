@@ -10,6 +10,11 @@ use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 class TimestampNormalizer implements NormalizerInterface
 {
+    /**
+     * Normalizes a date-time value to a Unix timestamp in seconds.
+     *
+     * @param DateTimeInterface $data
+     */
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|ArrayObject|null
     {
         return $data->getTimestamp();

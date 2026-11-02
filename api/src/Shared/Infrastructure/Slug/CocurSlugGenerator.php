@@ -13,6 +13,9 @@ readonly class CocurSlugGenerator implements SlugGeneratorInterface
 {
     private SlugifyInterface $slugify;
 
+    /**
+     * @param array<string, mixed> $options Options forwarded to Slugify.
+     */
     public function __construct(array $options = [], ?RuleProviderInterface $provider = null)
     {
         $this->slugify = new Slugify($options, $provider);
