@@ -14,7 +14,7 @@ final class Version20261026155716 extends AbstractMigration
 {
     public function getDescription(): string
     {
-        return '';
+        return 'Add the genres table and the catalog genre ID sequence.';
     }
 
     public function up(Schema $schema): void
