@@ -16,6 +16,11 @@ use Movioza\Shared\Domain\ValueObject\Slug;
 
 final class PersonFixtures extends Fixture implements FixtureGroupInterface
 {
+    /**
+     * Rows contain person ID, display name, slug, biography, gender, and YYYY-MM-DD birth date.
+     *
+     * @var list<array{int, string, string, string, PersonGender, string}>
+     */
     private const array PERSONS = [
         [
             1,

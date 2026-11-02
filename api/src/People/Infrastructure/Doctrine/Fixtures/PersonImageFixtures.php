@@ -16,6 +16,11 @@ use Movioza\People\Domain\ValueObject\ImageID;
 
 final class PersonImageFixtures extends Fixture implements FixtureGroupInterface, DependentFixtureInterface
 {
+    /**
+     * Rows contain person slug, Assets image ID, and assignment type. Demo images are reused.
+     *
+     * @var list<array{string, string, PersonImageType}>
+     */
     private const array PERSON_IMAGES = [
         ['leonardo-dicaprio', '01a17423-ac1b-715e-b3cf-555d3cdfb287', PersonImageType::PHOTO],
         ['joseph-gordon-levitt', '01a17423-ac1b-715e-b3cf-555d3cdfb287', PersonImageType::PHOTO],
