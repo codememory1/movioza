@@ -4,10 +4,10 @@ declare(strict_types = 1);
 
 namespace Movioza\MediaProcessing\Infrastructure\Tracker;
 
-use LogicException;
+use Movioza\MediaProcessing\Application\Exception\TrackerParsingFailedException;
 use Movioza\MediaProcessing\Application\Tracker\TrackerParserInterface;
 use Movioza\MediaProcessing\Application\Tracker\TrackerParserRegistryInterface;
-use Movioza\MediaProcessing\Domain\Enum\TorrentTracker;
+use Movioza\MediaProcessing\Domain\ValueObject\PageUrl;
 
 final class TrackerParserRegistry implements TrackerParserRegistryInterface
 {
@@ -26,9 +26,14 @@ final class TrackerParserRegistry implements TrackerParserRegistryInterface
         $this->parsers = is_array($parsers) ? $parsers : iterator_to_array($parsers);
     }
 
-    public function get(TorrentTracker $tracker): TrackerParserInterface
+    public function get(PageUrl $pageUrl): TrackerParserInterface
     {
-        return $this->parsers[$tracker->value]
-            ?? throw new LogicException(sprintf('Parser for tracker "%s" is not registered.', $tracker->value));
+        foreach ($this->parsers as $parser) {
+            if ($parser->supports($pageUrl)) {
+                return $parser;
+            }
+        }
+
+        throw new TrackerParsingFailedException('Tracker page contains no supported download source.');
     }
 }

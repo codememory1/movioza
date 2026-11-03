@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace Movioza\MediaProcessing\Infrastructure\Tracker;
 
+use Movioza\MediaProcessing\Application\Exception\TrackerParsingFailedException;
 use Movioza\MediaProcessing\Application\Tracker\ParsedDownloadSource;
 use Movioza\MediaProcessing\Application\Tracker\TrackerParserInterface;
 use Movioza\MediaProcessing\Domain\Enum\DownloadSourceType;
@@ -20,10 +21,31 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 final readonly class RutorParser implements TrackerParserInterface
 {
+    private const array SCHEMES = ['http', 'https'];
+
+    /**
+     * @param list<string> $supportedHosts
+     */
     public function __construct(
         private HttpClientInterface $client,
-        private TorrentFileStorageInterface $torrentFileStorage
+        private TorrentFileStorageInterface $torrentFileStorage,
+        private array $supportedHosts
     ) {
+    }
+
+    public function supports(PageUrl $pageUrl): bool
+    {
+        $parts = parse_url($pageUrl->getValue());
+
+        if ($parts === false) {
+            return false;
+        }
+
+        $scheme = strtolower($parts['scheme'] ?? '');
+        $host = strtolower(rtrim($parts['host'] ?? '', '.'));
+
+        return in_array($scheme, self::SCHEMES, true)
+            && in_array($host, $this->supportedHosts, true);
     }
 
     /**
@@ -49,7 +71,7 @@ final readonly class RutorParser implements TrackerParserInterface
             return new ParsedDownloadSource(DownloadSourceType::TORRENT, $torrentFile);
         }
 
-        throw new RuntimeException('Tracker page contains no supported download source.');
+        throw new TrackerParsingFailedException('Tracker page contains no supported download source.');
     }
 
     /**
