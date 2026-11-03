@@ -4,15 +4,15 @@ declare(strict_types = 1);
 
 namespace Movioza\MediaProcessing\Application\Tracker;
 
-use LogicException;
-use Movioza\MediaProcessing\Domain\Enum\TorrentTracker;
+use Movioza\MediaProcessing\Application\Exception\TrackerParsingFailedException;
+use Movioza\MediaProcessing\Domain\ValueObject\PageUrl;
 
 interface TrackerParserRegistryInterface
 {
     /**
-     * Returns the parser registered for the tracker.
+     * Returns the first registered parser that supports the given page URL.
      *
-     * @throws LogicException When the tracker has no registered parser.
+     * @throws TrackerParsingFailedException When no registered parser supports the given page URL.
      */
-    public function get(TorrentTracker $tracker): TrackerParserInterface;
+    public function get(PageUrl $pageUrl): TrackerParserInterface;
 }

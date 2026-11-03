@@ -51,18 +51,29 @@ class MediaSource extends AggregateRoot
         $this->status = MediaSourceStatus::PENDING;
     }
 
-    /**
-     * Applies a validated transition and records the supplied modification time.
-     *
-     * @throws MediaSourceTransitionNotAllowedException
-     */
-    public function applyTransition(
-        MediaSourceTransition $transition,
+    public function applyStartResolving(DateTimeImmutable $changedAt, MediaSourceStateMachineInterface $stateMachine): void
+    {
+        $this->applyTransition(MediaSourceTransition::START_RESOLVING, $changedAt, $stateMachine);
+
+        $this->resolvingAt = $changedAt;
+    }
+
+    public function applyFail(
+        string $message,
         DateTimeImmutable $changedAt,
         MediaSourceStateMachineInterface $stateMachine
     ): void {
-        $this->status = $stateMachine->apply($this, $transition);
-        $this->updatedAt = $changedAt;
+        $this->applyTransition(MediaSourceTransition::FAIL, $changedAt, $stateMachine);
+
+        $this->errorMessage = $message;
+        $this->failedAt = $changedAt;
+    }
+
+    public function applyResolve(DateTimeImmutable $changedAt, MediaSourceStateMachineInterface $stateMachine): void
+    {
+        $this->applyTransition(MediaSourceTransition::RESOLVE, $changedAt, $stateMachine);
+
+        $this->resolvedAt = $changedAt;
     }
 
     /**
@@ -174,5 +185,19 @@ class MediaSource extends AggregateRoot
     public function getUpdatedAt(): ?DateTimeImmutable
     {
         return $this->updatedAt;
+    }
+
+    /**
+     * Applies a validated transition and records the supplied modification time.
+     *
+     * @throws MediaSourceTransitionNotAllowedException
+     */
+    private function applyTransition(
+        MediaSourceTransition $transition,
+        DateTimeImmutable $changedAt,
+        MediaSourceStateMachineInterface $stateMachine
+    ): void {
+        $this->status = $stateMachine->apply($this, $transition);
+        $this->updatedAt = $changedAt;
     }
 }

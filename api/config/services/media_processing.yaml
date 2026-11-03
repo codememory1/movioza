@@ -9,11 +9,25 @@ services:
 
     Movioza\MediaProcessing\Domain\Repository\MediaSourceRepositoryInterface: '@movioza.media_processing.media_source_repository.doctrine'
 
+    # Readers
+    movioza.media_processing.media_source_reader.doctrine:
+        class: Movioza\MediaProcessing\Infrastructure\Doctrine\Reader\DoctrineMediaSourceReader
+        arguments:
+            $connection: '@doctrine.dbal.default_connection'
+
+    Movioza\MediaProcessing\Application\Reader\MediaSourceReaderInterface: '@movioza.media_processing.media_source_reader.doctrine'
+
     # Controllers
     Movioza\MediaProcessing\Presentation\Http\Controller\:
         resource: '%kernel.project_dir%/src/MediaProcessing/Presentation/Http/Controller/**/*Controller.php'
         tags:
             - { name: controller.service_arguments }
+
+    # Console Commands
+    Movioza\MediaProcessing\Presentation\Console\Command\:
+        resource: '%kernel.project_dir%/src/MediaProcessing/Presentation/Console/Command/*Command.php'
+        autoconfigure: true
+        autowire: true
 
     # Command Handlers
     Movioza\MediaProcessing\Application\Command\:
@@ -36,16 +50,16 @@ services:
 
     # Tracker Parsers
     Movioza\MediaProcessing\Infrastructure\Tracker\RutorParser:
+        arguments:
+            $supportedHosts: '%env(csv:RUTOR_SUPPORTED_HOSTS)%'
         tags:
-            - { name: movioza.tracker_parser, tracker: rutor }
+            - { name: movioza.tracker_parser }
 
     # Each tracker tag must match a TorrentTracker value; the registry is indexed by that value.
     movioza.media_processing.tracker_parser_registry:
         class: Movioza\MediaProcessing\Infrastructure\Tracker\TrackerParserRegistry
         arguments:
-            $parsers: !tagged_iterator
-                tag: movioza.tracker_parser
-                index_by: tracker
+            $parsers: !tagged_iterator movioza.tracker_parser
 
     Movioza\MediaProcessing\Application\Tracker\TrackerParserRegistryInterface: '@movioza.media_processing.tracker_parser_registry'
 
@@ -73,6 +87,14 @@ services:
             $sequenceName: 'media_processing_media_source_id_seq'
 
     Movioza\MediaProcessing\Application\Identity\MediaSourceIDGeneratorInterface: '@movioza.media_processing.media_source_id_generator.postgres'
+
+    movioza.media_processing.download_source_id_generator.postgres:
+        class: Movioza\MediaProcessing\Infrastructure\Identity\PostgresDownloadSourceIDGenerator
+        arguments:
+            $connection: '@doctrine.dbal.default_connection'
+            $sequenceName: 'media_processing_download_source_id_seq'
+
+    Movioza\MediaProcessing\Application\Identity\DownloadSourceIDGeneratorInterface: '@movioza.media_processing.download_source_id_generator.postgres'
 
     # Media
     movioza.media_processing.media_existence_checker.catalog:
