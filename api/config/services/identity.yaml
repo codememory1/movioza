@@ -1,0 +1,21 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    # Repositories
+    movioza.identity.guest_repository.doctrine:
+        class: Movioza\Identity\Infrastructure\Doctrine\Repository\DoctrineGuestRepository
+
+    Movioza\Identity\Domain\Repository\GuestRepositoryInterface: '@movioza.identity.guest_repository.doctrine'
+
+    movioza.identity.guest_session_repository.doctrine:
+        class: Movioza\Identity\Infrastructure\Doctrine\Repository\DoctrineGuestSessionRepository
+
+    Movioza\Identity\Domain\Repository\GuestSessionRepositoryInterface: '@movioza.identity.guest_session_repository.doctrine'
+
+    # Generator
+    movioza.identity.guest_session_token_generator.random:
+        class: Movioza\Identity\Infrastructure\Security\RandomGuestSessionTokenGeneratorInterface
+
+    Movioza\Identity\Application\Security\GuestSessionTokenGeneratorInterface: '@movioza.identity.guest_session_token_generator.random'

@@ -4,6 +4,8 @@ imports:
     - { resource: './services/people.yaml' }
     - { resource: './services/catalog.yaml' }
     - { resource: './services/media_processing.yaml' }
+    - { resource: './services/identity.yaml' }
+    - { resource: './services/discussion.yaml' }
     - { resource: './services/fixtures.yaml' }
 
 parameters:
