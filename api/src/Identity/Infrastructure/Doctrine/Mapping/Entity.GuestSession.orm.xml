@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="Movioza\Identity\Domain\Entity\GuestSession" table="guest_sessions">
+        <id name="id" column="id" type="identity_guest_session_id" length="36">
+            <generator strategy="NONE" />
+        </id>
+
+        <field name="guestId" column="guest_id" type="identity_guest_id" length="36" />
+        <field name="token" column="token" type="identity_guest_session_token" length="64" unique="true" />
+        <field name="ip" column="ip" type="identity_ip" />
+        <field name="userAgent" column="user_agent" type="identity_user_agent" length="2048" />
+        <field name="locale" column="locale" type="identity_locale" length="64" nullable="true" />
+        <field name="timezone" column="timezone" type="identity_timezone" length="128" nullable="true" />
+        <field name="expiresAt" column="expires_at" type="datetime_immutable" />
+        <field name="createdAt" column="created_at" type="datetime_immutable" />
+        <field name="updatedAt" column="updated_at" type="datetime_immutable" nullable="true" />
+    </entity>
+</doctrine-mapping>
