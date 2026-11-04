@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="Movioza\Discussion\Domain\Entity\Comment" table="comments">
+        <id name="id" column="id" type="discussion_comment_id">
+            <generator strategy="NONE" />
+        </id>
+
+        <field name="mediaId" column="media_id" type="discussion_media_id" />
+        <field name="guestId" column="guest_id" type="discussion_guest_id" length="36" />
+        <field name="parentId" column="parent_id" type="discussion_comment_id" nullable="true" />
+        <field name="authorName" column="author_name" type="discussion_author_name" length="100" />
+        <field name="comment" column="comment" type="discussion_comment_text" length="1024" />
+        <field name="createdAt" column="created_at" type="datetime_immutable" />
+    </entity>
+</doctrine-mapping>

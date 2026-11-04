@@ -50,6 +50,13 @@ doctrine:
             identity_timezone: Movioza\Identity\Infrastructure\Doctrine\Type\TimezoneType
             identity_user_agent: Movioza\Identity\Infrastructure\Doctrine\Type\UserAgentType
 
+            discussion_comment_id: Movioza\Discussion\Infrastructure\Doctrine\Type\CommentIDType
+            discussion_comment_vote_id: Movioza\Discussion\Infrastructure\Doctrine\Type\CommentVoteIDType
+            discussion_media_id: Movioza\Discussion\Infrastructure\Doctrine\Type\MediaIDType
+            discussion_guest_id: Movioza\Discussion\Infrastructure\Doctrine\Type\GuestIDType
+            discussion_author_name: Movioza\Discussion\Infrastructure\Doctrine\Type\AuthorNameType
+            discussion_comment_text: Movioza\Discussion\Infrastructure\Doctrine\Type\CommentTextType
+
         # ID sequences are created explicitly by migrations and excluded from automatic schema discovery.
         schema_filter: '~^(?!.*_seq$)~'
 
@@ -96,6 +103,12 @@ doctrine:
                 dir: '%kernel.project_dir%/src/Identity/Infrastructure/Doctrine/Mapping'
                 prefix: Movioza\Identity\Domain
                 alias: Identity
+            Discussion:
+                type: xml
+                is_bundle: false
+                dir: '%kernel.project_dir%/src/Discussion/Infrastructure/Doctrine/Mapping'
+                prefix: Movioza\Discussion\Domain
+                alias: Discussion
 
 when@test:
     doctrine:

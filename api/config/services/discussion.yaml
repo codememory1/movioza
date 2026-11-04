@@ -1,0 +1,15 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    # Repositories
+    movioza.discussion.comment_repository.doctrine:
+        class: Movioza\Discussion\Infrastructure\Doctrine\Repository\DoctrineCommentRepository
+
+    Movioza\Discussion\Domain\Repository\CommentRepositoryInterface: '@movioza.discussion.comment_repository.doctrine'
+
+    movioza.discussion.comment_vote_repository.doctrine:
+        class: Movioza\Discussion\Infrastructure\Doctrine\Repository\DoctrineCommentVoteRepository
+
+    Movioza\Discussion\Domain\Repository\CommentVoteRepositoryInterface: '@movioza.discussion.comment_vote_repository.doctrine'
