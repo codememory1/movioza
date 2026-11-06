@@ -58,6 +58,11 @@ services:
         tags:
             - { name: kernel.event_listener, event: kernel.view, method: onKernelView }
 
+    Movioza\Shared\Infrastructure\Http\EventListener\KernelResponse\:
+        resource: '../../src/Shared/Infrastructure/Http/EventListener/KernelResponse/*EventListener.php'
+        tags:
+            - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse }
+
     # Run the custom attribute resolver early; it must yield nothing for unsupported arguments.
     Movioza\Shared\Infrastructure\Http\Resolver\AttributeValueResolver:
         tags:
