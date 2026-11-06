@@ -1,0 +1,26 @@
+info:
+  name: Create
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: "{{api_host}}/guest-sessions"
+  headers:
+    - name: User-Agent
+      value: "{{user_agent}}"
+  body:
+    type: json
+    data: |-
+      {
+        "timezone": null,
+        "locale": null
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false
