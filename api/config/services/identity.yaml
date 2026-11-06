@@ -14,8 +14,55 @@ services:
 
     Movioza\Identity\Domain\Repository\GuestSessionRepositoryInterface: '@movioza.identity.guest_session_repository.doctrine'
 
+    # Readers
+    movioza.identity.guest_session_reader.doctrine:
+        class: Movioza\Identity\Infrastructure\Doctrine\Reader\DoctrineGuestSessionReader
+        arguments:
+            $connection: '@doctrine.dbal.default_connection'
+
+    Movioza\Identity\Application\Reader\GuestSessionReaderInterface: '@movioza.identity.guest_session_reader.doctrine'
+
+    # Controllers
+    Movioza\Identity\Presentation\Http\Controller\:
+        resource: '%kernel.project_dir%/src/Identity/Presentation/Http/Controller/**/*Controller.php'
+        tags:
+            - { name: controller.service_arguments }
+
+    # Command Handlers
+    Movioza\Identity\Application\Command\:
+        resource: '%kernel.project_dir%/src/Identity/Application/Command/**/*Handler.php'
+
     # Generator
     movioza.identity.guest_session_token_generator.random:
-        class: Movioza\Identity\Infrastructure\Security\RandomGuestSessionTokenGeneratorInterface
+        class: Movioza\Identity\Infrastructure\Security\RandomGuestSessionTokenGenerator
 
     Movioza\Identity\Application\Security\GuestSessionTokenGeneratorInterface: '@movioza.identity.guest_session_token_generator.random'
+
+    # Identity Generator
+    movioza.identity.guest_session_id_generator.symfony:
+        class: Movioza\Identity\Infrastructure\Identity\SymfonyGuestSessionIDGenerator
+
+    Movioza\Identity\Application\Identity\GuestSessionIDGeneratorInterface: '@movioza.identity.guest_session_id_generator.symfony'
+
+    movioza.identity.guest_id_generator.symfony:
+        class: Movioza\Identity\Infrastructure\Identity\SymfonyGuestIDGenerator
+
+    Movioza\Identity\Application\Identity\GuestIDGeneratorInterface: '@movioza.identity.guest_id_generator.symfony'
+
+    # Authenticator
+    Movioza\Identity\Application\Security\GuestSessionAuthenticator: ~
+
+    # Cookie
+    Movioza\Identity\Presentation\Http\Cookie\GuestSessionCookie:
+        arguments:
+            $secure: '%env(bool:IDENTITY_GUEST_SESSION_COOKIE_SECURE)%'
+
+    # Presentation Resolvers
+    Movioza\Identity\Presentation\Http\Resolver\ClientIPAddressResolver: ~
+
+    Movioza\Identity\Presentation\Http\Resolver\UserAgentResolver: ~
+
+    # Policy
+    Movioza\Identity\Application\Policy\GuestSessionLifetimePolicy:
+        arguments:
+            $ttlSeconds: '%env(IDENTITY_GUEST_SESSION_TTL)%'
