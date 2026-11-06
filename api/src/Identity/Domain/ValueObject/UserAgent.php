@@ -14,7 +14,7 @@ final readonly class UserAgent implements ValueObjectInterface
     public function __construct(
         private string $userAgent
     ) {
-        if (trim($this->userAgent) !== '') {
+        if (trim($this->userAgent) === '') {
             throw new InvalidArgumentException('User-agent must be a valid string.');
         }
 

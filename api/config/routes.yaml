@@ -18,3 +18,10 @@ catalog_controllers:
         namespace: Movioza\Catalog\Presentation\Http\Controller
     type: attribute
     host: '%movioza.api_host%'
+
+identity_controllers:
+    resource:
+        path: '../src/Identity/Presentation/Http/Controller'
+        namespace: Movioza\Identity\Presentation\Http\Controller
+    type: attribute
+    host: '%movioza.api_host%'

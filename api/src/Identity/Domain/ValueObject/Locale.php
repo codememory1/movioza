@@ -9,7 +9,7 @@ use Movioza\Shared\Domain\ValueObject\ValueObjectInterface;
 
 final class Locale implements ValueObjectInterface
 {
-    private const string PATTERN = '/\A[a-z]{2,3}(?:-[a-z]{4})?(?:-(?:[a-z]{2}|[0-9]{3}))?\z/';
+    public const string PATTERN = '/\A[a-z]{2,3}(?:-[a-z]{4})?(?:-(?:[a-z]{2}|[0-9]{3}))?\z/i';
 
     private readonly string $locale;
 
