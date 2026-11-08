@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace Movioza\Shared\Domain\ValueObject;
 
-use InvalidArgumentException;
+use Movioza\Shared\Domain\Exception\InvalidValueObjectException;
 
 final readonly class Slug implements ValueObjectInterface
 {
@@ -12,15 +12,15 @@ final readonly class Slug implements ValueObjectInterface
         private string $slug,
     ) {
         if (trim($this->slug) === '') {
-            throw new InvalidArgumentException('Slug cannot be empty');
+            throw new InvalidValueObjectException('Slug cannot be empty');
         }
 
         if (strlen($slug) > 280) {
-            throw new InvalidArgumentException('Media slug must not exceed 280 characters.');
+            throw new InvalidValueObjectException('Media slug must not exceed 280 characters.');
         }
 
         if (preg_match('/\A[a-z0-9]+(?:-[a-z0-9]+)*\z/', $slug) !== 1) {
-            throw new InvalidArgumentException('Media slug must contain lowercase Latin letters, digits and single hyphens between parts.');
+            throw new InvalidValueObjectException('Media slug must contain lowercase Latin letters, digits and single hyphens between parts.');
         }
     }
 

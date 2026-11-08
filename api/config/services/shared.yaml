@@ -7,6 +7,71 @@ services:
             $appProtocol: '%env(APP_PROTOCOL)%'
             $apiHost: '%env(APP_API_HOST)%'
 
+    # API Error Definitions
+    Movioza\Shared\Infrastructure\Http\Exception\RateLimitExceededException:
+        resource_tags:
+            - name: movioza.api_error.definition
+              status: 429
+              code: rate_limit_exceeded
+              message: 'Too many requests. Please try again later.'
+              log_level: notice
+
+    Movioza\Shared\Infrastructure\Http\Exception\RequestValidationException:
+        resource_tags:
+            - name: movioza.api_error.definition
+              status: 422
+              code: request_validation_failed
+              message: 'Request validation failed.'
+              log_level: notice
+
+    Movioza\Shared\Infrastructure\Http\Exception\InvalidJsonPayloadException:
+        resource_tags:
+            - name: movioza.api_error.definition
+              status: 400
+              code: invalid_json
+              message: 'The request body must contain valid JSON.'
+              log_level: notice
+
+    Movioza\Shared\Infrastructure\Http\Exception\MissingRequiredFieldsException:
+        resource_tags:
+            - name: movioza.api_error.definition
+              status: 400
+              code: missing_required_fields
+              message: 'Required fields are missing.'
+              log_level: notice
+
+    Movioza\Shared\Infrastructure\Http\Exception\UnknownFieldsException:
+        resource_tags:
+            - name: movioza.api_error.definition
+              status: 400
+              code: unknown_fields
+              message: 'The request body contains unknown fields.'
+              log_level: notice
+
+    Movioza\Shared\Infrastructure\Http\Exception\InvalidFieldTypeException:
+        resource_tags:
+            - name: movioza.api_error.definition
+              status: 400
+              code: invalid_field_type
+              message: 'A request field has an invalid type.'
+              log_level: notice
+
+    Movioza\Shared\Infrastructure\Http\Exception\InvalidFieldValueException:
+        resource_tags:
+            - name: movioza.api_error.definition
+              status: 400
+              code: invalid_field_value
+              message: 'A request field contains an invalid value.'
+              log_level: notice
+
+    Movioza\Shared\Infrastructure\Http\Exception\InvalidFieldException:
+        resource_tags:
+            - name: movioza.api_error.definition
+              status: 400
+              code: invalid_field
+              message: 'A request field could not be processed.'
+              log_level: notice
+
     # Repositories
     movioza.shared.country_repository.doctrine:
         class: Movioza\Shared\Infrastructure\Doctrine\Repository\DoctrineCountryRepository
@@ -51,7 +116,15 @@ services:
     Movioza\Shared\Infrastructure\Http\EventListener\KernelException\:
         resource: '../../src/Shared/Infrastructure/Http/EventListener/KernelException/*EventListener.php'
         tags:
-            - { name: kernel.event_listener, event: kernel.exception, method: onKernelException }
+            - name: kernel.event_listener
+              event: kernel.exception
+              method: captureException
+              priority: 64
+
+            - name: kernel.event_listener
+              event: kernel.exception
+              method: onKernelException
+              priority: -64
 
     Movioza\Shared\Infrastructure\Http\EventListener\KernelView\:
         resource: '../../src/Shared/Infrastructure/Http/EventListener/KernelView/*EventListener.php'

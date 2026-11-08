@@ -19,8 +19,10 @@ use Movioza\Identity\Presentation\Http\Request\CreateGuestSessionRequest;
 use Movioza\Identity\Presentation\Http\Resolver\ClientIPAddressResolver;
 use Movioza\Identity\Presentation\Http\Resolver\UserAgentResolver;
 use Movioza\Identity\Presentation\Http\Response\CreateGuestSessionResponse;
+use Movioza\Shared\Domain\Exception\InvalidValueObjectException;
 use Movioza\Shared\Infrastructure\Http\Attribute\Controller\RateLimit;
 use Movioza\Shared\Infrastructure\Http\Attribute\ControllerArgument\MapRequestPayload;
+use Movioza\Shared\Infrastructure\Http\Exception\InvalidRequestPayloadException;
 use Movioza\Shared\Infrastructure\Http\Response\ApiResponse;
 use Movioza\Shared\Infrastructure\Http\Response\ApiResponseInterface;
 use Movioza\Shared\Infrastructure\Http\Response\DataDocument;
@@ -58,15 +60,13 @@ final readonly class CreateGuestSessionController
         }
 
         $guestSessionID = $this->guestSessionIDGenerator->next();
-        $timezone = $payload->timezone === null ? null : new Timezone($payload->timezone);
-        $locale = $payload->locale === null ? null : new Locale($payload->locale);
 
         ($this->handler)(new CreateGuestSessionCommand(
             new GuestSessionID($guestSessionID),
             $this->clientIPAddressResolver->resolve($request),
             $this->userAgentResolver->resolve($request),
-            $timezone,
-            $locale
+            $this->resolveTimezone($payload),
+            $this->resolveLocale($payload)
         ));
 
         $session = $this->guestSessionReader->findByID($guestSessionID);
@@ -78,6 +78,24 @@ final readonly class CreateGuestSessionController
         return $this->respond($session, Response::HTTP_CREATED, [
             'Set-Cookie' => (string) $cookie
         ]);
+    }
+
+    private function resolveTimezone(CreateGuestSessionRequest $payload): ?Timezone
+    {
+        try {
+            return $payload->timezone === null ? null : new Timezone($payload->timezone);
+        } catch (InvalidValueObjectException $e) {
+            throw InvalidRequestPayloadException::invalidFieldValue('timezone', $e);
+        }
+    }
+
+    private function resolveLocale(CreateGuestSessionRequest $payload): ?Locale
+    {
+        try {
+            return $payload->locale === null ? null : new Locale($payload->locale);
+        } catch (InvalidValueObjectException $e) {
+            throw InvalidRequestPayloadException::invalidFieldValue('locale', $e);
+        }
     }
 
     private function respond(GuestSessionView $session, int $status, array $headers = []): ApiResponseInterface

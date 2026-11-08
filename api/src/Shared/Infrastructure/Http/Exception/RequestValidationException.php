@@ -4,44 +4,42 @@ declare(strict_types = 1);
 
 namespace Movioza\Shared\Infrastructure\Http\Exception;
 
+use Movioza\Shared\Infrastructure\Http\Error\ErrorExtensionsProviderInterface;
+use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
-use Throwable;
 
-final class RequestValidationException extends HttpException
+final class RequestValidationException extends UnprocessableEntityHttpException implements ErrorExtensionsProviderInterface
 {
-    public function __construct(
-        mixed $detail = null,
-        array $headers = [],
-        ?Throwable $previous = null,
-        int $code = 0
+    /**
+     * @param list<array{field: string, message: string}> $errors
+     */
+    private function __construct(
+        private readonly array $errors
     ) {
-        parent::__construct(
-            422,
-            'validation_failed',
-            'Request validation failed.',
-            $detail,
-            $headers,
-            $previous,
-            $code
-        );
+        parent::__construct('Request payload validation failed.');
     }
 
-    /**
-     * Builds a 422 validation problem with one detail entry per violation.
-     * Each entry contains path, code, and message; paths are taken directly from the validator.
-     */
     public static function fromViolations(ConstraintViolationListInterface $violations): self
     {
         $errors = [];
 
         foreach ($violations as $violation) {
             $errors[] = [
-                'path' => $violation->getPropertyPath(),
-                'code' => 'invalid_field_value',
-                'message' => $violation->getMessage(),
+                'field' => $violation->getPropertyPath(),
+                'message' => (string) $violation->getMessage(),
             ];
         }
 
         return new self($errors);
+    }
+
+    /**
+     * @return array{errors: list<array{field: string, message: string}>}
+     */
+    public function getErrorExtensions(): array
+    {
+        return [
+            'errors' => $this->errors,
+        ];
     }
 }

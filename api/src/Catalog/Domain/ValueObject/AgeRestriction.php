@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace Movioza\Catalog\Domain\ValueObject;
 
-use InvalidArgumentException;
+use Movioza\Shared\Domain\Exception\InvalidValueObjectException;
 use Movioza\Shared\Domain\ValueObject\ValueObjectInterface;
 
 final readonly class AgeRestriction implements ValueObjectInterface
@@ -13,7 +13,7 @@ final readonly class AgeRestriction implements ValueObjectInterface
         private int $ageRestriction
     ) {
         if ($ageRestriction < 0) {
-            throw new InvalidArgumentException('Age restriction must not be negative.');
+            throw new InvalidValueObjectException('Age restriction must not be negative.');
         }
     }
 

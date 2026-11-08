@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace Movioza\Catalog\Domain\ValueObject;
 
-use InvalidArgumentException;
+use Movioza\Shared\Domain\Exception\InvalidValueObjectException;
 use Movioza\Shared\Domain\ValueObject\ValueObjectInterface;
 
 final readonly class GenreShortDescription implements ValueObjectInterface
@@ -13,11 +13,11 @@ final readonly class GenreShortDescription implements ValueObjectInterface
         private string $shortDescription
     ) {
         if (trim($this->shortDescription) === '') {
-            throw new InvalidArgumentException('Genre short description cannot be empty.');
+            throw new InvalidValueObjectException('Genre short description cannot be empty.');
         }
 
         if (mb_strlen($this->shortDescription) > 80) {
-            throw new InvalidArgumentException('Genre short description cannot be longer than 80 characters.');
+            throw new InvalidValueObjectException('Genre short description cannot be longer than 80 characters.');
         }
     }
 

@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace Movioza\Catalog\Domain\ValueObject;
 
-use InvalidArgumentException;
+use Movioza\Shared\Domain\Exception\InvalidValueObjectException;
 use Movioza\Shared\Domain\ValueObject\ValueObjectInterface;
 
 final readonly class GenreName implements ValueObjectInterface
@@ -13,11 +13,11 @@ final readonly class GenreName implements ValueObjectInterface
         private string $name
     ) {
         if (trim($this->name) === '') {
-            throw new InvalidArgumentException('Genre name cannot be empty.');
+            throw new InvalidValueObjectException('Genre name cannot be empty.');
         }
 
         if (mb_strlen($this->name) > 80) {
-            throw new InvalidArgumentException('Genre name cannot be longer than 80 characters.');
+            throw new InvalidValueObjectException('Genre name cannot be longer than 80 characters.');
         }
     }
 

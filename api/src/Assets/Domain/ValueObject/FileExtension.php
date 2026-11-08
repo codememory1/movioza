@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace Movioza\Assets\Domain\ValueObject;
 
-use InvalidArgumentException;
+use Movioza\Shared\Domain\Exception\InvalidValueObjectException;
 use Movioza\Shared\Domain\ValueObject\ValueObjectInterface;
 
 final readonly class FileExtension implements ValueObjectInterface
@@ -13,11 +13,11 @@ final readonly class FileExtension implements ValueObjectInterface
         private string $extension,
     ) {
         if (trim($this->extension) === '') {
-            throw new InvalidArgumentException('File extension cannot be empty.');
+            throw new InvalidValueObjectException('File extension cannot be empty.');
         }
 
         if (mb_strlen($this->extension) > 16) {
-            throw new InvalidArgumentException('File extension cannot be longer than 16 characters.');
+            throw new InvalidValueObjectException('File extension cannot be longer than 16 characters.');
         }
     }
 

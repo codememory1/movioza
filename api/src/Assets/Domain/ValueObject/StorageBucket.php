@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace Movioza\Assets\Domain\ValueObject;
 
-use InvalidArgumentException;
+use Movioza\Shared\Domain\Exception\InvalidValueObjectException;
 use Movioza\Shared\Domain\ValueObject\ValueObjectInterface;
 
 final readonly class StorageBucket implements ValueObjectInterface
@@ -13,11 +13,11 @@ final readonly class StorageBucket implements ValueObjectInterface
         private string $bucket
     ) {
         if (trim($this->bucket) === '') {
-            throw new InvalidArgumentException('Bucket name cannot be empty.');
+            throw new InvalidValueObjectException('Bucket name cannot be empty.');
         }
 
         if (mb_strlen($this->bucket) > 255) {
-            throw new InvalidArgumentException('Bucket name cannot be longer than 255 characters.');
+            throw new InvalidValueObjectException('Bucket name cannot be longer than 255 characters.');
         }
     }
 

@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace Movioza\Identity\Domain\ValueObject;
 
-use InvalidArgumentException;
+use Movioza\Shared\Domain\Exception\InvalidValueObjectException;
 use Movioza\Shared\Domain\ValueObject\ValueObjectInterface;
 
 final readonly class IPAddress implements ValueObjectInterface
@@ -13,7 +13,7 @@ final readonly class IPAddress implements ValueObjectInterface
         private string $ip
     ) {
         if (filter_var($this->ip, FILTER_VALIDATE_IP) === false) {
-            throw new InvalidArgumentException('IP address must be a valid IPv4 or IPv6 address.');
+            throw new InvalidValueObjectException('IP address must be a valid IPv4 or IPv6 address.');
         }
     }
 

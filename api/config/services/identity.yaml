@@ -3,6 +3,31 @@ services:
         autowire: true
         autoconfigure: true
 
+    # API Error Definitions
+    Movioza\Identity\Infrastructure\Http\Exception\UserAgentRequiredException:
+        resource_tags:
+            - name: movioza.api_error.definition
+              status: 400
+              code: user_agent_required
+              message: 'User-Agent header is required.'
+              log_level: notice
+
+    Movioza\Identity\Infrastructure\Http\Exception\ClientIPAddressUnavailableException:
+        resource_tags:
+            - name: movioza.api_error.definition
+              status: 500
+              code: client_ip_unavailable
+              message: 'Client IP address could not be determined.'
+              log_level: error
+
+    Movioza\Identity\Infrastructure\Http\Exception\UserAgentInvalidException:
+        resource_tags:
+            - name: movioza.api_error.definition
+              status: 400
+              code: user_agent_invalid
+              message: 'User-Agent header has an invalid value.'
+              log_level: notice
+
     # Repositories
     movioza.identity.guest_repository.doctrine:
         class: Movioza\Identity\Infrastructure\Doctrine\Repository\DoctrineGuestRepository

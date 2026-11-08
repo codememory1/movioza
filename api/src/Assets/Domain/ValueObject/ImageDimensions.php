@@ -4,8 +4,8 @@ declare(strict_types = 1);
 
 namespace Movioza\Assets\Domain\ValueObject;
 
-use InvalidArgumentException;
 use JsonException;
+use Movioza\Shared\Domain\Exception\InvalidValueObjectException;
 use Movioza\Shared\Domain\ValueObject\ValueObjectInterface;
 
 final readonly class ImageDimensions implements ValueObjectInterface
@@ -15,7 +15,7 @@ final readonly class ImageDimensions implements ValueObjectInterface
         private int $height,
     ) {
         if ($width <= 0 || $height <= 0) {
-            throw new InvalidArgumentException('Image dimensions must be positive.');
+            throw new InvalidValueObjectException('Image dimensions must be positive.');
         }
     }
 

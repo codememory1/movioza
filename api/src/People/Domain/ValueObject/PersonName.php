@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace Movioza\People\Domain\ValueObject;
 
-use InvalidArgumentException;
+use Movioza\Shared\Domain\Exception\InvalidValueObjectException;
 use Movioza\Shared\Domain\ValueObject\ValueObjectInterface;
 
 final class PersonName implements ValueObjectInterface
@@ -15,11 +15,11 @@ final class PersonName implements ValueObjectInterface
         private readonly string $name
     ) {
         if (trim($name) === '') {
-            throw new InvalidArgumentException('Person name cannot be empty.');
+            throw new InvalidValueObjectException('Person name cannot be empty.');
         }
 
         if (mb_strlen($name, 'UTF-8') > self::MAX_LENGTH) {
-            throw new InvalidArgumentException(sprintf('Person name cannot exceed %d characters.', self::MAX_LENGTH));
+            throw new InvalidValueObjectException(sprintf('Person name cannot exceed %d characters.', self::MAX_LENGTH));
         }
     }
 
