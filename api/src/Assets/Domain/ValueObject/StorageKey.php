@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace Movioza\Assets\Domain\ValueObject;
 
-use InvalidArgumentException;
+use Movioza\Shared\Domain\Exception\InvalidValueObjectException;
 use Movioza\Shared\Domain\ValueObject\ValueObjectInterface;
 
 final readonly class StorageKey implements ValueObjectInterface
@@ -13,11 +13,11 @@ final readonly class StorageKey implements ValueObjectInterface
         private string $key
     ) {
         if (trim($this->key) === '') {
-            throw new InvalidArgumentException('Storage key cannot be empty.');
+            throw new InvalidValueObjectException('Storage key cannot be empty.');
         }
 
         if (mb_strlen($this->key) > 1024) {
-            throw new InvalidArgumentException('Storage key cannot be longer than 1024 characters.');
+            throw new InvalidValueObjectException('Storage key cannot be longer than 1024 characters.');
         }
     }
 

@@ -5,7 +5,7 @@ declare(strict_types = 1);
 namespace Movioza\Shared\Domain\ValueObject;
 
 use Incenteev\EmojiPattern\EmojiPattern;
-use InvalidArgumentException;
+use Movioza\Shared\Domain\Exception\InvalidValueObjectException;
 
 final readonly class Emoji implements ValueObjectInterface
 {
@@ -13,14 +13,14 @@ final readonly class Emoji implements ValueObjectInterface
         private string $emoji
     ) {
         if (mb_strlen($this->emoji, 'UTF-8') > 32) {
-            throw new InvalidArgumentException('Emoji cannot be longer than 32 characters.');
+            throw new InvalidValueObjectException('Emoji cannot be longer than 32 characters.');
         }
 
         // Match one complete emoji sequence, which may contain multiple Unicode code points.
         $pattern = sprintf('/\A(?:%s)\z/u', EmojiPattern::getEmojiPattern());
 
         if (preg_match($pattern, $emoji) !== 1) {
-            throw new InvalidArgumentException('Value must contain exactly one valid emoji.');
+            throw new InvalidValueObjectException('Value must contain exactly one valid emoji.');
         }
     }
 

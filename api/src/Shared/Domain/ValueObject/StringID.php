@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace Movioza\Shared\Domain\ValueObject;
 
-use InvalidArgumentException;
+use Movioza\Shared\Domain\Exception\InvalidValueObjectException;
 
 abstract class StringID implements ValueObjectInterface
 {
@@ -12,7 +12,7 @@ abstract class StringID implements ValueObjectInterface
         private readonly string $id
     ) {
         if (trim($this->id) === '') {
-            throw new InvalidArgumentException('StringID cannot be empty');
+            throw new InvalidValueObjectException('StringID cannot be empty');
         }
     }
 

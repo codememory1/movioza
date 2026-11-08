@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace Movioza\Catalog\Domain\ValueObject;
 
-use InvalidArgumentException;
+use Movioza\Shared\Domain\Exception\InvalidValueObjectException;
 use Movioza\Shared\Domain\ValueObject\ValueObjectInterface;
 
 final readonly class MediaTitle implements ValueObjectInterface
@@ -13,11 +13,11 @@ final readonly class MediaTitle implements ValueObjectInterface
         private string $title
     ) {
         if (trim($title) === '') {
-            throw new InvalidArgumentException('Title cannot be empty');
+            throw new InvalidValueObjectException('Title cannot be empty');
         }
 
         if (mb_strlen($title) > 255) {
-            throw new InvalidArgumentException('Title cannot be longer than 255 characters');
+            throw new InvalidValueObjectException('Title cannot be longer than 255 characters');
         }
     }
 

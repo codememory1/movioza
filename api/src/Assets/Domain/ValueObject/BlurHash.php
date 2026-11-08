@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace Movioza\Assets\Domain\ValueObject;
 
-use InvalidArgumentException;
+use Movioza\Shared\Domain\Exception\InvalidValueObjectException;
 use Movioza\Shared\Domain\ValueObject\ValueObjectInterface;
 
 final readonly class BlurHash implements ValueObjectInterface
@@ -13,11 +13,11 @@ final readonly class BlurHash implements ValueObjectInterface
         private string $blurHash,
     ) {
         if (trim($this->blurHash) === '') {
-            throw new InvalidArgumentException('Blur hash cannot be empty.');
+            throw new InvalidValueObjectException('Blur hash cannot be empty.');
         }
 
         if (mb_strlen($this->blurHash) > 255) {
-            throw new InvalidArgumentException('Blur hash cannot be longer than 255 characters.');
+            throw new InvalidValueObjectException('Blur hash cannot be longer than 255 characters.');
         }
     }
 

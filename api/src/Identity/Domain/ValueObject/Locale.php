@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace Movioza\Identity\Domain\ValueObject;
 
-use InvalidArgumentException;
+use Movioza\Shared\Domain\Exception\InvalidValueObjectException;
 use Movioza\Shared\Domain\ValueObject\ValueObjectInterface;
 
 final class Locale implements ValueObjectInterface
@@ -18,7 +18,7 @@ final class Locale implements ValueObjectInterface
         $locale = strtolower($locale);
 
         if (preg_match(self::PATTERN, $locale) !== 1) {
-            throw new InvalidArgumentException('Invalid locale format.');
+            throw new InvalidValueObjectException('Invalid locale format.');
         }
 
         $this->locale = $locale;

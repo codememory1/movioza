@@ -3,6 +3,15 @@ services:
         autoconfigure: false
         autowire: true
 
+    # API Error Definitions
+    Movioza\Catalog\Application\Exception\MediaNotFoundException:
+        resource_tags:
+            - name: movioza.api_error.definition
+              status: 404
+              code: media_not_found
+              message: 'Media was not found.'
+              log_level: notice
+
     # Repositories
     movioza.catalog.media_repository.doctrine:
         class: Movioza\Catalog\Infrastructure\Doctrine\Repository\DoctrineMediaRepository

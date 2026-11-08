@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace Movioza\Discussion\Domain\ValueObject;
 
-use InvalidArgumentException;
+use Movioza\Shared\Domain\Exception\InvalidValueObjectException;
 use Movioza\Shared\Domain\ValueObject\ValueObjectInterface;
 
 final readonly class CommentText implements ValueObjectInterface
@@ -15,15 +15,15 @@ final readonly class CommentText implements ValueObjectInterface
         private string $text
     ) {
         if (trim($this->text)) {
-            throw new InvalidArgumentException('Comment text cannot be empty');
+            throw new InvalidValueObjectException('Comment text cannot be empty');
         }
 
         if (!mb_check_encoding($this->text, 'UTF-8')) {
-            throw new InvalidArgumentException('Comment text must be valid UTF-8.');
+            throw new InvalidValueObjectException('Comment text must be valid UTF-8.');
         }
 
         if (mb_strlen($this->text, 'UTF-8') > self::MAX_LENGTH) {
-            throw new InvalidArgumentException(sprintf(
+            throw new InvalidValueObjectException(sprintf(
                 'Comment text cannot be longer than %s characters',
                 self::MAX_LENGTH
             ));

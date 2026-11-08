@@ -4,9 +4,9 @@ declare(strict_types = 1);
 
 namespace Movioza\MediaProcessing\Application\Exception;
 
-use RuntimeException;
+use Movioza\Shared\Application\Exception\ApplicationException;
 
-final class ReferencedMediaNotFoundException extends RuntimeException
+final class ReferencedMediaNotFoundException extends ApplicationException
 {
     public function __construct(
         public readonly int $mediaID,

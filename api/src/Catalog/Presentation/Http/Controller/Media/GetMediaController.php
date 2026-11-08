@@ -8,6 +8,8 @@ use Movioza\Catalog\Application\Query\GetMedia\GetMediaQuery;
 use Movioza\Catalog\Application\Query\GetMedia\GetMediaQueryHandler;
 use Movioza\Catalog\Domain\ValueObject\MediaID;
 use Movioza\Catalog\Presentation\Http\Response\GetMediaResponse;
+use Movioza\Shared\Domain\Exception\InvalidValueObjectException;
+use Movioza\Shared\Infrastructure\Http\Exception\InvalidRequestPayloadException;
 use Movioza\Shared\Infrastructure\Http\Response\ApiResponse;
 use Movioza\Shared\Infrastructure\Http\Response\ApiResponseInterface;
 use Movioza\Shared\Infrastructure\Http\Response\DataDocument;
@@ -24,7 +26,13 @@ final readonly class GetMediaController
 
     public function __invoke(int $id): ApiResponseInterface
     {
-        $query = new GetMediaQuery(new MediaID($id));
+        try {
+            $mediaID = new MediaID($id);
+        } catch (InvalidValueObjectException $e) {
+            throw InvalidRequestPayloadException::invalidFieldValue('id', $e);
+        }
+
+        $query = new GetMediaQuery($mediaID);
         $mediaView = ($this->handler)($query);
 
         return new ApiResponse(new DataDocument(

@@ -5,7 +5,7 @@ declare(strict_types = 1);
 namespace Movioza\Identity\Domain\ValueObject;
 
 use DateTimeZone;
-use InvalidArgumentException;
+use Movioza\Shared\Domain\Exception\InvalidValueObjectException;
 use Movioza\Shared\Domain\ValueObject\ValueObjectInterface;
 
 final readonly class Timezone implements ValueObjectInterface
@@ -16,7 +16,7 @@ final readonly class Timezone implements ValueObjectInterface
         $timezones = DateTimeZone::listIdentifiers(DateTimeZone::ALL_WITH_BC);
 
         if (!in_array($this->timezone, $timezones, true)) {
-            throw new InvalidArgumentException('Timezone must be a valid timezone identifier.');
+            throw new InvalidValueObjectException('Timezone must be a valid timezone identifier.');
         }
     }
 

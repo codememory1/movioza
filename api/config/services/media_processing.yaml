@@ -3,6 +3,15 @@ services:
         autoconfigure: false
         autowire: true
 
+    # API Error Definitions
+    Movioza\MediaProcessing\Application\Exception\ReferencedMediaNotFoundException:
+        resource_tags:
+            - name: movioza.api_error.definition
+              status: 422
+              code: referenced_media_not_found
+              message: 'Referenced media was not found.'
+              log_level: notice
+
     # Repositories
     movioza.media_processing.media_source_repository.doctrine:
         class: Movioza\MediaProcessing\Infrastructure\Doctrine\Repository\DoctrineMediaSourceRepository

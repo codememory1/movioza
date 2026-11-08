@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace Movioza\Catalog\Domain\ValueObject;
 
-use InvalidArgumentException;
+use Movioza\Shared\Domain\Exception\InvalidValueObjectException;
 use Movioza\Shared\Domain\ValueObject\ValueObjectInterface;
 
 final readonly class SeasonNumber implements ValueObjectInterface
@@ -13,7 +13,7 @@ final readonly class SeasonNumber implements ValueObjectInterface
         private int $number,
     ) {
         if ($number < 1) {
-            throw new InvalidArgumentException('Season number cannot be less than 1');
+            throw new InvalidValueObjectException('Season number cannot be less than 1');
         }
     }
 

@@ -12,7 +12,9 @@ use Movioza\MediaProcessing\Domain\ValueObject\MediaSourceID;
 use Movioza\MediaProcessing\Domain\ValueObject\PageUrl;
 use Movioza\MediaProcessing\Presentation\Http\Request\Admin\MediaSource\CreateMediaSourceRequest;
 use Movioza\MediaProcessing\Presentation\Http\Response\Admin\MediaSource\CreateMediaSourceResponse;
+use Movioza\Shared\Domain\Exception\InvalidValueObjectException;
 use Movioza\Shared\Infrastructure\Http\Attribute\ControllerArgument\MapRequestPayload;
+use Movioza\Shared\Infrastructure\Http\Exception\InvalidRequestPayloadException;
 use Movioza\Shared\Infrastructure\Http\Response\ApiResponse;
 use Movioza\Shared\Infrastructure\Http\Response\ApiResponseInterface;
 use Movioza\Shared\Infrastructure\Http\Response\DataDocument;
@@ -34,16 +36,36 @@ final readonly class CreateMediaSourceController
     }
 
     public function __invoke(
-        #[MapRequestPayload] CreateMediaSourceRequest $request
+        #[MapRequestPayload] CreateMediaSourceRequest $payload
     ): ApiResponseInterface {
         $id = new MediaSourceID($this->IDGenerator->next());
-        $mediaID = new MediaID($request->mediaId);
-        $pageUrl = new PageUrl($request->pageUrl);
 
-        ($this->handler)(new CreateMediaSourceCommand($id, $mediaID, $pageUrl));
+        ($this->handler)(new CreateMediaSourceCommand(
+            $id,
+            $this->resolveMediaID($payload),
+            $this->resolvePageURL($payload)
+        ));
 
         return new ApiResponse(new DataDocument(
             new CreateMediaSourceResponse($id)->toArray()
         ), Response::HTTP_CREATED);
+    }
+
+    private function resolveMediaID(CreateMediaSourceRequest $payload): MediaID
+    {
+        try {
+            return new MediaID($payload->mediaId);
+        } catch (InvalidValueObjectException $e) {
+            throw InvalidRequestPayloadException::invalidFieldValue('media_id', $e);
+        }
+    }
+
+    private function resolvePageURL(CreateMediaSourceRequest $payload): PageUrl
+    {
+        try {
+            return new PageUrl($payload->pageUrl);
+        } catch (InvalidValueObjectException $e) {
+            throw InvalidRequestPayloadException::invalidFieldValue('page_url', $e);
+        }
     }
 }

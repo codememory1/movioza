@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Movioza;
 
+use Movioza\Shared\Infrastructure\DependencyInjection\CompilerPass\RegisterApiErrorDefinitionsPass;
 use Movioza\Shared\Infrastructure\DependencyInjection\CompilerPass\RegisterControllerArgumentAttributeHandlersPass;
 use Movioza\Shared\Infrastructure\DependencyInjection\CompilerPass\RegisterControllerAttributeHandlersPass;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
@@ -18,5 +19,6 @@ class Kernel extends BaseKernel
     {
         $container->addCompilerPass(new RegisterControllerAttributeHandlersPass());
         $container->addCompilerPass(new RegisterControllerArgumentAttributeHandlersPass());
+        $container->addCompilerPass(new RegisterApiErrorDefinitionsPass());
     }
 }

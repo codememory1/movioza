@@ -4,12 +4,16 @@ declare(strict_types = 1);
 
 namespace Movioza\Shared\Infrastructure\Http\Exception;
 
-final class RateLimitExceededException extends HttpException
+use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
+use Throwable;
+
+final class RateLimitExceededException extends TooManyRequestsHttpException
 {
-    public function __construct(int $retryAfter)
+    /**
+     * @param int $retryAfter Delay in seconds before retrying.
+     */
+    public function __construct(int $retryAfter, ?Throwable $previous = null)
     {
-        parent::__construct(429, 'rate_limit_exceeded', 'Too many requests. Please try again later.', headers: [
-            'Retry-After' => $retryAfter
-        ]);
+        parent::__construct(max(1, $retryAfter), 'Request rate limit exceeded.', $previous);
     }
 }

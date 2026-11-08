@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace Movioza\Shared\Domain\ValueObject;
 
-use InvalidArgumentException;
+use Movioza\Shared\Domain\Exception\InvalidValueObjectException;
 
 final readonly class CountryName implements ValueObjectInterface
 {
@@ -12,11 +12,11 @@ final readonly class CountryName implements ValueObjectInterface
         private string $name
     ) {
         if (trim($this->name) === '') {
-            throw new InvalidArgumentException('Country name cannot be empty.');
+            throw new InvalidValueObjectException('Country name cannot be empty.');
         }
 
         if (mb_strlen($this->name) > 120) {
-            throw new InvalidArgumentException('Country name cannot be longer than 120 characters.');
+            throw new InvalidValueObjectException('Country name cannot be longer than 120 characters.');
         }
     }
 

@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace Movioza\Catalog\Domain\ValueObject;
 
-use InvalidArgumentException;
+use Movioza\Shared\Domain\Exception\InvalidValueObjectException;
 use Movioza\Shared\Domain\ValueObject\ValueObjectInterface;
 
 final readonly class EpisodeNumber implements ValueObjectInterface
@@ -13,7 +13,7 @@ final readonly class EpisodeNumber implements ValueObjectInterface
         private int $number,
     ) {
         if ($number < 1) {
-            throw new InvalidArgumentException('Episode number cannot be less than 1');
+            throw new InvalidValueObjectException('Episode number cannot be less than 1');
         }
     }
 

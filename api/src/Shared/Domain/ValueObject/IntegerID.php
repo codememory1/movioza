@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace Movioza\Shared\Domain\ValueObject;
 
-use InvalidArgumentException;
+use Movioza\Shared\Domain\Exception\InvalidValueObjectException;
 
 abstract class IntegerID implements ValueObjectInterface
 {
@@ -12,7 +12,7 @@ abstract class IntegerID implements ValueObjectInterface
         private readonly int $id
     ) {
         if ($id < 1) {
-            throw new InvalidArgumentException('ID must be greater or equal to 1');
+            throw new InvalidValueObjectException('ID must be greater or equal to 1');
         }
     }
 

@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace Movioza\Shared\Domain\ValueObject;
 
-use InvalidArgumentException;
+use Movioza\Shared\Domain\Exception\InvalidValueObjectException;
 
 final readonly class CountryCode implements ValueObjectInterface
 {
@@ -12,11 +12,11 @@ final readonly class CountryCode implements ValueObjectInterface
         private string $code
     ) {
         if (trim($this->code) === '') {
-            throw new InvalidArgumentException('Country code cannot be empty.');
+            throw new InvalidValueObjectException('Country code cannot be empty.');
         }
 
         if (mb_strlen($this->code) > 3) {
-            throw new InvalidArgumentException('Country code cannot be longer than 3 characters.');
+            throw new InvalidValueObjectException('Country code cannot be longer than 3 characters.');
         }
     }
 

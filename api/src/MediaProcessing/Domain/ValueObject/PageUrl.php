@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace Movioza\MediaProcessing\Domain\ValueObject;
 
-use InvalidArgumentException;
+use Movioza\Shared\Domain\Exception\InvalidValueObjectException;
 use Movioza\Shared\Domain\ValueObject\ValueObjectInterface;
 
 readonly class PageUrl implements ValueObjectInterface
@@ -13,15 +13,15 @@ readonly class PageUrl implements ValueObjectInterface
         private string $url
     ) {
         if (trim($this->url) === '') {
-            throw new InvalidArgumentException('Page url cannot be empty');
+            throw new InvalidValueObjectException('Page url cannot be empty');
         }
 
         if (filter_var($url, FILTER_VALIDATE_URL) === false) {
-            throw new InvalidArgumentException('Tracker page URL must be a valid URL.');
+            throw new InvalidValueObjectException('Tracker page URL must be a valid URL.');
         }
 
         if (mb_strlen($url) > 1024) {
-            throw new InvalidArgumentException('Tracker page URL cannot be longer than 1024 characters.');
+            throw new InvalidValueObjectException('Tracker page URL cannot be longer than 1024 characters.');
         }
     }
 

@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace Movioza\Assets\Domain\ValueObject;
 
-use InvalidArgumentException;
+use Movioza\Shared\Domain\Exception\InvalidValueObjectException;
 use Movioza\Shared\Domain\ValueObject\ValueObjectInterface;
 
 /**
@@ -16,7 +16,7 @@ final readonly class FileSize implements ValueObjectInterface
         private int $size
     ) {
         if ($this->size < 0) {
-            throw new InvalidArgumentException('File size must be greater than 0.');
+            throw new InvalidValueObjectException('File size must be greater than 0.');
         }
     }
 

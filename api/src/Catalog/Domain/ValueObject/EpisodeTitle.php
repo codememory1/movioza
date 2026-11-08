@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace Movioza\Catalog\Domain\ValueObject;
 
-use InvalidArgumentException;
+use Movioza\Shared\Domain\Exception\InvalidValueObjectException;
 use Movioza\Shared\Domain\ValueObject\ValueObjectInterface;
 
 final readonly class EpisodeTitle implements ValueObjectInterface
@@ -13,11 +13,11 @@ final readonly class EpisodeTitle implements ValueObjectInterface
         private string $title
     ) {
         if (trim($this->title) === '') {
-            throw new InvalidArgumentException('Episode title cannot be empty');
+            throw new InvalidValueObjectException('Episode title cannot be empty');
         }
 
         if (mb_strlen($this->title) > 100) {
-            throw new InvalidArgumentException('Episode title cannot be longer than 100 characters');
+            throw new InvalidValueObjectException('Episode title cannot be longer than 100 characters');
         }
     }
 
