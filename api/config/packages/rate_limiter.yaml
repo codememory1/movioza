@@ -35,7 +35,7 @@ framework:
             interval: '1 second'
             cache_pool: cache.api_rate_limiter
             lock_factory: lock.rate_limiter.factory
-        
+
         identity_guest_session_get_current_per_minute:
             policy: fixed_window
             limit: 60

@@ -1,2 +1,3 @@
 framework:
-    lock: '%env(LOCK_DSN)%'
+    lock:
+        api_response: '%env(API_RESPONSE_CACHE_REDIS_URL)%'
