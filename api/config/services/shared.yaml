@@ -136,6 +136,12 @@ services:
         tags:
             - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse }
 
+    Movioza\Shared\Infrastructure\Http\EventListener\KernelResponse\CacheResponseEventListener:
+        arguments:
+            $cache: '@cache.api_response'
+        tags:
+            - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse }
+
     # Run the custom attribute resolver early; it must yield nothing for unsupported arguments.
     Movioza\Shared\Infrastructure\Http\Resolver\AttributeValueResolver:
         tags:
@@ -147,6 +153,16 @@ services:
         tags:
             - { name: movioza.controller.attribute_handler }
 
+    Movioza\Shared\Infrastructure\Http\Attribute\Controller\CacheResponseHandler:
+        arguments:
+            $cache: '@cache.api_response'
+            $lockFactory: '@lock.api_response.factory'
+            $lockTTL: '%env(int:API_RESPONSE_CACHE_LOCK_TTL)%'
+            $lockWaitTimeout: '%env(int:API_RESPONSE_CACHE_LOCK_WAIT_TIMEOUT)%'
+            $lockRetryDelay: '%env(int:API_RESPONSE_CACHE_LOCK_RETRY_DELAY_US)%'
+        tags:
+            - { name: movioza.controller.attribute_handler }
+
     Movioza\Shared\Infrastructure\Http\Attribute\ControllerArgument\:
         resource: '../../src/Shared/Infrastructure/Http/Attribute/ControllerArgument/*Handler.php'
         tags:
@@ -154,6 +170,9 @@ services:
 
     # HTTP Request ID Resolver
     Movioza\Shared\Infrastructure\Http\RequestIDResolver: ~
+
+    # HTTP Cache
+    Movioza\Shared\Infrastructure\Http\Cache\ResponseCacheTagger: ~
 
     # CDN
     movioza.shared.cdn_provider.bunny:

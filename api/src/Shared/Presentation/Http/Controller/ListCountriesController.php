@@ -7,6 +7,9 @@ namespace Movioza\Shared\Presentation\Http\Controller;
 use Movioza\Shared\Application\Bus\Query\QueryBusInterface;
 use Movioza\Shared\Application\Query\ListCountries\ListCountriesQuery;
 use Movioza\Shared\Application\ReadModel\CountryView;
+use Movioza\Shared\Infrastructure\Cache\CacheTags;
+use Movioza\Shared\Infrastructure\Http\Attribute\Controller\CacheResponse;
+use Movioza\Shared\Infrastructure\Http\Cache\ResponseCacheTagger;
 use Movioza\Shared\Infrastructure\Http\Response\ApiResponse;
 use Movioza\Shared\Infrastructure\Http\Response\ApiResponseInterface;
 use Movioza\Shared\Infrastructure\Http\Response\DataDocument;
@@ -15,10 +18,12 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 
 #[Route(path: '/countries', name: 'shared_countries_list', methods: [Request::METHOD_GET])]
+#[CacheResponse(ttl: 86400)]
 final readonly class ListCountriesController
 {
     public function __construct(
-        private QueryBusInterface $queryBus
+        private QueryBusInterface $queryBus,
+        private ResponseCacheTagger $responseCacheTagger
     ) {
     }
 
@@ -26,6 +31,10 @@ final readonly class ListCountriesController
     {
         /** @var list<CountryView> $countries */
         $countries = $this->queryBus->ask(new ListCountriesQuery());
+
+        $this->responseCacheTagger->addTags([
+            CacheTags::countryList()
+        ]);
 
         return new ApiResponse(new DataDocument(
             new ListCountriesResponse($countries)->toArray()
