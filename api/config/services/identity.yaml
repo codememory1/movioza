@@ -28,6 +28,16 @@ services:
               message: 'User-Agent header has an invalid value.'
               log_level: notice
 
+    Movioza\Identity\Application\Exception\GuestSessionAuthenticationFailedException:
+        resource_tags:
+            - name: movioza.api_error.definition
+              status: 401
+              code: guest_session_unauthenticated
+              message: 'A valid guest session is required.'
+              log_level: notice
+              headers:
+                WWW-Authenticate: 'GuestSession realm="identity"'
+
     # Repositories
     movioza.identity.guest_repository.doctrine:
         class: Movioza\Identity\Infrastructure\Doctrine\Repository\DoctrineGuestRepository

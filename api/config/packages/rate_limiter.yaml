@@ -28,3 +28,23 @@ framework:
             limiters:
                 - identity_guest_session_create_per_second
                 - identity_guest_session_create_per_ten_minutes
+
+        identity_guest_session_get_current_per_second:
+            policy: fixed_window
+            limit: 5
+            interval: '1 second'
+            cache_pool: cache.api_rate_limiter
+            lock_factory: lock.rate_limiter.factory
+        
+        identity_guest_session_get_current_per_minute:
+            policy: fixed_window
+            limit: 60
+            interval: '10 minutes'
+            cache_pool: cache.api_rate_limiter
+            lock_factory: lock.rate_limiter.factory
+
+        identity_guest_session_get_current:
+            policy: compound
+            limiters:
+                - identity_guest_session_get_current_per_second
+                - identity_guest_session_get_current_per_minute
