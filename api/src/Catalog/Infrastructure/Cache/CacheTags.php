@@ -10,4 +10,9 @@ final class CacheTags
     {
         return sprintf('catalog.media.%d', $mediaId);
     }
+
+    public static function collectionList(): string
+    {
+        return 'catalog.collection.list';
+    }
 }

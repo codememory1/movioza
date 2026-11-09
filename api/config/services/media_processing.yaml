@@ -84,7 +84,7 @@ services:
     movioza.media_processing.media_source_state_machine.symfony:
         class: Movioza\MediaProcessing\Infrastructure\Workflow\SymfonyMediaSourceWorkflow
         arguments:
-            $stateMachine: '@state_machine.media_source'
+            $stateMachine: '@state_machine.media_processing_media_source'
 
     Movioza\MediaProcessing\Domain\StateMachine\MediaSourceStateMachineInterface: '@movioza.media_processing.media_source_state_machine.symfony'
 

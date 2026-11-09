@@ -1,0 +1,29 @@
+framework:
+    workflows:
+        catalog_collection:
+            type: state_machine
+
+            supports:
+                - Movioza\Catalog\Infrastructure\Workflow\CollectionWorkflowState
+
+            marking_store:
+                type: method
+                property: status
+
+            initial_marking: !php/enum Movioza\Catalog\Domain\Enum\CollectionStatus::DRAFT
+            places: !php/enum Movioza\Catalog\Domain\Enum\CollectionStatus
+
+            transitions:
+                !php/enum Movioza\Catalog\Domain\Enum\CollectionTransition::PUBLISH->value:
+                    from: !php/enum Movioza\Catalog\Domain\Enum\CollectionStatus::DRAFT
+                    to: !php/enum Movioza\Catalog\Domain\Enum\CollectionStatus::PUBLISHED
+
+                !php/enum Movioza\Catalog\Domain\Enum\CollectionTransition::UNPUBLISH->value:
+                    from: !php/enum Movioza\Catalog\Domain\Enum\CollectionStatus::PUBLISHED
+                    to: !php/enum Movioza\Catalog\Domain\Enum\CollectionStatus::DRAFT
+
+                !php/enum Movioza\Catalog\Domain\Enum\CollectionTransition::ARCHIVE->value:
+                    from:
+                        - !php/enum Movioza\Catalog\Domain\Enum\CollectionStatus::DRAFT
+                        - !php/enum Movioza\Catalog\Domain\Enum\CollectionStatus::PUBLISHED
+                    to: !php/enum Movioza\Catalog\Domain\Enum\CollectionStatus::ARCHIVED

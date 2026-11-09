@@ -13,7 +13,7 @@
         </id>
 
         <field name="number" column="number" type="catalog_episode_number" />
-        <field name="title" column="title" type="catalog_episode_title" />
+        <field name="title" column="title" type="catalog_episode_title" length="100" />
         <field name="slug" column="slug" type="shared_slug" length="280" />
         <field name="description" column="description" type="text" nullable="true" />
         <field name="releasedAt" column="released_at" type="datetime_immutable" nullable="true" />

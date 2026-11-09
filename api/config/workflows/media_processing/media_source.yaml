@@ -1,6 +1,6 @@
 framework:
     workflows:
-        media_source:
+        media_processing_media_source:
             type: state_machine
 
             supports:
