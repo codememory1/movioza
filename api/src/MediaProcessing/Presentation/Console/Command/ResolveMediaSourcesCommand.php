@@ -5,9 +5,9 @@ declare(strict_types = 1);
 namespace Movioza\MediaProcessing\Presentation\Console\Command;
 
 use Movioza\MediaProcessing\Application\Command\ResolveMediaSource\ResolveMediaSourceCommand;
-use Movioza\MediaProcessing\Application\Command\ResolveMediaSource\ResolveMediaSourceCommandHandler;
 use Movioza\MediaProcessing\Application\Reader\MediaSourceReaderInterface;
 use Movioza\MediaProcessing\Domain\ValueObject\MediaSourceID;
+use Movioza\Shared\Application\Bus\Command\CommandBusInterface;
 use Movioza\Shared\Presentation\Console\Input\WorkerOptions;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -32,7 +32,7 @@ final class ResolveMediaSourcesCommand implements SignalableCommandInterface
 
     public function __construct(
         private readonly MediaSourceReaderInterface $mediaSourceReader,
-        private readonly ResolveMediaSourceCommandHandler $handler,
+        private CommandBusInterface $bus,
         private readonly LoggerInterface $logger,
         #[Autowire(service: 'services_resetter')]
         private readonly ResetInterface $reset
@@ -75,7 +75,7 @@ final class ResolveMediaSourcesCommand implements SignalableCommandInterface
                     $currentSourceId = $mediaSourceID;
 
                     try {
-                        ($this->handler)(new ResolveMediaSourceCommand(
+                        $this->bus->dispatch(new ResolveMediaSourceCommand(
                             new MediaSourceID($mediaSourceID)
                         ));
                     } finally {

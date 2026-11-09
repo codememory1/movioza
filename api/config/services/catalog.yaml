@@ -18,6 +18,11 @@ services:
 
     Movioza\Catalog\Domain\Repository\MediaRepositoryInterface: '@movioza.catalog.media_repository.doctrine'
 
+    movioza.catalog.collection_repository.doctrine:
+        class: Movioza\Catalog\Infrastructure\Doctrine\Repository\DoctrineCollectionRepository
+
+    Movioza\Catalog\Domain\Repository\CollectionRepositoryInterface: '@movioza.catalog.collection_repository.doctrine'
+
     # Readers
     movioza.catalog.media_reader.doctrine:
         class: Movioza\Catalog\Infrastructure\Doctrine\Reader\DoctrineMediaReader
@@ -43,9 +48,20 @@ services:
 
     Movioza\Catalog\Application\Reader\ExternalPersonReaderInterface: '@movioza.catalog.external_person_reader.people'
 
+    movioza.catalog.collection_reader.doctrine:
+        class: Movioza\Catalog\Infrastructure\Doctrine\Reader\DoctrineCollectionReader
+
+    Movioza\Catalog\Application\Reader\CollectionReaderInterface: '@movioza.catalog.collection_reader.doctrine'
+
     # Query Handlers
     Movioza\Catalog\Application\Query\:
         resource: '%kernel.project_dir%/src/Catalog/Application/Query/**/*QueryHandler.php'
+        tags:
+            - { name: messenger.message_handler, bus: query.bus }
+
+    Movioza\Catalog\Application\Query\ListMainCollections\ListMainCollectionsHandler:
+        arguments:
+            $limit: '%env(int:CATALOG_MAIN_COLLECTIONS_LIMIT)%'
         tags:
             - { name: messenger.message_handler, bus: query.bus }
 
@@ -54,3 +70,11 @@ services:
         resource: '%kernel.project_dir%/src/Catalog/Presentation/Http/Controller/**/*Controller.php'
         tags:
             - { name: controller.service_arguments }
+
+    # State Machine
+    movioza.catalog.collection_state_machine.symfony:
+        class: Movioza\Catalog\Infrastructure\Workflow\SymfonyCollectionWorkflow
+        arguments:
+            $stateMachine: '@state_machine.catalog_collection'
+
+    Movioza\Catalog\Domain\StateMachine\CollectionStateMachineInterface: '@movioza.catalog.collection_state_machine.symfony'

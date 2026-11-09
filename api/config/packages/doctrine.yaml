@@ -23,6 +23,9 @@ doctrine:
             catalog_person_id: Movioza\Catalog\Infrastructure\Doctrine\Type\PersonIDType
             catalog_season_id: Movioza\Catalog\Infrastructure\Doctrine\Type\SeasonIDType
             catalog_episode_id: Movioza\Catalog\Infrastructure\Doctrine\Type\EpisodeIDType
+            catalog_collection_id: Movioza\Catalog\Infrastructure\Doctrine\Type\CollectionIDType
+            catalog_collection_title: Movioza\Catalog\Infrastructure\Doctrine\Type\CollectionTitleType
+            catalog_collection_description: Movioza\Catalog\Infrastructure\Doctrine\Type\CollectionDescriptionType
             catalog_media_title: Movioza\Catalog\Infrastructure\Doctrine\Type\MediaTitleType
             catalog_media_titles: Movioza\Catalog\Infrastructure\Doctrine\Type\MediaTitlesType
             catalog_age_restriction: Movioza\Catalog\Infrastructure\Doctrine\Type\AgeRestrictionType

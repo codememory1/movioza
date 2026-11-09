@@ -5,7 +5,6 @@ declare(strict_types = 1);
 namespace Movioza\Identity\Presentation\Http\Controller\GuestSession;
 
 use Movioza\Identity\Application\Command\CreateGuestSession\CreateGuestSessionCommand;
-use Movioza\Identity\Application\Command\CreateGuestSession\CreateGuestSessionCommandHandler;
 use Movioza\Identity\Application\Identity\GuestSessionIDGeneratorInterface;
 use Movioza\Identity\Application\Reader\GuestSessionReaderInterface;
 use Movioza\Identity\Application\ReadModel\GuestSessionView;
@@ -19,6 +18,7 @@ use Movioza\Identity\Presentation\Http\Request\CreateGuestSessionRequest;
 use Movioza\Identity\Presentation\Http\Resolver\ClientIPAddressResolver;
 use Movioza\Identity\Presentation\Http\Resolver\UserAgentResolver;
 use Movioza\Identity\Presentation\Http\Response\CreateGuestSessionResponse;
+use Movioza\Shared\Application\Bus\Command\CommandBusInterface;
 use Movioza\Shared\Domain\Exception\InvalidValueObjectException;
 use Movioza\Shared\Infrastructure\Http\Attribute\Controller\RateLimit;
 use Movioza\Shared\Infrastructure\Http\Attribute\ControllerArgument\MapRequestPayload;
@@ -41,7 +41,7 @@ final readonly class CreateGuestSessionController
         private ClientIPAddressResolver $clientIPAddressResolver,
         private UserAgentResolver $userAgentResolver,
         private GuestSessionReaderInterface $guestSessionReader,
-        private CreateGuestSessionCommandHandler $handler
+        private CommandBusInterface $bus
     ) {
     }
 
@@ -61,7 +61,7 @@ final readonly class CreateGuestSessionController
 
         $guestSessionID = $this->guestSessionIDGenerator->next();
 
-        ($this->handler)(new CreateGuestSessionCommand(
+        $this->bus->dispatch(new CreateGuestSessionCommand(
             new GuestSessionID($guestSessionID),
             $this->clientIPAddressResolver->resolve($request),
             $this->userAgentResolver->resolve($request),

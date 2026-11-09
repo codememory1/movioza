@@ -5,13 +5,13 @@ declare(strict_types = 1);
 namespace Movioza\MediaProcessing\Presentation\Http\Controller\Admin\MediaSource;
 
 use Movioza\MediaProcessing\Application\Command\CreateMediaSource\CreateMediaSourceCommand;
-use Movioza\MediaProcessing\Application\Command\CreateMediaSource\CreateMediaSourceCommandHandler;
 use Movioza\MediaProcessing\Application\Identity\MediaSourceIDGeneratorInterface;
 use Movioza\MediaProcessing\Domain\ValueObject\MediaID;
 use Movioza\MediaProcessing\Domain\ValueObject\MediaSourceID;
 use Movioza\MediaProcessing\Domain\ValueObject\PageUrl;
 use Movioza\MediaProcessing\Presentation\Http\Request\Admin\MediaSource\CreateMediaSourceRequest;
 use Movioza\MediaProcessing\Presentation\Http\Response\Admin\MediaSource\CreateMediaSourceResponse;
+use Movioza\Shared\Application\Bus\Command\CommandBusInterface;
 use Movioza\Shared\Domain\Exception\InvalidValueObjectException;
 use Movioza\Shared\Infrastructure\Http\Attribute\ControllerArgument\MapRequestPayload;
 use Movioza\Shared\Infrastructure\Http\Exception\InvalidRequestPayloadException;
@@ -31,7 +31,7 @@ final readonly class CreateMediaSourceController
 {
     public function __construct(
         private MediaSourceIDGeneratorInterface $IDGenerator,
-        private CreateMediaSourceCommandHandler $handler
+        private CommandBusInterface $bus
     ) {
     }
 
@@ -40,7 +40,7 @@ final readonly class CreateMediaSourceController
     ): ApiResponseInterface {
         $id = new MediaSourceID($this->IDGenerator->next());
 
-        ($this->handler)(new CreateMediaSourceCommand(
+        $this->bus->dispatch(new CreateMediaSourceCommand(
             $id,
             $this->resolveMediaID($payload),
             $this->resolvePageURL($payload)

@@ -9,6 +9,26 @@ framework:
         rate_limiter: '%env(API_RATE_LIMITER_REDIS_URL)%'
 
     rate_limiter:
+        public_read_per_second:
+            policy: fixed_window
+            limit: 5
+            interval: '1 second'
+            cache_pool: cache.api_rate_limiter
+            lock_factory: lock.rate_limiter.factory
+
+        public_read_per_minute:
+            policy: sliding_window
+            limit: 60
+            interval: '1 minute'
+            cache_pool: cache.api_rate_limiter
+            lock_factory: lock.rate_limiter.factory
+
+        public_read:
+            policy: compound
+            limiters:
+                - public_read_per_second
+                - public_read_per_minute
+
         identity_guest_session_create_per_second:
             policy: fixed_window
             limit: 2

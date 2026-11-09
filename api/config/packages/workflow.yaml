@@ -1,2 +1,3 @@
 imports:
-    - { resource: '../workflows/media_source.yaml' }
+    - { resource: '../workflows/media_processing/media_source.yaml' }
+    - { resource: '../workflows/catalog/collection.yaml' }
