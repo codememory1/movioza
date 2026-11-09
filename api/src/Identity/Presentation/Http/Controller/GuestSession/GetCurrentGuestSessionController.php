@@ -2,7 +2,7 @@
 
 declare(strict_types = 1);
 
-namespace Movioza\Identity\Presentation\Http\Controller\GetCurrentGuestSession;
+namespace Movioza\Identity\Presentation\Http\Controller\GuestSession;
 
 use Movioza\Identity\Application\Exception\GuestSessionAuthenticationFailedException;
 use Movioza\Identity\Application\Security\GuestSessionAuthenticator;
