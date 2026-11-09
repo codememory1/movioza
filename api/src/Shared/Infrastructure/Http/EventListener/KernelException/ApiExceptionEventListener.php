@@ -26,7 +26,8 @@ final readonly class ApiExceptionEventListener
         private RequestIDResolver $requestIDResolver,
         private array $definitions,
         private string $appProtocol,
-        private string $apiHost
+        private string $apiHost,
+        private bool $isDebug
     ) {
     }
 
@@ -56,6 +57,10 @@ final readonly class ApiExceptionEventListener
         $originalException = $originalException instanceof Throwable ? $originalException : $exception;
         $definition = $this->findDefinition($originalException);
         $status = $this->resolveStatus($exception, $originalException, $definition);
+
+        if ($this->isDebug && $status === Response::HTTP_INTERNAL_SERVER_ERROR) {
+            return;
+        }
 
         // Another HTTP component may have changed the final status.
         if ($definition !== null && $definition->getStatus() !== $status) {

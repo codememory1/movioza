@@ -6,6 +6,7 @@ services:
         bind:
             $appProtocol: '%env(APP_PROTOCOL)%'
             $apiHost: '%env(APP_API_HOST)%'
+            $isDebug: '%env(bool:APP_DEBUG)%'
 
     # API Error Definitions
     Movioza\Shared\Infrastructure\Http\Exception\RateLimitExceededException:
