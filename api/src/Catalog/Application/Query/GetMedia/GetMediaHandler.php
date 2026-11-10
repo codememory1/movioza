@@ -9,7 +9,7 @@ use Movioza\Catalog\Application\Reader\MediaReaderInterface;
 use Movioza\Catalog\Application\ReadModel\MediaView;
 use Movioza\Shared\Application\Bus\Query\QueryHandlerInterface;
 
-final readonly class GetMediaQueryHandler implements QueryHandlerInterface
+final readonly class GetMediaHandler implements QueryHandlerInterface
 {
     public function __construct(
         private MediaReaderInterface $mediaReader
