@@ -73,6 +73,14 @@ services:
               message: 'A request field could not be processed.'
               log_level: notice
 
+    Movioza\Shared\Application\Exception\InvalidCursorPaginationException:
+        resource_tags:
+            - name: movioza.api_error.definition
+              status: 400
+              code: invalid_cursor
+              message: 'The pagination cursor is invalid.'
+              log_level: notice
+
     # Repositories
     movioza.shared.country_repository.doctrine:
         class: Movioza\Shared\Infrastructure\Doctrine\Repository\DoctrineCountryRepository
@@ -238,3 +246,11 @@ services:
         class: Movioza\Shared\Infrastructure\Clock\SystemClock
 
     Movioza\Shared\Application\Clock\ClockInterface: '@movioza.shared.clock.system'
+
+    # Pagination
+    movioza.shared.cursor_pagination_codec.hmac:
+        class: Movioza\Shared\Infrastructure\Pagination\HmacCursorCodec
+        arguments:
+            $secret: '%env(PAGINATION_CURSOR_SECRET)%'
+
+    Movioza\Shared\Application\Pagination\CursorCodecInterface: '@movioza.shared.cursor_pagination_codec.hmac'
