@@ -55,7 +55,7 @@ services:
 
     # Query Handlers
     Movioza\Catalog\Application\Query\:
-        resource: '%kernel.project_dir%/src/Catalog/Application/Query/**/*QueryHandler.php'
+        resource: '%kernel.project_dir%/src/Catalog/Application/Query/**/*Handler.php'
         tags:
             - { name: messenger.message_handler, bus: query.bus }
 

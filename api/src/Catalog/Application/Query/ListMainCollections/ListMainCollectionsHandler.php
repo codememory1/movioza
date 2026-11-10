@@ -21,6 +21,6 @@ final readonly class ListMainCollectionsHandler implements QueryHandlerInterface
      */
     public function __invoke(ListMainCollectionsQuery $query): array
     {
-        return $this->reader->findMain($this->limit);
+        return $this->reader->findForMainPage($this->limit);
     }
 }

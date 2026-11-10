@@ -16,7 +16,7 @@ use Movioza\Shared\Infrastructure\Http\Response\DataDocument;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route(path: '/main-collections', name: 'catalog_main_collections_get', methods: Request::METHOD_GET)]
+#[Route(path: '/main-collections', name: 'catalog_main_collections_list', methods: Request::METHOD_GET)]
 #[RateLimit(name: 'public_read')]
 #[CacheResponse(ttl: 900)]
 final readonly class ListMainCollectionsController
