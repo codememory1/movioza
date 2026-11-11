@@ -73,4 +73,36 @@ final readonly class DoctrineGenreReader implements GenreReaderInterface
         ), $rows);
     }
 
+    /**
+     * @throws Exception
+     */
+    public function findFeatured(int $limit): array
+    {
+        $rows = $this->connection
+            ->createQueryBuilder()
+            ->select(
+                'g.id',
+                'g.slug',
+                'g.name',
+                'g.emoji',
+                'g.short_description'
+            )
+            ->from('genres', 'g')
+            ->orderBy('g.id', 'DESC')
+            ->setMaxResults($limit)
+            ->executeQuery()
+            ->fetchAllAssociative();
+
+        if ($rows === []) {
+            return [];
+        }
+
+        return array_map(static fn (array $row) => new GenreListItemView(
+            $row['id'],
+            $row['slug'],
+            $row['name'],
+            $row['emoji'],
+            $row['short_description']
+        ), $rows);
+    }
 }

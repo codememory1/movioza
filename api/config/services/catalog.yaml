@@ -65,6 +65,12 @@ services:
         tags:
             - { name: messenger.message_handler, bus: query.bus }
 
+    Movioza\Catalog\Application\Query\FeaturedGenres\FeaturedGenresHandler:
+        arguments:
+            $limit: '%env(int:CATALOG_FEATURED_GENRES_LIMIT)%'
+        tags:
+            - { name: messenger.message_handler, bus: query.bus }
+
     # Controllers
     Movioza\Catalog\Presentation\Http\Controller\:
         resource: '%kernel.project_dir%/src/Catalog/Presentation/Http/Controller/**/*Controller.php'

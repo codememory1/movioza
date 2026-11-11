@@ -16,7 +16,7 @@ use Movioza\Shared\Infrastructure\Http\Response\DataDocument;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route(path: '/genres', name: 'catalog_genre_list', methods: Request::METHOD_GET)]
+#[Route(path: '/genres', name: 'catalog_genres_list', methods: Request::METHOD_GET)]
 #[RateLimit(name: 'public_read')]
 #[CacheResponse(ttl: 86400)]
 final readonly class ListGenresController

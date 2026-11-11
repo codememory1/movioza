@@ -24,4 +24,11 @@ interface GenreReaderInterface
      * @return list<GenreListItemView>
      */
     public function findAll(): array;
+
+    /**
+     * Returns featured genres in display order, limited to the requested count.
+     *
+     * @return list<GenreListItemView>
+     */
+    public function findFeatured(int $limit): array;
 }
