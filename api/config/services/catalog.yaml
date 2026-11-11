@@ -53,6 +53,11 @@ services:
 
     Movioza\Catalog\Application\Reader\CollectionReaderInterface: '@movioza.catalog.collection_reader.doctrine'
 
+    movioza.catalog.season_reader.doctrine:
+        class: Movioza\Catalog\Infrastructure\Doctrine\Reader\DoctrineSeasonReader
+
+    Movioza\Catalog\Application\Reader\SeasonReaderInterface: '@movioza.catalog.season_reader.doctrine'
+
     # Query Handlers
     Movioza\Catalog\Application\Query\:
         resource: '%kernel.project_dir%/src/Catalog/Application/Query/**/*Handler.php'
