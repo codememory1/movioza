@@ -15,4 +15,9 @@ final class CacheTags
     {
         return 'catalog.collection.list';
     }
+
+    public static function genreList(): string
+    {
+        return 'catalog.genre.list';
+    }
 }
