@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace Movioza\Catalog\Application\Reader;
 
+use Movioza\Catalog\Application\ReadModel\GenreListItemView;
 use Movioza\Catalog\Application\ReadModel\GenreView;
 
 interface GenreReaderInterface
@@ -16,4 +17,11 @@ interface GenreReaderInterface
      * @return array<int, GenreView>
      */
     public function findByIDs(array $ids): array;
+
+    /**
+     * Returns the complete genre list without pagination.
+     *
+     * @return list<GenreListItemView>
+     */
+    public function findAll(): array;
 }
