@@ -16,5 +16,8 @@ interface MediaReaderInterface
      */
     public function findByID(int $id): ?MediaView;
 
+    /**
+     * Checks whether media with the specified ID exists.
+     */
     public function exists(int $id): bool;
 }
