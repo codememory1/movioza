@@ -11,6 +11,7 @@ use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\ParameterType;
 use Movioza\Catalog\Application\Reader\SeasonReaderInterface;
 use Movioza\Catalog\Application\ReadModel\SeasonListItemView;
+use Movioza\Catalog\Application\ReadModel\SeasonView;
 
 final readonly class DoctrineSeasonReader implements SeasonReaderInterface
 {
@@ -57,5 +58,28 @@ final readonly class DoctrineSeasonReader implements SeasonReaderInterface
             $row['episode_count'],
             new DateTimeImmutable($row['released_at']),
         ), $rows);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function findByMediaIDAndNumber(int $mediaId, int $seasonNumber): ?SeasonView
+    {
+        $row = $this->connection
+            ->createQueryBuilder()
+            ->select('s.id', 's.slug', 's.title')
+            ->from('seasons', 's')
+            ->where('s.media_id = :media_id')
+            ->andWhere('s.number = :season_number')
+            ->setParameter('media_id', $mediaId, ParameterType::INTEGER)
+            ->setParameter('season_number', $seasonNumber, ParameterType::INTEGER)
+            ->executeQuery()
+            ->fetchAssociative();
+
+        if ($row === false) {
+            return null;
+        }
+
+        return new SeasonView($row['id'], $row['slug'], $row['title']);
     }
 }

@@ -35,6 +35,7 @@ doctrine:
             catalog_episode_title: Movioza\Catalog\Infrastructure\Doctrine\Type\EpisodeTitleType
             catalog_genre_name: Movioza\Catalog\Infrastructure\Doctrine\Type\GenreNameType
             catalog_genre_short_description: Movioza\Catalog\Infrastructure\Doctrine\Type\GenreShortDescriptionType
+            catalog_duration: Movioza\Catalog\Infrastructure\Doctrine\Type\DurationType
 
             people_person_id: Movioza\People\Infrastructure\Doctrine\Type\PersonIDType
             people_image_id: Movioza\People\Infrastructure\Doctrine\Type\ImageIDType
