@@ -20,4 +20,9 @@ final class CacheTags
     {
         return 'catalog.genre.list';
     }
+
+    public static function seasonEpisodeList(int $mediaID, int $seasonNumber): string
+    {
+        return sprintf('catalog.media.%d.season.%d.episode.list', $mediaID, $seasonNumber);
+    }
 }
