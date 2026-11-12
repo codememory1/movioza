@@ -8,6 +8,7 @@ use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Movioza\Catalog\Domain\Enum\EpisodeImageType;
+use Movioza\Catalog\Domain\ValueObject\Duration;
 use Movioza\Catalog\Domain\ValueObject\EpisodeID;
 use Movioza\Catalog\Domain\ValueObject\EpisodeNumber;
 use Movioza\Catalog\Domain\ValueObject\EpisodeTitle;
@@ -52,6 +53,7 @@ class Episode
         private readonly EpisodeTitle $title,
         private readonly Slug $slug,
         private readonly ?string $description,
+        private readonly Duration $duration,
         private readonly DateTimeImmutable $createdAt
     ) {
         $this->images = new ArrayCollection();
@@ -159,6 +161,14 @@ class Episode
     public function getDescription(): ?string
     {
         return $this->description;
+    }
+
+    /**
+     * Returns the duration
+     */
+    public function getDuration(): Duration
+    {
+        return $this->duration;
     }
 
     /**

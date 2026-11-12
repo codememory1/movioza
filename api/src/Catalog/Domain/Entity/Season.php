@@ -8,6 +8,7 @@ use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Movioza\Catalog\Domain\Enum\SeasonImageType;
+use Movioza\Catalog\Domain\ValueObject\Duration;
 use Movioza\Catalog\Domain\ValueObject\EpisodeID;
 use Movioza\Catalog\Domain\ValueObject\EpisodeNumber;
 use Movioza\Catalog\Domain\ValueObject\EpisodeTitle;
@@ -75,6 +76,7 @@ class Season
         EpisodeTitle $title,
         Slug $slug,
         ?string $description,
+        Duration $duration,
         DateTimeImmutable $changedAt
     ): bool {
         if ($this->hasEpisode($number)) {
@@ -88,6 +90,7 @@ class Season
             $title,
             $slug,
             $description,
+            $duration,
             $changedAt
         ));
 
