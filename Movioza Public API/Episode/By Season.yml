@@ -1,0 +1,25 @@
+info:
+  name: By Season
+  type: http
+  seq: 1
+
+http:
+  method: GET
+  url: "{{api_host}}/media/:id/seasons/:number/episodes"
+  params:
+    - name: number
+      value: "1"
+      type: path
+      description: Season Number
+    - name: id
+      value: "23"
+      type: path
+      description: Media ID
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false
