@@ -9,8 +9,12 @@ use Attribute;
 #[Attribute(Attribute::TARGET_CLASS | Attribute::TARGET_METHOD)]
 final class CacheResponse implements AttributeInterface
 {
+    /**
+     * @param list<string> $tags
+     */
     public function __construct(
-        public readonly int $ttl
+        public readonly int $ttl,
+        public readonly array $tags = []
     ) {
     }
 

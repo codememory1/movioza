@@ -6,23 +6,16 @@ namespace Movioza\Catalog\Infrastructure\Cache;
 
 final class CacheTags
 {
-    public static function media(int $mediaId): string
+    public const string COLLECTION_LIST = 'catalog.collection.list';
+    public const string GENRE_LIST = 'catalog.genre.list';
+
+    public static function media(int $mediaID): string
     {
-        return sprintf('catalog.media.%d', $mediaId);
+        return sprintf('catalog.media.%d', $mediaID);
     }
 
-    public static function collectionList(): string
+    public static function mediaSeason(int $mediaID, int $seasonNumber): string
     {
-        return 'catalog.collection.list';
-    }
-
-    public static function genreList(): string
-    {
-        return 'catalog.genre.list';
-    }
-
-    public static function seasonEpisodeList(int $mediaID, int $seasonNumber): string
-    {
-        return sprintf('catalog.media.%d.season.%d.episode.list', $mediaID, $seasonNumber);
+        return sprintf('catalog.media.%d.season.%d', $mediaID, $seasonNumber);
     }
 }
