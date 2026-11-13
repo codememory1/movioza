@@ -24,4 +24,9 @@ interface SeasonReaderInterface
      * Returns null when no matching season exists.
      */
     public function findByMediaIDAndNumber(int $mediaId, int $seasonNumber): ?SeasonView;
+
+    /**
+     * Returns the owning media ID, or null if the season does not exist.
+     */
+    public function findMediaIdBySeasonId(int $seasonID): ?int;
 }

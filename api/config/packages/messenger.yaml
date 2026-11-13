@@ -9,6 +9,7 @@ framework:
                     - doctrine_close_connection
 
             query.bus: ~
+            cdc.bus: ~
 
         transports:
             sync:
@@ -22,4 +23,45 @@ framework:
                         type: fanout
                     queues:
                         failed_default: ~
+
+            cdc:
+                dsn: '%env(MESSENGER_CDC_TRANSPORT_DSN)%'
+                serializer: Movioza\Shared\Infrastructure\Messenger\Serializer\DebeziumMessageSerializer
+                failure_transport: cdc_failed
+                options:
+                    # Also allows Messenger to create delayed retry queues.
+                    auto_setup: true
+                    exchange:
+                        name: '%env(MESSENGER_CDC_EXCHANGE)%'
+                        type: topic
+                        default_publish_routing_key: '%env(MESSENGER_CDC_ROUTING_KEY)%'
+
+                    queues:
+                        '%env(MESSENGER_CDC_QUEUE)%':
+                            binding_keys:
+                                - '%env(MESSENGER_CDC_ROUTING_KEY)%'
+
+                retry_strategy:
+                    max_retries: 5
+                    delay: 1000
+                    multiplier: 2
+                    max_delay: 60000
+
+            cdc_failed:
+                dsn: '%env(MESSENGER_CDC_TRANSPORT_DSN)%'
+                serializer: messenger.transport.symfony_serializer
+
+                options:
+                    auto_setup: true
+
+                    exchange:
+                        name: movioza.cdc.failed
+                        type: direct
+                        default_publish_routing_key: failed
+
+                    queues:
+                        movioza.cdc.failed:
+                            binding_keys:
+                                - failed
+
         routing: []
