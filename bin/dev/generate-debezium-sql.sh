@@ -14,8 +14,8 @@ set +a
 : "${DEBEZIUM_POSTGRES_TABLE:?DEBEZIUM_POSTGRES_TABLE is required}"
 : "${DEBEZIUM_PUBLICATION_NAME:?DEBEZIUM_PUBLICATION_NAME is required}"
 
-# Split the CSV list, preserving trailing empty entries for validation.
-IFS=',' read -r -a tables <<< "${DEBEZIUM_POSTGRES_TABLE},"
+# Split the pipe-separated list, preserving trailing empty entries for validation.
+IFS='|' read -r -a tables <<< "${DEBEZIUM_POSTGRES_TABLE}|"
 
 tables_sql=""
 separator=""
