@@ -6,8 +6,5 @@ namespace Movioza\Shared\Infrastructure\Cache;
 
 final class CacheTags
 {
-    public static function countryList(): string
-    {
-        return 'shared.country.list';
-    }
+    public const string COUNTRY_LIST = 'shared.country.list';
 }

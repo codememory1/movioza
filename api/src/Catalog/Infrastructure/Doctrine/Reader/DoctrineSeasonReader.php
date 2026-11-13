@@ -82,4 +82,21 @@ final readonly class DoctrineSeasonReader implements SeasonReaderInterface
 
         return new SeasonView($row['id'], $row['slug'], $row['title']);
     }
+
+    /**
+     * @throws Exception
+     */
+    public function findMediaIdBySeasonId(int $seasonID): ?int
+    {
+        $mediaID = $this->connection
+            ->createQueryBuilder()
+            ->select('s.media_id')
+            ->from('seasons', 's')
+            ->where('s.id = :id')
+            ->setParameter('id', $seasonID, ParameterType::INTEGER)
+            ->executeQuery()
+            ->fetchOne();
+
+        return $mediaID === false ? null : (int) $mediaID;
+    }
 }

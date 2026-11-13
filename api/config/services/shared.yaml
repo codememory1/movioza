@@ -254,3 +254,23 @@ services:
             $secret: '%env(PAGINATION_CURSOR_SECRET)%'
 
     Movioza\Shared\Application\Pagination\CursorCodecInterface: '@movioza.shared.cursor_pagination_codec.hmac'
+
+    # Messenger
+    Movioza\Shared\Infrastructure\Messenger\DebeziumMessageRegistry: ~
+
+    Movioza\Shared\Infrastructure\Messenger\Serializer\DebeziumMessageSerializer:
+        arguments:
+            $serializer: '@serializer'
+            $format: json
+            $context:
+                allow_extra_attributes: true
+                datetime_format: 'U'
+                datetime_cast: int
+
+    Movioza\Shared\Infrastructure\Messenger\Message\CountryChangeMessage:
+        resource_tags:
+            - { name: movioza.debezium.message, schema: public, table: countries }
+
+    Movioza\Shared\Infrastructure\Messenger\MessageHandler\:
+        resource: '%kernel.project_dir%/src/Shared/Infrastructure/Messenger/MessageHandler/*Handler.php'
+        autoconfigure: true

@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace Movioza\Catalog\Presentation\Http\Controller\Episode;
 
 use Movioza\Catalog\Application\Query\ListSeasonEpisodes\ListSeasonEpisodesQuery;
+use Movioza\Catalog\Application\ReadModel\EpisodeListItemView;
 use Movioza\Catalog\Domain\ValueObject\MediaID;
 use Movioza\Catalog\Domain\ValueObject\SeasonNumber;
 use Movioza\Catalog\Infrastructure\Cache\CacheTags;
@@ -38,26 +39,47 @@ final readonly class ListSeasonEpisodesController
 
     public function __invoke(int $mediaId, int $seasonNumber): ApiResponseInterface
     {
-        try {
-            $mediaIdVO = new MediaID($mediaId);
-        } catch (InvalidValueObjectException $e) {
-            throw InvalidRequestPayloadException::invalidFieldValue('mediaId', $e);
-        }
-
-        try {
-            $seasonNumberVO = new SeasonNumber($seasonNumber);
-        } catch (InvalidValueObjectException $e) {
-            throw InvalidRequestPayloadException::invalidFieldValue('seasonNumber', $e);
-        }
-
-        $episodes = $this->bus->ask(new ListSeasonEpisodesQuery($mediaIdVO, $seasonNumberVO));
+        /** @var list<EpisodeListItemView> $episodes */
+        $episodes = $this->bus->ask(new ListSeasonEpisodesQuery(
+            $this->resolveMediaID($mediaId),
+            $this->resolveSeasonNumber($seasonNumber)
+        ));
 
         $this->responseCacheTagger->addTags([
-            CacheTags::seasonEpisodeList($mediaId, $seasonNumber)
+            CacheTags::media($mediaId),
+            CacheTags::mediaSeason($mediaId, $seasonNumber)
         ]);
 
         return new ApiResponse(new DataDocument(
             new ListSeasonEpisodesResponse($episodes)->toArray()
         ));
+    }
+
+    /**
+     * Creates a validated media identifier from the route parameter.
+     *
+     * @throws InvalidRequestPayloadException When the media identifier is invalid.
+     */
+    private function resolveMediaID(int $routeMediaID): MediaID
+    {
+        try {
+            return new MediaID($routeMediaID);
+        } catch (InvalidValueObjectException $e) {
+            throw InvalidRequestPayloadException::invalidFieldValue('mediaId', $e);
+        }
+    }
+
+    /**
+     * Creates a validated season number from the route parameter.
+     *
+     * @throws InvalidRequestPayloadException When the season number is invalid.
+     */
+    private function resolveSeasonNumber(int $routeSeasonNumber): SeasonNumber
+    {
+        try {
+            return new SeasonNumber($routeSeasonNumber);
+        } catch (InvalidValueObjectException $e) {
+            throw InvalidRequestPayloadException::invalidFieldValue('seasonNumber', $e);
+        }
     }
 }

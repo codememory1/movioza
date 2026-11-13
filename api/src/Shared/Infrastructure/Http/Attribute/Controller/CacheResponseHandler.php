@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace Movioza\Shared\Infrastructure\Http\Attribute\Controller;
 
+use Movioza\Shared\Infrastructure\Http\Cache\ResponseCacheTagger;
 use Movioza\Shared\Infrastructure\Http\Request\RequestAttributes;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Cache\InvalidArgumentException;
@@ -22,6 +23,7 @@ final readonly class CacheResponseHandler implements AttributeHandlerInterface
     public function __construct(
         private CacheItemPoolInterface $cache,
         private LockFactory $lockFactory,
+        private ResponseCacheTagger $responseCacheTagger,
         private int $lockTTL,
         private int $lockWaitTimeout,
         private int $lockRetryDelay
@@ -44,7 +46,7 @@ final readonly class CacheResponseHandler implements AttributeHandlerInterface
         $lock = $this->lockFactory->createLock(sprintf('%s.build', $key), (float) $this->lockTTL);
 
         $this->acquireLock($lock);
-        $this->prepareCacheBuild($key, $attribute->ttl, $lock, $event);
+        $this->prepareCacheBuild($attribute, $lock, $event, $key);
     }
 
     private function createKey(Request $request): string
@@ -99,7 +101,7 @@ final readonly class CacheResponseHandler implements AttributeHandlerInterface
     /**
      * @throws InvalidArgumentException
      */
-    private function prepareCacheBuild(string $key, int $ttl, LockInterface $lock, ControllerEvent $event): void
+    private function prepareCacheBuild(CacheResponse $attribute, LockInterface $lock, ControllerEvent $event, string $key): void
     {
         $keepLock = false;
 
@@ -110,9 +112,13 @@ final readonly class CacheResponseHandler implements AttributeHandlerInterface
 
             $event->getRequest()->attributes->set(RequestAttributes::RESPONSE_CACHE_CONTEXT, [
                 'key' => $key,
-                'ttl' => $ttl,
+                'ttl' => $attribute->ttl,
                 'lock' => $lock
             ]);
+
+            if (count($attribute->tags) > 0) {
+                $this->responseCacheTagger->addTags($attribute->tags);
+            }
 
             $keepLock = true;
         } finally {

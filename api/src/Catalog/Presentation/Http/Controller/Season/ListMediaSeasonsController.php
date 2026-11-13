@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace Movioza\Catalog\Presentation\Http\Controller\Season;
 
 use Movioza\Catalog\Application\Query\ListMediaSeasons\ListMediaSeasonsQuery;
+use Movioza\Catalog\Application\ReadModel\SeasonListItemView;
 use Movioza\Catalog\Domain\ValueObject\MediaID;
 use Movioza\Catalog\Infrastructure\Cache\CacheTags;
 use Movioza\Catalog\Presentation\Http\Response\ListMediaSeasonsResponse;
@@ -33,13 +34,10 @@ final readonly class ListMediaSeasonsController
 
     public function __invoke(int $id): ApiResponseInterface
     {
-        try {
-            $mediaID = new MediaID($id);
-        } catch (InvalidValueObjectException $e) {
-            throw InvalidRequestPayloadException::invalidFieldValue('id', $e);
-        }
-
-        $seasons = $this->bus->ask(new ListMediaSeasonsQuery($mediaID));
+        /** @var list<SeasonListItemView> $seasons */
+        $seasons = $this->bus->ask(new ListMediaSeasonsQuery(
+            $this->resolveMediaID($id)
+        ));
 
         $this->responseCacheTagger->addTags([
             CacheTags::media($id)
@@ -48,5 +46,19 @@ final readonly class ListMediaSeasonsController
         return new ApiResponse(new DataDocument(
             new ListMediaSeasonsResponse($seasons)->toArray()
         ));
+    }
+
+    /**
+     * Creates a validated media identifier from the route parameter.
+     *
+     * @throws InvalidRequestPayloadException When the media identifier is invalid.
+     */
+    private function resolveMediaID(int $routeMediaID): MediaID
+    {
+        try {
+            return new MediaID($routeMediaID);
+        } catch (InvalidValueObjectException $e) {
+            throw InvalidRequestPayloadException::invalidFieldValue('id', $e);
+        }
     }
 }

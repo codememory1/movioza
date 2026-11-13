@@ -94,3 +94,28 @@ services:
             $stateMachine: '@state_machine.catalog_collection'
 
     Movioza\Catalog\Domain\StateMachine\CollectionStateMachineInterface: '@movioza.catalog.collection_state_machine.symfony'
+
+    # Messenger
+    Movioza\Catalog\Infrastructure\Messenger\Message\CollectionChangeMessage:
+        resource_tags:
+            - { name: movioza.debezium.message, schema: public, table: collections }
+
+    Movioza\Catalog\Infrastructure\Messenger\Message\EpisodeChangeMessage:
+        resource_tags:
+            - { name: movioza.debezium.message, schema: public, table: episodes }
+
+    Movioza\Catalog\Infrastructure\Messenger\Message\GenreChangeMessage:
+        resource_tags:
+            - { name: movioza.debezium.message, schema: public, table: genres }
+
+    Movioza\Catalog\Infrastructure\Messenger\Message\SeasonChangeMessage:
+        resource_tags:
+            - { name: movioza.debezium.message, schema: public, table: seasons }
+
+    Movioza\Catalog\Infrastructure\Messenger\Message\MediaChangeMessage:
+        resource_tags:
+            - { name: movioza.debezium.message, schema: public, table: media }
+
+    Movioza\Catalog\Infrastructure\Messenger\MessageHandler\:
+        resource: '%kernel.project_dir%/src/Catalog/Infrastructure/Messenger/MessageHandler/*Handler.php'
+        autoconfigure: true
