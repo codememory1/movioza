@@ -3,6 +3,31 @@ services:
         autowire: true
         autoconfigure: true
 
+    # API Error Definitions
+    Movioza\Discussion\Application\Exception\MediaNotFoundException:
+        resource_tags:
+            -   name: movioza.api_error.definition
+                status: 404
+                code: media_not_found
+                message: 'The requested media was not found.'
+                log_level: notice
+
+    Movioza\Discussion\Application\Exception\ParentCommentNotFoundException:
+        resource_tags:
+            -   name: movioza.api_error.definition
+                status: 404
+                code: parent_comment_not_found
+                message: 'The specified parent comment was not found.'
+                log_level: notice
+
+    Movioza\Discussion\Domain\Exception\ParentCommentMediaMismatchException:
+        resource_tags:
+            -   name: movioza.api_error.definition
+                status: 422
+                code: parent_comment_media_mismatch
+                message: 'The parent comment must belong to the same media.'
+                log_level: notice
+
     # Repositories
     movioza.discussion.comment_repository.doctrine:
         class: Movioza\Discussion\Infrastructure\Doctrine\Repository\DoctrineCommentRepository
@@ -13,3 +38,36 @@ services:
         class: Movioza\Discussion\Infrastructure\Doctrine\Repository\DoctrineCommentVoteRepository
 
     Movioza\Discussion\Domain\Repository\CommentVoteRepositoryInterface: '@movioza.discussion.comment_vote_repository.doctrine'
+
+    # Command Handlers
+    Movioza\Discussion\Application\Command\:
+        resource: '%kernel.project_dir%/src/Discussion/Application/Command/**/*Handler.php'
+        tags:
+            - { name: messenger.message_handler, bus: command.bus }
+
+    # Controllers
+    Movioza\Discussion\Presentation\Http\Controller\:
+        resource: '%kernel.project_dir%/src/Discussion/Presentation/Http/Controller/**/*Controller.php'
+        tags:
+            - { name: controller.service_arguments }
+
+    # Integrations
+    movioza.discussion.guest_session_resolver.identity:
+        class: Movioza\Discussion\Infrastructure\Integration\Identity\IdentityGuestSessionResolver
+
+    Movioza\Discussion\Application\Guest\GuestSessionResolverInterface: '@movioza.discussion.guest_session_resolver.identity'
+
+    # Identity
+    movioza.discussion.comment_id_generator.postgres:
+        class: Movioza\Discussion\Infrastructure\Identity\PostgresCommentIDGenerator
+        arguments:
+            $connection: '@doctrine.dbal.default_connection'
+            $sequenceName: 'discussion_comment_id_seq'
+
+    Movioza\Discussion\Application\Identity\CommentIDGeneratorInterface: '@movioza.discussion.comment_id_generator.postgres'
+
+    # Media
+    movioza.discussion.media_existence_checker.catalog:
+        class: Movioza\Discussion\Infrastructure\Integration\Catalog\CatalogMediaExistenceChecker
+
+    Movioza\Discussion\Application\Media\MediaExistenceCheckerInterface: '@movioza.discussion.media_existence_checker.catalog'

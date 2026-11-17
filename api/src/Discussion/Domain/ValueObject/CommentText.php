@@ -9,12 +9,12 @@ use Movioza\Shared\Domain\ValueObject\ValueObjectInterface;
 
 final readonly class CommentText implements ValueObjectInterface
 {
-    private const int MAX_LENGTH = 1024;
+    public const int MAX_LENGTH = 1024;
 
     public function __construct(
         private string $text
     ) {
-        if (trim($this->text)) {
+        if (trim($this->text) === '') {
             throw new InvalidValueObjectException('Comment text cannot be empty');
         }
 

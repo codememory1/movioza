@@ -9,12 +9,12 @@ use Movioza\Shared\Domain\ValueObject\ValueObjectInterface;
 
 final readonly class AuthorName implements ValueObjectInterface
 {
-    private const int MAX_LENGTH = 100;
+    public const int MAX_LENGTH = 100;
 
     public function __construct(
         private string $name
     ) {
-        if (trim($this->name) !== '') {
+        if (trim($this->name) === '') {
             throw new InvalidValueObjectException('Author name cannot be empty.');
         }
 
