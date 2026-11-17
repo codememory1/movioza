@@ -13,7 +13,7 @@ use Movioza\Identity\Domain\ValueObject\GuestSessionID;
 use Movioza\Identity\Domain\ValueObject\GuestSessionToken;
 use Movioza\Identity\Domain\ValueObject\Locale;
 use Movioza\Identity\Domain\ValueObject\Timezone;
-use Movioza\Identity\Presentation\Http\Cookie\GuestSessionCookie;
+use Movioza\Identity\Infrastructure\Http\Cookie\GuestSessionCookie;
 use Movioza\Identity\Presentation\Http\Request\CreateGuestSessionRequest;
 use Movioza\Identity\Presentation\Http\Resolver\ClientIPAddressResolver;
 use Movioza\Identity\Presentation\Http\Resolver\UserAgentResolver;

@@ -6,7 +6,7 @@ namespace Movioza\Identity\Presentation\Http\Controller\GuestSession;
 
 use Movioza\Identity\Application\Exception\GuestSessionAuthenticationFailedException;
 use Movioza\Identity\Application\Security\GuestSessionAuthenticator;
-use Movioza\Identity\Presentation\Http\Cookie\GuestSessionCookie;
+use Movioza\Identity\Infrastructure\Http\Cookie\GuestSessionCookie;
 use Movioza\Identity\Presentation\Http\Response\GetCurrentGuestSessionResponse;
 use Movioza\Shared\Infrastructure\Http\Attribute\Controller\RateLimit;
 use Movioza\Shared\Infrastructure\Http\Response\ApiResponse;

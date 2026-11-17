@@ -2,7 +2,7 @@
 
 declare(strict_types = 1);
 
-namespace Movioza\Identity\Presentation\Http\Cookie;
+namespace Movioza\Identity\Infrastructure\Http\Cookie;
 
 use DateTimeImmutable;
 use Movioza\Identity\Domain\ValueObject\GuestSessionToken;

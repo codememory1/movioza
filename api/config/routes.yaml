@@ -25,3 +25,10 @@ identity_controllers:
         namespace: Movioza\Identity\Presentation\Http\Controller
     type: attribute
     host: '%movioza.api_host%'
+
+discussion_controllers:
+    resource:
+        path: '../src/Discussion/Presentation/Http/Controller'
+        namespace: Movioza\Discussion\Presentation\Http\Controller
+    type: attribute
+    host: '%movioza.api_host%'
