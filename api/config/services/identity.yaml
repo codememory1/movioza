@@ -73,6 +73,12 @@ services:
 
     Movioza\Identity\Application\Security\GuestSessionTokenGeneratorInterface: '@movioza.identity.guest_session_token_generator.random'
 
+    # Security
+    movioza.identity.guest_session_provider.http:
+        class: Movioza\Identity\Infrastructure\Http\Security\HttpCurrentGuestSessionProvider
+
+    Movioza\Identity\Application\Security\GuestSessionProviderInterface: '@movioza.identity.guest_session_provider.http'
+
     # Identity Generator
     movioza.identity.guest_session_id_generator.symfony:
         class: Movioza\Identity\Infrastructure\Identity\SymfonyGuestSessionIDGenerator
@@ -88,7 +94,7 @@ services:
     Movioza\Identity\Application\Security\GuestSessionAuthenticator: ~
 
     # Cookie
-    Movioza\Identity\Presentation\Http\Cookie\GuestSessionCookie:
+    Movioza\Identity\Infrastructure\Http\Cookie\GuestSessionCookie:
         arguments:
             $secure: '%env(bool:IDENTITY_GUEST_SESSION_COOKIE_SECURE)%'
 
