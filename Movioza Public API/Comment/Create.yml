@@ -1,0 +1,21 @@
+info:
+  name: Create
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: "{{api_host}}/media/:id/comments"
+  params:
+    - name: id
+      value: ""
+      type: path
+      description: Media ID
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false
