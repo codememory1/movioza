@@ -12,6 +12,14 @@ services:
                 message: 'The requested media was not found.'
                 log_level: notice
 
+    Movioza\Discussion\Application\Exception\CommentNotFoundException:
+        resource_tags:
+            -   name: movioza.api_error.definition
+                status: 404
+                code: comment_not_found
+                message: 'The requested comment was not found.'
+                log_level: notice
+
     Movioza\Discussion\Application\Exception\ParentCommentNotFoundException:
         resource_tags:
             -   name: movioza.api_error.definition
@@ -39,11 +47,25 @@ services:
 
     Movioza\Discussion\Domain\Repository\CommentVoteRepositoryInterface: '@movioza.discussion.comment_vote_repository.doctrine'
 
+    # Readers
+    movioza.discussion.comment_reader.doctrine:
+        class: Movioza\Discussion\Infrastructure\Doctrine\Reader\DoctrineCommentReader
+        arguments:
+            $connection: '@doctrine.dbal.default_connection'
+
+    Movioza\Discussion\Application\Reader\CommentReaderInterface: '@movioza.discussion.comment_reader.doctrine'
+
     # Command Handlers
     Movioza\Discussion\Application\Command\:
         resource: '%kernel.project_dir%/src/Discussion/Application/Command/**/*Handler.php'
         tags:
             - { name: messenger.message_handler, bus: command.bus }
+
+    # Query Handlers
+    Movioza\Discussion\Application\Query\:
+        resource: '%kernel.project_dir%/src/Discussion/Application/Query/**/*Handler.php'
+        tags:
+            - { name: messenger.message_handler, bus: query.bus }
 
     # Controllers
     Movioza\Discussion\Presentation\Http\Controller\:
