@@ -55,7 +55,6 @@ doctrine:
             identity_user_agent: Movioza\Identity\Infrastructure\Doctrine\Type\UserAgentType
 
             discussion_comment_id: Movioza\Discussion\Infrastructure\Doctrine\Type\CommentIDType
-            discussion_comment_vote_id: Movioza\Discussion\Infrastructure\Doctrine\Type\CommentVoteIDType
             discussion_media_id: Movioza\Discussion\Infrastructure\Doctrine\Type\MediaIDType
             discussion_guest_id: Movioza\Discussion\Infrastructure\Doctrine\Type\GuestIDType
             discussion_author_name: Movioza\Discussion\Infrastructure\Doctrine\Type\AuthorNameType

@@ -23,10 +23,10 @@ class SymfonyCommandBus implements CommandBusInterface
     /**
      * @throws Throwable
      */
-    public function dispatch(CommandInterface $command): void
+    public function dispatch(CommandInterface $command): mixed
     {
         try {
-            $this->handle($command);
+            return $this->handle($command);
         } catch (HandlerFailedException $e) {
             $exceptions = array_values($e->getWrappedExceptions(recursive: true));
 
