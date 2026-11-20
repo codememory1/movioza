@@ -1,0 +1,26 @@
+info:
+  name: Set vote
+  type: http
+  seq: 4
+
+http:
+  method: PUT
+  url: "{{api_host}}/comments/:id/vote"
+  params:
+    - name: id
+      value: "7"
+      type: path
+  body:
+    type: json
+    data: |-
+      {
+          "type": 1
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false
