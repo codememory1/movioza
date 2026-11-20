@@ -8,4 +8,9 @@ enum CommentVoteType: int
 {
     case LIKE = 1;
     case DISLIKE = -1;
+
+    public static function values(): array
+    {
+        return array_column(self::cases(), 'value');
+    }
 }
