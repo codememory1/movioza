@@ -51,6 +51,22 @@ class MediaSource extends AggregateRoot
         $this->status = MediaSourceStatus::PENDING;
     }
 
+    /**
+     * Returns the download source with the specified identifier.
+     *
+     * Returns null when the source does not belong to this media source.
+     */
+    public function findDownloadSourceById(DownloadSourceID $downloadSourceId): ?DownloadSource
+    {
+        foreach ($this->downloadSources as $downloadSource) {
+            if ($downloadSource->getId()->equals($downloadSourceId)) {
+                return $downloadSource;
+            }
+        }
+
+        return null;
+    }
+
     public function applyStartResolving(DateTimeImmutable $changedAt, MediaSourceStateMachineInterface $stateMachine): void
     {
         $this->applyTransition(MediaSourceTransition::START_RESOLVING, $changedAt, $stateMachine);

@@ -32,4 +32,26 @@ final readonly class DoctrineMediaSourceReader implements MediaSourceReaderInter
             ->executeQuery()
             ->fetchFirstColumn();
     }
+
+    /**
+     * @throws Exception
+     */
+    public function findDownloadSourceIdsWithoutDownloads(int $batchSize): array
+    {
+        return $this->connection
+            ->createQueryBuilder()
+            ->select('ds.id')
+            ->from('download_sources', 'ds')
+            ->where(
+                'NOT EXISTS (
+                SELECT 1
+                FROM downloads d
+                WHERE d.download_source_id = ds.id
+            )'
+            )
+            ->orderBy('ds.id', 'ASC')
+            ->setMaxResults($batchSize)
+            ->executeQuery()
+            ->fetchFirstColumn();
+    }
 }
