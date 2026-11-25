@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="Movioza\MediaProcessing\Domain\Entity\Download" table="downloads">
+        <id name="id" column="id" type="media_processing_download_id">
+            <generator strategy="NONE" />
+        </id>
+
+        <field name="downloadSourceId" column="download_source_id" type="media_processing_download_source_id" />
+        <field name="destinationDirectory" column="destination_directory" type="media_processing_destination_directory" />
+        <field name="status" column="status" length="32" enum-type="Movioza\MediaProcessing\Domain\Enum\DownloadStatus" />
+        <field
+            name="downloader"
+            column="downloader"
+            length="32"
+            enum-type="Movioza\MediaProcessing\Domain\Enum\DownloaderKey"
+            nullable="true"
+        />
+        <field name="externalDownloadId" column="external_download_id" type="media_processing_external_download_id" nullable="true" />
+        <field name="error" column="error" type="text" nullable="true" />
+        <field name="leaseToken" column="lease_token" type="media_processing_lease_token" nullable="true" />
+        <field name="leaseExpiresAt" column="lease_expires_at" type="datetime_immutable" nullable="true" />
+        <field name="startedAt" column="started_at" type="datetime_immutable" nullable="true" />
+        <field name="pausedAt" column="paused_at" type="datetime_immutable" nullable="true" />
+        <field name="completedAt" column="completed_at" type="datetime_immutable" nullable="true" />
+        <field name="failedAt" column="failed_at" type="datetime_immutable" nullable="true" />
+        <field name="canceledAt" column="canceled_at" type="datetime_immutable" nullable="true" />
+        <field name="createdAt" column="created_at" type="datetime_immutable" />
+        <field name="updatedAt" column="updated_at" type="datetime_immutable" nullable="true" />
+    </entity>
+</doctrine-mapping>

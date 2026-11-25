@@ -1,0 +1,49 @@
+framework:
+    workflows:
+        media_processing_download:
+            type: state_machine
+
+            supports:
+                - Movioza\MediaProcessing\Infrastructure\Workflow\DownloadWorkflowState
+
+            marking_store:
+                type: method
+                property: status
+
+            initial_marking: !php/enum Movioza\MediaProcessing\Domain\Enum\DownloadStatus::PENDING
+            places: !php/enum Movioza\MediaProcessing\Domain\Enum\DownloadStatus
+
+            transitions:
+                !php/enum Movioza\MediaProcessing\Domain\Enum\DownloadTransition::START->value:
+                    from: !php/enum Movioza\MediaProcessing\Domain\Enum\DownloadStatus::PENDING
+                    to: !php/enum Movioza\MediaProcessing\Domain\Enum\DownloadStatus::STARTED
+
+                !php/enum Movioza\MediaProcessing\Domain\Enum\DownloadTransition::START_DOWNLOADING->value:
+                    from:
+                        - !php/enum Movioza\MediaProcessing\Domain\Enum\DownloadStatus::STARTED
+                        - !php/enum Movioza\MediaProcessing\Domain\Enum\DownloadStatus::PAUSED
+                    to: !php/enum Movioza\MediaProcessing\Domain\Enum\DownloadStatus::DOWNLOADING
+
+                !php/enum Movioza\MediaProcessing\Domain\Enum\DownloadTransition::PAUSE->value:
+                    from: !php/enum Movioza\MediaProcessing\Domain\Enum\DownloadStatus::DOWNLOADING
+                    to: !php/enum Movioza\MediaProcessing\Domain\Enum\DownloadStatus::PAUSED
+
+                !php/enum Movioza\MediaProcessing\Domain\Enum\DownloadTransition::RESUME->value:
+                    from: !php/enum Movioza\MediaProcessing\Domain\Enum\DownloadStatus::PAUSED
+                    to: !php/enum Movioza\MediaProcessing\Domain\Enum\DownloadStatus::DOWNLOADING
+
+                !php/enum Movioza\MediaProcessing\Domain\Enum\DownloadTransition::COMPLETE->value:
+                    from: !php/enum Movioza\MediaProcessing\Domain\Enum\DownloadStatus::DOWNLOADING
+                    to: !php/enum Movioza\MediaProcessing\Domain\Enum\DownloadStatus::COMPLETED
+
+                !php/enum Movioza\MediaProcessing\Domain\Enum\DownloadTransition::FAIL->value:
+                    from: !php/enum Movioza\MediaProcessing\Domain\Enum\DownloadStatus::DOWNLOADING
+                    to: !php/enum Movioza\MediaProcessing\Domain\Enum\DownloadStatus::FAILED
+
+                !php/enum Movioza\MediaProcessing\Domain\Enum\DownloadTransition::CANCEL->value:
+                    from:
+                        - !php/enum Movioza\MediaProcessing\Domain\Enum\DownloadStatus::PENDING
+                        - !php/enum Movioza\MediaProcessing\Domain\Enum\DownloadStatus::STARTED
+                        - !php/enum Movioza\MediaProcessing\Domain\Enum\DownloadStatus::DOWNLOADING
+                        - !php/enum Movioza\MediaProcessing\Domain\Enum\DownloadStatus::PAUSED
+                    to: !php/enum Movioza\MediaProcessing\Domain\Enum\DownloadStatus::CANCELLED
