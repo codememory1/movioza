@@ -4,9 +4,10 @@ declare(strict_types = 1);
 
 namespace Movioza\MediaProcessing\Application\Download;
 
-use Movioza\MediaProcessing\Domain\Enum\DownloadState;
-
-final readonly class DownloadStatus
+/**
+ * Contains the download state and transfer metrics reported by the downloader.
+ */
+final readonly class DownloadSnapshot
 {
     /**
      * @param int $downloadedBytes Number of bytes downloaded so far.

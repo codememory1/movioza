@@ -5,11 +5,12 @@ declare(strict_types = 1);
 namespace Movioza\MediaProcessing\Infrastructure\Download\Aria2;
 
 use Movioza\MediaProcessing\Application\Download\DownloaderInterface;
-use Movioza\MediaProcessing\Application\Download\DownloadID;
 use Movioza\MediaProcessing\Application\Download\DownloadRequest;
-use Movioza\MediaProcessing\Application\Download\DownloadStatus;
+use Movioza\MediaProcessing\Application\Download\DownloadSnapshot;
+use Movioza\MediaProcessing\Application\Download\DownloadState;
+use Movioza\MediaProcessing\Domain\Enum\DownloaderKey;
 use Movioza\MediaProcessing\Domain\Enum\DownloadSourceType;
-use Movioza\MediaProcessing\Domain\Enum\DownloadState;
+use Movioza\MediaProcessing\Domain\ValueObject\ExternalDownloadID;
 use Random\RandomException;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
@@ -33,6 +34,23 @@ readonly class Aria2Downloader implements DownloaderInterface
     }
 
     /**
+     * @throws RandomException
+     */
+    public function generateId(): ExternalDownloadID
+    {
+        do {
+            $value = bin2hex(random_bytes(8));
+        } while ($value === '0000000000000000');
+
+        return new ExternalDownloadID($value);
+    }
+
+    public function getKey(): DownloaderKey
+    {
+        return DownloaderKey::ARIA2;
+    }
+
+    /**
      * @throws ClientExceptionInterface
      * @throws DecodingExceptionInterface
      * @throws RandomException
@@ -40,7 +58,7 @@ readonly class Aria2Downloader implements DownloaderInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      */
-    public function start(DownloadRequest $request): DownloadID
+    public function start(DownloadRequest $request): ExternalDownloadID
     {
         return match ($request->sourceType) {
             DownloadSourceType::TORRENT => $this->startTorrent($request),
@@ -56,11 +74,11 @@ readonly class Aria2Downloader implements DownloaderInterface
      * @throws DecodingExceptionInterface
      * @throws ClientExceptionInterface
      */
-    public function getStatus(DownloadID $id): DownloadStatus
+    public function getStatus(ExternalDownloadID $id): DownloadSnapshot
     {
         $result = $this->resolveCurrentStatus($id);
 
-        return new DownloadStatus(
+        return new DownloadSnapshot(
             $this->mapStatus($result->status),
             $result->completedLength,
             $result->totalLength,
@@ -77,7 +95,7 @@ readonly class Aria2Downloader implements DownloaderInterface
      * @throws DecodingExceptionInterface
      * @throws ClientExceptionInterface
      */
-    public function cancel(DownloadID $id): void
+    public function cancel(ExternalDownloadID $id): void
     {
         $status = $this->resolveCurrentStatus($id);
 
@@ -92,11 +110,14 @@ readonly class Aria2Downloader implements DownloaderInterface
      * @throws DecodingExceptionInterface
      * @throws ClientExceptionInterface
      */
-    private function startTorrent(DownloadRequest $request): DownloadID
+    private function startTorrent(DownloadRequest $request): ExternalDownloadID
     {
-        $GID = $this->rpc->addTorrent($request->source);
+        $GID = $this->rpc->addTorrent($request->source, [
+            'gid' => $request->externalDownloadId->getValue(),
+            'dir' => $request->destinationDirectory->getValue()
+        ]);
 
-        return new DownloadID($GID);
+        return new ExternalDownloadID($GID);
     }
 
     /**
@@ -107,11 +128,14 @@ readonly class Aria2Downloader implements DownloaderInterface
      * @throws DecodingExceptionInterface
      * @throws ClientExceptionInterface
      */
-    public function startMagnet(DownloadRequest $request): DownloadID
+    public function startMagnet(DownloadRequest $request): ExternalDownloadID
     {
-        $GID = $this->rpc->addUri([$request->source]);
+        $GID = $this->rpc->addUri([$request->source], [
+            'gid' => $request->externalDownloadId->getValue(),
+            'dir' => $request->destinationDirectory->getValue()
+        ]);
 
-        return new DownloadID($GID);
+        return new ExternalDownloadID($GID);
     }
 
     /**
@@ -126,9 +150,9 @@ readonly class Aria2Downloader implements DownloaderInterface
      * @throws DecodingExceptionInterface
      * @throws ClientExceptionInterface
      */
-    private function resolveCurrentStatus(DownloadID $downloadId): Aria2TaskStatus
+    private function resolveCurrentStatus(ExternalDownloadID $downloadId): Aria2TaskStatus
     {
-        $gid = $downloadId->id;
+        $gid = $downloadId->getValue();
         $visited = [];
 
         while (true) {

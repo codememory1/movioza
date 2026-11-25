@@ -2,7 +2,7 @@
 
 declare(strict_types = 1);
 
-namespace Movioza\MediaProcessing\Domain\Enum;
+namespace Movioza\MediaProcessing\Application\Download;
 
 enum DownloadState: string
 {

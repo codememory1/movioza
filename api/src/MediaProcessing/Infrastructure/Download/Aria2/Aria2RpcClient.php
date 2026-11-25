@@ -61,9 +61,7 @@ final readonly class Aria2RpcClient
         $content = @file_get_contents($torrent);
 
         if ($content === false) {
-            throw new RuntimeException(
-                sprintf('Cannot read torrent file "%s".', $torrent),
-            );
+            throw new RuntimeException(sprintf('Cannot read torrent file "%s".', $torrent));
         }
 
         return $this->request('aria2.addTorrent', [
@@ -86,9 +84,7 @@ final readonly class Aria2RpcClient
         $result = $this->request('aria2.tellStatus', [$gid]);
 
         if (!is_array($result)) {
-            throw new UnexpectedValueException(
-                'Expected an object from aria2.tellStatus.',
-            );
+            throw new UnexpectedValueException('Expected an object from aria2.tellStatus.');
         }
 
         return Aria2TaskStatus::fromArray($result);
