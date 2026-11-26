@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace Movioza\MediaProcessing\Domain\Entity;
 
 use DateTimeImmutable;
+use InvalidArgumentException;
 use Movioza\MediaProcessing\Domain\Enum\DownloaderKey;
 use Movioza\MediaProcessing\Domain\Enum\DownloadStatus;
 use Movioza\MediaProcessing\Domain\Enum\DownloadTransition;
@@ -198,6 +199,51 @@ final class Download extends AggregateRoot
     public function isStarted(): bool
     {
         return $this->status === DownloadStatus::STARTED;
+    }
+
+    public function isDownloading(): bool
+    {
+        return $this->status === DownloadStatus::DOWNLOADING;
+    }
+
+    public function isPaused(): bool
+    {
+        return $this->status === DownloadStatus::PAUSED;
+    }
+
+    /**
+     * Acquires an available or expired lease.
+     */
+    public function tryAcquireLease(
+        LeaseToken $leaseToken,
+        DateTimeImmutable $leaseExpiresAt,
+        DateTimeImmutable $now
+    ): bool {
+        if ($leaseExpiresAt <= $now) {
+            throw new InvalidArgumentException('The lease expiration time must be in the future.');
+        }
+
+        if ($this->leaseExpiresAt !== null && $this->leaseExpiresAt > $now) {
+            return false;
+        }
+
+        $this->leaseToken = $leaseToken;
+        $this->leaseExpiresAt = $leaseExpiresAt;
+
+        return true;
+    }
+
+    /**
+     * Releases the lease only if it belongs to the supplied token.
+     */
+    public function releaseLease(LeaseToken $leaseToken): void
+    {
+        if ($this->leaseToken?->equals($leaseToken) !== true) {
+            return;
+        }
+
+        $this->leaseToken = null;
+        $this->leaseExpiresAt = null;
     }
 
     public function getId(): DownloadID

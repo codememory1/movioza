@@ -68,6 +68,12 @@ services:
         tags:
             - { name: messenger.message_handler, bus: command.bus }
 
+    Movioza\MediaProcessing\Application\Command\SyncDownload\SyncDownloadHandler:
+        arguments:
+            $syncTimeoutSeconds: '%env(int:MEDIA_PROCESSING_DOWNLOAD_SYNC_TIMEOUT_SECONDS)%'
+        tags:
+            - { name: messenger.message_handler, bus: command.bus }
+
     # Aria2
     movioza.media_processing.aria2.rpc_client:
         class: Movioza\MediaProcessing\Infrastructure\Download\Aria2\Aria2RpcClient

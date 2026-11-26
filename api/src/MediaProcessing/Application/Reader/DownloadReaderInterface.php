@@ -12,4 +12,11 @@ interface DownloadReaderInterface
      * @return list<int>
      */
     public function findPendingIds(int $batchSize): array;
+
+    /**
+     * Returns identifiers of downloading or paused downloads in ascending order.
+     *
+     * @return list<int>
+     */
+    public function findIdsForSync(int $limit, ?int $afterId = null): array;
 }
