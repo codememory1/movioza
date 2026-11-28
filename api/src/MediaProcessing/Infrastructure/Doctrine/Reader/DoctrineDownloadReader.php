@@ -4,9 +4,11 @@ declare(strict_types = 1);
 
 namespace Movioza\MediaProcessing\Infrastructure\Doctrine\Reader;
 
+use DateTimeImmutable;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\ParameterType;
+use Doctrine\DBAL\Types\Types;
 use Movioza\MediaProcessing\Application\Reader\DownloadReaderInterface;
 use Movioza\MediaProcessing\Domain\Enum\DownloadStatus;
 
@@ -53,6 +55,30 @@ final readonly class DoctrineDownloadReader implements DownloadReaderInterface
             $qb
                 ->andWhere('d.id > :after_id')
                 ->setParameter('after_id', $afterId, ParameterType::INTEGER);
+        }
+
+        return $qb->executeQuery()->fetchFirstColumn();
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function findIdsForStartRecovery(int $limit, DateTimeImmutable $now, ?int $afterId = null): array
+    {
+        $qb = $this->connection
+            ->createQueryBuilder()
+            ->select('d.id')
+            ->from('downloads', 'd')
+            ->where('d.status = :status')
+            ->andWhere('d.lease_expires_at <= :now')
+            ->setParameter('status', DownloadStatus::STARTED->value)
+            ->setParameter('now', $now, Types::DATETIME_IMMUTABLE)
+            ->orderBy('d.id')
+            ->setMaxResults($limit);
+
+        if ($afterId !== null) {
+            $qb->andWhere('d.id > :after_id')
+               ->setParameter('after_id', $afterId, ParameterType::INTEGER);
         }
 
         return $qb->executeQuery()->fetchFirstColumn();

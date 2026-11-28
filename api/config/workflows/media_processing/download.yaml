@@ -47,3 +47,7 @@ framework:
                         - !php/enum Movioza\MediaProcessing\Domain\Enum\DownloadStatus::DOWNLOADING
                         - !php/enum Movioza\MediaProcessing\Domain\Enum\DownloadStatus::PAUSED
                     to: !php/enum Movioza\MediaProcessing\Domain\Enum\DownloadStatus::CANCELLED
+
+                !php/enum Movioza\MediaProcessing\Domain\Enum\DownloadTransition::REQUEUE->value:
+                    from: !php/enum Movioza\MediaProcessing\Domain\Enum\DownloadStatus::STARTED
+                    to: !php/enum Movioza\MediaProcessing\Domain\Enum\DownloadStatus::PENDING

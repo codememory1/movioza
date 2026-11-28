@@ -43,4 +43,9 @@ enum DownloadTransition: string
      * Records cancellation.
      */
     case CANCEL = 'cancel';
+
+    /**
+     * Returns the download to the pending queue.
+     */
+    case REQUEUE = 'requeue';
 }

@@ -191,6 +191,22 @@ final class Download extends AggregateRoot
         $this->canceledAt = $changedAt;
     }
 
+    /**
+     * @throws DownloadTransitionNotAllowedException
+     */
+    public function applyRequeue(
+        DateTimeImmutable $changedAt,
+        DownloadStateMachineInterface $stateMachine
+    ): void {
+        $this->applyTransition(
+            DownloadTransition::REQUEUE,
+            $changedAt,
+            $stateMachine
+        );
+
+        $this->leaseExpiresAt = null;
+    }
+
     public function isPending(): bool
     {
         return $this->status === DownloadStatus::PENDING;
@@ -209,6 +225,16 @@ final class Download extends AggregateRoot
     public function isPaused(): bool
     {
         return $this->status === DownloadStatus::PAUSED;
+    }
+
+    /**
+     * Checks whether the download start is eligible for recovery.
+     */
+    public function canRecoverStart(DateTimeImmutable $now): bool
+    {
+        return $this->isStarted()
+            && $this->leaseExpiresAt !== null
+            && $this->leaseExpiresAt <= $now;
     }
 
     /**
